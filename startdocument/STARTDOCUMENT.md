@@ -52,7 +52,7 @@ Voor deze opdracht moeten er drie patterns gebruikt worden. Hierbij worden de vo
 
 ## Klassendiagram
 
-![Class Diagram](img/classdiagram.png "First Version of the class diagram")
+![Class Diagram](img/class-diagram.png "First Version of the class diagram")
 
 
 ## Planning
