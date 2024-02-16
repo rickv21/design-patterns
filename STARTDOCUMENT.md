@@ -37,6 +37,7 @@ Could haves:
 - Kleurtjes kunnen toevoegen.
 - Emoticon toevoegen. Wanneer je bijvoorbeeld teveel geld heb spendeert, komt er een verdrietig gezichtje.
 - Meerdere rollen (Admin, gebruiker)
+- Inkomsten en uitgaven voorspelling, bijvoorbeeld loon.
 
 Won't have:
 
@@ -45,9 +46,9 @@ Won't have:
 ## Design patterns
 Voor deze opdracht moeten er drie patterns gebruikt worden. Hierbij worden de volgende patterns gebruikt:
 
-- Factory pattern. Creational
-- Observer pattern. Behaviour
--
+- Factory pattern. 
+- Observer pattern. 
+- Command pattern. 
 
 ## Klassendiagram
 
