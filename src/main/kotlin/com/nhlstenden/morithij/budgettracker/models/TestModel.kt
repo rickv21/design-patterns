@@ -1,6 +1,6 @@
-package com.nhlstenden.morithij.budgettracker
+package com.nhlstenden.morithij.budgettracker.models
 
-class Model {
+class TestModel {
 
     private var budgetMap = HashMap<String, Any>()
 
