@@ -1,0 +1,14 @@
+<!-- sqltestview.fxml -->
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<GridPane fx:controller="com.nhlstenden.morithij.budgettracker.controllers.SQLTestController" xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
+
+        <TextField fx:id="inputField" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Button text="Save" onAction="#handleSaveAction" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <TextField fx:id="idField"  GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+        <Button text="Load" onAction="#handleLoadAction" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+        <Label fx:id="label" style="-fx-padding: 10 0 0 0" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+
+</GridPane>

@@ -1,6 +1,9 @@
-package com.nhlstenden.morithij.budgettracker
+package com.nhlstenden.morithij.budgettracker.models
 
-class Model {
+/**
+ * A model class for testing purposes.
+ */
+class TestModel {
 
     private var budgetMap = HashMap<String, Any>()
 
