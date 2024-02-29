@@ -5,6 +5,9 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 
+/**
+ * Test controller class for experimenting with MVC.
+ */
 class TestController {
     lateinit var testModel: TestModel
 

@@ -10,11 +10,14 @@ import javafx.scene.Scene
 import javafx.scene.input.KeyCode
 import javafx.stage.Stage
 
-
+// The entry point for the application.
 fun main(args: Array<String>) {
     Application.launch(BudgetTracker::class.java, *args)
 }
 
+/**
+ * The main class for the BudgetTracker application.
+ */
 class BudgetTracker : Application() {
 
     override fun start(primaryStage: Stage) {
@@ -26,7 +29,6 @@ class BudgetTracker : Application() {
 
         primaryStage.width = 500.0
         primaryStage.height = 375.0
-
         primaryStage.title = "Budget tracker MVC Test"
 
         val scene = Scene(root)

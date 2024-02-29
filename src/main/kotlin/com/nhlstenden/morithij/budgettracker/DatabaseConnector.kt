@@ -3,11 +3,15 @@ package com.nhlstenden.morithij.budgettracker
 import java.sql.Connection
 import java.sql.DriverManager
 
+/**
+ * The class responsible for connecting to the SQLite database.
+ */
 object DatabaseConnector {
 
     private var connection: Connection? = null
 
     private fun init() {
+        //Hardcoded for now.
         val url = "jdbc:sqlite:budgetDB.db"
         connection = DriverManager.getConnection(url)
 
@@ -25,6 +29,9 @@ object DatabaseConnector {
     }
 
     fun close() {
+        //At the moment this is not yet used.
+        //I read that closing and re-opening connections is an expensive operation.
+        //So when functionality is completed we should look when we want to close the connection.
         connection?.close()
     }
 }

@@ -9,6 +9,9 @@ import javafx.scene.control.Label
 import javafx.scene.control.TextField
 import java.time.LocalDateTime
 
+/**
+ * A controller class for testing SQLite functionality.
+ */
 class SQLTestController {
 
     @FXML
