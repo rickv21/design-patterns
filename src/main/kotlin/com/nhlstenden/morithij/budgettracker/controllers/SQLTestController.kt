@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 /**
  * A controller class for testing SQLite functionality.
  */
-class SQLTestController {
+class SQLTestController() : Controller() {
 
     @FXML
     lateinit var idField: TextField
@@ -24,6 +24,8 @@ class SQLTestController {
     lateinit var label: Label
 
     var id = -1
+
+    override val title = "SQL Test"
 
     @FXML
     fun initialize(){
@@ -58,5 +60,9 @@ class SQLTestController {
         val record = dao.get(id)
         label.text = record.toString()
         println("Loaded record: $record")
+    }
+
+    override fun setModels(vararg models: Any) {
+        // No models needed
     }
 }

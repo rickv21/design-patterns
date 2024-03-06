@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController" xmlns:fx="http://javafx.com/fxml">
+<BorderPane fx:id="pane" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController" xmlns:fx="http://javafx.com/fxml">
     <top>
         <Label fx:id="label" style="-fx-padding: 10 0 0 0" BorderPane.alignment="CENTER"/>
     </top>
