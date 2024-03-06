@@ -28,8 +28,8 @@ object SceneManager {
     private fun createScene(key: String, vararg models: Model) : Pair<Controller, FXMLLoader> {
         val viewName : String
         when (key) {
-            "test" -> {
-                viewName = "testview"
+            "overview" -> {
+                viewName = "overview"
             }
             "sqltest" -> {
                 viewName = "sqltestview"

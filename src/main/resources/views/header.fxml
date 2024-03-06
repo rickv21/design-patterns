@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <BorderPane style="-fx-border-color: #a3a3a3 #a3a3a3 #a3a3a3 #a3a3a3; -fx-border-width: 0 0 1 0;">
+        <top>
+            <HBox spacing="280" style="-fx-padding: 13;">
+                <Label text="Budget Tracker" style="-fx-font-size: 24px;"/>
+                <MenuBar>
+                    <Menu text="Expenses" style="-fx-padding: 10;-fx-font-size: 16px;"/>
+                    <Menu text="Budget" style="-fx-padding: 10;-fx-font-size: 16px;"/>
+                    <Menu text="Accounts" style="-fx-padding: 10;-fx-font-size: 16px;"/>
+                    <Menu text="Planned" style="-fx-padding: 10;-fx-font-size: 16px;"/>
+                </MenuBar>
+            </HBox>
+        </top>
+    </BorderPane>
+</AnchorPane>
+
+

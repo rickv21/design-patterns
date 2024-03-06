@@ -16,6 +16,6 @@ class BudgetTracker : Application() {
 
     override fun start(primaryStage: Stage) {
         SceneManager.primaryStage = primaryStage
-        SceneManager.switchScene("test", TestModel())
+        SceneManager.switchScene("overview", TestModel())
     }
 }
