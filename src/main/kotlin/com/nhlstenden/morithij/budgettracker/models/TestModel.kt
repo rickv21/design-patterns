@@ -3,7 +3,7 @@ package com.nhlstenden.morithij.budgettracker.models
 /**
  * A model class for testing purposes.
  */
-class TestModel {
+class TestModel : Model {
 
     private var budgetMap = HashMap<String, Any>()
 
