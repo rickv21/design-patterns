@@ -8,6 +8,7 @@ import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.BorderPane
 
 /**
@@ -17,7 +18,7 @@ class TestController() : Controller() {
     lateinit var testModel: TestModel
 
     @FXML
-    lateinit var pane: BorderPane
+    lateinit var pane: AnchorPane
 
     @FXML
     lateinit var label: Label

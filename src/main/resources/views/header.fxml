@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
-    <BorderPane style="-fx-border-color: #a3a3a3 #a3a3a3 #a3a3a3 #a3a3a3; -fx-border-width: 0 0 1 0;">
-        <top>
-            <HBox spacing="280" style="-fx-padding: 13;">
-                <Label text="Budget Tracker" style="-fx-font-size: 24px;"/>
-                <MenuBar>
-                    <Menu text="Expenses" style="-fx-padding: 10;-fx-font-size: 16px;"/>
-                    <Menu text="Budget" style="-fx-padding: 10;-fx-font-size: 16px;"/>
-                    <Menu text="Accounts" style="-fx-padding: 10;-fx-font-size: 16px;"/>
-                    <Menu text="Planned" style="-fx-padding: 10;-fx-font-size: 16px;"/>
-                </MenuBar>
-            </HBox>
-        </top>
-    </BorderPane>
+<AnchorPane prefHeight="105.0" prefWidth="900.0" style="-fx-background-color: #E7F2F8;"
+            xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label layoutX="43.0" layoutY="35.0" text="Budget Tracker">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Label>
+        <Label layoutX="464.0" layoutY="44.0" text="Budgets">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Label>
+        <Label layoutX="563.0" layoutY="44.0" text="Expenses">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Label>
+        <Label layoutX="672.0" layoutY="44.0" text="Accounts">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Label>
+        <Label layoutX="773.0" layoutY="44.0" text="Planning">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Label>
+        <Line endX="451.33331298828125" layoutX="410.0" layoutY="90.0" startX="-384.66668701171875"/>
+    </children>
 </AnchorPane>
-
-
