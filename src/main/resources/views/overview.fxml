@@ -8,21 +8,31 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController">
+<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController">
     <children>
-        <fx:include prefHeight="600.0" prefWidth="900.0" source="header.fxml"/>
+        <fx:include prefHeight="600.0" prefWidth="900.0" source="header.fxml" />
         <Label layoutX="44.0" layoutY="113.0" text="All budgets">
             <font>
-                <Font name="System Bold" size="20.0"/>
+                <Font name="System Bold" size="20.0" />
             </font>
         </Label>
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="404.0" layoutX="135.0" layoutY="165.0"
-                   stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="630.0"/>
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="330.0" layoutX="166.0" layoutY="193.0"
-                   stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="569.0"/>
-        <Button layoutX="655.0" layoutY="532.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;"
-                text="Add Budget"/>
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="404.0" layoutX="135.0" layoutY="165.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="630.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="330.0" layoutX="166.0" layoutY="193.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="569.0" />
+        <Button layoutX="655.0" layoutY="532.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" />
+      <Label layoutX="207.0" layoutY="247.0" text="Auto:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="291.0" layoutY="249.0" text="€">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="299.0" layoutY="249.0" text="500">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
