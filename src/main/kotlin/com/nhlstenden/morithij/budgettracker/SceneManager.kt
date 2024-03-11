@@ -19,6 +19,7 @@ object SceneManager {
         primaryStage.title = createdScene.first.title
         primaryStage.width = WINDOW_WIDTH
         primaryStage.height = WINDOW_HEIGHT
+        primaryStage.isResizable = false
 
         val root = createdScene.second.getRoot() as Parent
 
