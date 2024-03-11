@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pane" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController">
+<AnchorPane fx:id="pane" maxHeight="670.0" maxWidth="900.0" minHeight="670.0" minWidth="900.0" prefHeight="667.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController">
     <children>
         <fx:include prefHeight="600.0" prefWidth="900.0" source="header.fxml" />
         <Label layoutX="44.0" layoutY="113.0" text="All budgets">

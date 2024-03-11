@@ -10,6 +10,7 @@ import javafx.scene.input.KeyCode
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.BorderPane
+import javafx.stage.Stage
 
 /**
  * Test controller class for experimenting with MVC.
@@ -23,6 +24,7 @@ class TestController() : Controller() {
     @FXML
     lateinit var label: Label
 
+
     @FXML
     fun initialize() {
         pane.setOnKeyPressed { event: KeyEvent ->
@@ -30,7 +32,6 @@ class TestController() : Controller() {
                 SceneManager.switchScene("sqltest")
             }
         }
-
     }
 
     @FXML
