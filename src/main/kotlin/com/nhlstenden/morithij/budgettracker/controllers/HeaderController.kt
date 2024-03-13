@@ -15,6 +15,9 @@ class HeaderController() : Controller() {
     @FXML
     lateinit var budgetLabel: Label
 
+    @FXML
+    lateinit var planningLabel: Label
+
 
     @FXML
     fun initialize() {
@@ -26,6 +29,9 @@ class HeaderController() : Controller() {
             SceneManager.switchScene("overview", TestModel())
         }
 
+        planningLabel.setOnMouseClicked { event: MouseEvent ->
+            SceneManager.switchScene("planner", TestModel())
+        }
     }
 
     override fun setModels(vararg models: Any) {

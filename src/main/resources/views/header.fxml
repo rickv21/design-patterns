@@ -27,7 +27,7 @@
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="874.0" layoutY="40.0" text="Planning">
+        <Label fx:id="planningLabel" layoutX="874.0" layoutY="40.0" text="Planning">
             <font>
                 <Font size="16.0" />
             </font>

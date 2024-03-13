@@ -39,6 +39,9 @@ object SceneManager {
             "expense" -> {
                 viewName = "expense"
             }
+            "planner" -> {
+                viewName = "planner"
+            }
             else -> {
                 throw IllegalArgumentException("No such key: $key")
             }
