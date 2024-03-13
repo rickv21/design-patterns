@@ -36,8 +36,8 @@ object SceneManager {
             "overview" -> {
                 viewName = "overview"
             }
-            "sqltest" -> {
-                viewName = "sqltestview"
+            "expenseview" -> {
+                viewName = "expenseview"
             }
             else -> {
                 throw IllegalArgumentException("No such key: $key")
