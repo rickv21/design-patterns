@@ -17,9 +17,10 @@ class OverviewController : Controller() {
         //TODO use MoneyRecordsDOA to get all records
 
         val dao = DAOFactory.getDAO(TotalMoneyModel::class.java) as DAO<TotalMoneyModel>
-//        val record = dao.get(1)
-        val record = TotalMoneyModel(1, 2.2)
-        totalMoneyLabel.text = record.toString()
+        //TODO take this out when real users exist
+        dao.save(TotalMoneyModel(1, 2.2))
+        val record = dao.get(1)
+        totalMoneyLabel.text = "Total Budget: $record"
     }
 
     override fun setModels(vararg models: Any) {

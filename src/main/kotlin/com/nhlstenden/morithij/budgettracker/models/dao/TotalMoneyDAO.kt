@@ -20,8 +20,6 @@ class TotalMoneyDAO : DAO<TotalMoneyModel> {
         var total :  TotalMoneyModel? = null
 
         if(resultSet.next()){
-            val timestamp = resultSet.getLong("record_date")
-            val recordDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
             total = TotalMoneyModel(
                     resultSet.getInt("id"),
                     resultSet.getDouble("total")
@@ -45,7 +43,7 @@ class TotalMoneyDAO : DAO<TotalMoneyModel> {
         val id = if (resultSet.next()) resultSet.getInt(1) else -1
 
         statement.close()
-        connection.close()
+//        connection.close()
 
         return id
     }

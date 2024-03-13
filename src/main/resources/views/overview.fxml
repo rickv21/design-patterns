@@ -18,6 +18,7 @@
         </Label>
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="404.0" layoutX="202.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="630.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="330.0" layoutX="233.0" layoutY="225.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="569.0" />
+        <Label fx:id="totalMoneyLabel" layoutX="250.0" layoutY="564.0" style="-fx-padding: 10 0 0 0"/>
         <Button layoutX="722.0" layoutY="564.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" />
       <Label layoutX="274.0" layoutY="279.0" text="Auto:">
          <font>
@@ -34,6 +35,5 @@
             <Font size="13.0" />
          </font>
       </Label>
-        <Label fx:id="totalMoneyLabel" style="-fx-padding: 10 0 0 0"/>
     </children>
 </AnchorPane>
