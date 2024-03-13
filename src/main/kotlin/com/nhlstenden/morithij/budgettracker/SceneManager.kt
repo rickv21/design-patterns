@@ -6,25 +6,26 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
+import java.awt.Color
 
 object SceneManager {
 
     lateinit var primaryStage: Stage
 
-    private val WINDOW_WIDTH = 900.0
-    private val WINDOW_HEIGHT = 640.0
+    private val WINDOW_WIDTH = 1000.0
+    private val WINDOW_HEIGHT = 700.0
 
     fun switchScene(key: String, vararg models: Model)  {
         val createdScene = createScene(key, *models)
         primaryStage.title = createdScene.first.title
-        primaryStage.width = WINDOW_WIDTH
-        primaryStage.height = WINDOW_HEIGHT
-        primaryStage.isResizable = false
+        primaryStage.minWidth = WINDOW_WIDTH
+        primaryStage.minHeight = WINDOW_HEIGHT
 
         val root = createdScene.second.getRoot() as Parent
 
         // Update the scene with the new view
         val scene = Scene(root)
+
         primaryStage.scene = scene
         primaryStage.show()
     }

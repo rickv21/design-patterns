@@ -5,34 +5,33 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="105.0" prefWidth="900.0" style="-fx-background-color: #E7F2F8;"
-            xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="105.0" prefWidth="1000.0" style="-fx-background-color: #E7F2F8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label layoutX="43.0" layoutY="35.0" text="Budget Tracker">
             <font>
-                <Font name="System Bold" size="24.0"/>
+                <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <Label layoutX="464.0" layoutY="44.0" text="Budgets">
+        <Label layoutX="565.0" layoutY="40.0" text="Budgets">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="563.0" layoutY="44.0" text="Expenses">
+        <Label layoutX="664.0" layoutY="40.0" text="Expenses">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="672.0" layoutY="44.0" text="Accounts">
+        <Label layoutX="773.0" layoutY="40.0" text="Accounts">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="773.0" layoutY="44.0" text="Planning">
+        <Label layoutX="874.0" layoutY="40.0" text="Planning">
             <font>
-                <Font size="16.0"/>
+                <Font size="16.0" />
             </font>
         </Label>
-        <Line endX="451.33331298828125" layoutX="410.0" layoutY="90.0" startX="-384.66668701171875"/>
+        <Line endX="552.0000610351562" layoutX="410.0" layoutY="90.0" startX="-384.66668701171875" />
     </children>
 </AnchorPane>
