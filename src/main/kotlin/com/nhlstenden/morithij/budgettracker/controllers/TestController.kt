@@ -22,10 +22,6 @@ class TestController() : Controller() {
     lateinit var pane: AnchorPane
 
     @FXML
-    lateinit var expensesLabel: Label
-
-
-    @FXML
     fun initialize() {
         pane.setOnKeyPressed { event: KeyEvent ->
             if (event.code == KeyCode.F5) {

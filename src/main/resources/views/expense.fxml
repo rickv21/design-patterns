@@ -6,14 +6,14 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.TestController">
+<AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.ExpenseController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
-      <Label layoutX="41.0" layoutY="119.0" text="Expenses">
-         <font>
-            <Font name="System Bold" size="18.0" />
-         </font>
-      </Label>
+        <Label layoutX="41.0" layoutY="119.0" text="Expenses">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
       <Label layoutX="41.0" layoutY="187.0" text="Total budget:">
          <font>
             <Font size="16.0" />
