@@ -1,7 +1,8 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.DatabaseConnector
-import com.nhlstenden.morithij.budgettracker.models.TotalMoneyModel
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
+import com.nhlstenden.morithij.budgettracker.models.*
 import java.sql.Connection
 import java.time.Instant
 import java.time.LocalDateTime
@@ -10,8 +11,9 @@ import java.time.ZoneId
 /**
  * A DAO for MoneyRecord objects.
  */
-class TotalMoneyDAO : DAO<TotalMoneyModel> {
+class TotalMoneyDAO : DAO<TotalMoneyModel>, Observable {
     private val connection: Connection = DatabaseConnector.getConnection()
+    private val observers : HashSet<Observer> = HashSet<Observer>()
 
     override fun get(id: Int): TotalMoneyModel? {
         val statement = connection.createStatement()
@@ -44,7 +46,7 @@ class TotalMoneyDAO : DAO<TotalMoneyModel> {
 
         statement.close()
 //        connection.close()
-
+        notifyObservers()
         return id
     }
 
@@ -54,5 +56,14 @@ class TotalMoneyDAO : DAO<TotalMoneyModel> {
         statement.setInt(2, obj.user)
         statement.executeUpdate()
         statement.close()
+        notifyObservers()
+    }
+
+    override fun addObserver(observer: Observer) {
+        observers.add(observer)
+    }
+
+    override fun notifyObservers() {
+        observers.forEach { it.update(this) }
     }
 }
