@@ -1,6 +1,6 @@
 package com.nhlstenden.morithij.budgettracker
 
-import com.nhlstenden.morithij.budgettracker.models.TestModel
+import com.nhlstenden.morithij.budgettracker.models.*
 import javafx.application.Application
 import javafx.stage.Stage
 
@@ -16,6 +16,6 @@ class BudgetTracker : Application() {
 
     override fun start(primaryStage: Stage) {
         SceneManager.primaryStage = primaryStage
-        SceneManager.switchScene("overview", TestModel())
+        SceneManager.switchScene("overview")
     }
 }
