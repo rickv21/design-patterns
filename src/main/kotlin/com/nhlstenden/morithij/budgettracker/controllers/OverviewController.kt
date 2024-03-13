@@ -18,8 +18,9 @@ class OverviewController : Controller() {
 
         val dao = DAOFactory.getDAO(TotalMoneyModel::class.java) as DAO<TotalMoneyModel>
         //TODO take this out when real users exist
-        dao.save(TotalMoneyModel(1, 2.2))
-        val record = dao.get(1)
+//        dao.save(TotalMoneyModel(1, 2.2))
+//        val record = dao.get(1)
+        val record = TotalMoneyModel(1, 2.2)
         totalMoneyLabel.text = "Total Budget: $record"
     }
 

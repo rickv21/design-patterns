@@ -12,7 +12,7 @@ object DatabaseConnector {
 
     private fun init() {
         //Hardcoded for now.
-        val url = "jdbc:sqlite:budget2.db"
+        val url = "jdbc:sqlite:budgetDB.db"
         connection = DriverManager.getConnection(url)
 
         // Date is stored as a string because SQLite does not have a DATEIME column type.
