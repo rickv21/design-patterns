@@ -11,9 +11,8 @@ import java.time.ZoneId
 /**
  * A DAO for MoneyRecord objects.
  */
-class TotalMoneyDAO : DAO<TotalMoneyModel>, Observable {
+class TotalMoneyDAO : DAO<TotalMoneyModel> {
     private val connection: Connection = DatabaseConnector.getConnection()
-    private val observers : HashSet<Observer> = HashSet<Observer>()
 
     override fun get(id: Int): TotalMoneyModel? {
         val statement = connection.createStatement()
@@ -46,7 +45,6 @@ class TotalMoneyDAO : DAO<TotalMoneyModel>, Observable {
 
         statement.close()
 //        connection.close()
-        notifyObservers()
         return id
     }
 
@@ -56,14 +54,5 @@ class TotalMoneyDAO : DAO<TotalMoneyModel>, Observable {
         statement.setInt(2, obj.user)
         statement.executeUpdate()
         statement.close()
-        notifyObservers()
-    }
-
-    override fun addObserver(observer: Observer) {
-        observers.add(observer)
-    }
-
-    override fun notifyObservers() {
-        observers.forEach { it.update(this) }
     }
 }

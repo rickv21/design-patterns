@@ -12,6 +12,7 @@ import java.lang.reflect.Field
 
 class OverviewController : Controller(), Observer {
     lateinit var records: List<MoneyRecordModel>
+    lateinit var total : TotalMoneyModel
     lateinit var dao: DAO<TotalMoneyModel>
 
     @FXML
@@ -21,19 +22,19 @@ class OverviewController : Controller(), Observer {
         //TODO use MoneyRecordsDOA to get all records
 
         dao = DAOFactory.getDAO(TotalMoneyModel::class.java) as DAO<TotalMoneyModel>
-        totalMoneyLabel.text = "Total Budget: ${getTotal()}"
-        if (dao is Observable) {
-            (dao as Observable).addObserver(this)
-        }
+        total = getTotalAmount()
+        total.addObserver(this)
+        totalMoneyLabel.text = "Total Budget:$total"
+
     }
 
     override fun update(obj: Any) {
-        if (obj is TotalMoneyDAO) {
-            totalMoneyLabel.text = "Total Budget: ${getTotal()}"
+        if (obj is TotalMoneyModel) {
+            totalMoneyLabel.text = "Total Budget: $total"
         }
     }
 
-    fun getTotal() : TotalMoneyModel{
+    fun getTotalAmount() : TotalMoneyModel{
        // dao.save(TotalMoneyModel(1, 2.2))
        // val record = dao.get(1)
         return TotalMoneyModel(1, 2.2)
@@ -52,6 +53,6 @@ class OverviewController : Controller(), Observer {
     }
 
     fun handleLoadAction(actionEvent: ActionEvent) {
-        dao.update(TotalMoneyModel(1, 3.2))
+        total.setTotalAmount(5.5);
     }
 }
