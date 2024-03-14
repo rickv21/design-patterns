@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker
 
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -8,16 +9,27 @@ import java.sql.DriverManager
  */
 object DatabaseConnector {
 
+    const val DATABASE_FILE = "budgetDB.db"
+    const val RESET_ON_START = false
+
     private var connection: Connection? = null
 
-    private fun init() {
-        //Hardcoded for now.
-        val url = "jdbc:sqlite:budgetDB.db"
-        connection = DriverManager.getConnection(url)
+    private fun init(startup: Boolean = false) {
+        val dbFile = File(DATABASE_FILE)
 
-        // Date is stored as a string because SQLite does not have a DATEIME column type.
+        if (dbFile.exists() && startup && RESET_ON_START) {
+            println("Deleting database file")
+            dbFile.delete()
+        }
+        val url = "jdbc:sqlite:$DATABASE_FILE"
+        connection = DriverManager.getConnection(url)
+        initDatabase()
+    }
+
+    private fun initDatabase(){
         val statement = connection!!.createStatement()
-        statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, money DOUBLE, record_date TEXT, description TEXT)")
+        //Set the user_id to 1 by default, this is temporary until we have a login system.
+        statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, user_id INTEGER DEFAULT 1, money DOUBLE, record_date TEXT, description TEXT)")
     }
 
     fun getConnection(): Connection {
