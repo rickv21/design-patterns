@@ -31,6 +31,7 @@ class OverviewController : Controller(), Observer {
     override fun update(obj: Any) {
         if (obj is TotalMoneyModel) {
             totalMoneyLabel.text = "Total Budget: $total"
+            dao.update(total)
         }
     }
 
