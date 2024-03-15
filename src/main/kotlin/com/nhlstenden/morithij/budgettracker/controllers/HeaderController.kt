@@ -18,6 +18,10 @@ class HeaderController() : Controller() {
     @FXML
     lateinit var planningLabel: Label
 
+    @FXML
+    lateinit var accountLabel: Label
+
+
 
     @FXML
     fun initialize() {
@@ -31,6 +35,10 @@ class HeaderController() : Controller() {
 
         planningLabel.setOnMouseClicked { event: MouseEvent ->
             SceneManager.switchScene("planner", TestModel())
+        }
+
+        accountLabel.setOnMouseClicked { event: MouseEvent ->
+            SceneManager.switchScene("account", TestModel())
         }
     }
 
