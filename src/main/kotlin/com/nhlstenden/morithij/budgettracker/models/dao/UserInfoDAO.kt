@@ -1,29 +1,25 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.DatabaseConnector
-import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.*
 import java.sql.Connection
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
 
 /**
  * A DAO for MoneyRecord objects.
  */
-class TotalMoneyDAO : DAO<TotalMoneyModel> {
+class UserInfoDAO : DAO<UserInfoModel> {
     private val connection: Connection = DatabaseConnector.getConnection()
 
-    override fun get(id: Int): TotalMoneyModel? {
+    override fun get(id: Int): UserInfoModel? {
         val statement = connection.createStatement()
-        val resultSet = statement.executeQuery("SELECT * FROM total WHERE user = $id")
+        val resultSet = statement.executeQuery("SELECT * FROM user WHERE id = $id")
 
-        var total :  TotalMoneyModel? = null
+        var total :  UserInfoModel? = null
 
         if(resultSet.next()){
-            total = TotalMoneyModel(
+            total = UserInfoModel(
                     resultSet.getInt("id"),
-                    resultSet.getDouble("total")
+                    resultSet.getDouble("total_money")
             )
         }
 
@@ -32,11 +28,11 @@ class TotalMoneyDAO : DAO<TotalMoneyModel> {
         return total
     }
 
-    override fun save(obj: TotalMoneyModel) : Int {
-        val sql = "INSERT INTO total (user, total) VALUES (?, ?)"
+    override fun save(obj: UserInfoModel) : Int {
+        val sql = "INSERT INTO user (id, total_money) VALUES (?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setInt(1, obj.user)
-        statement.setDouble(2, obj.total)
+        statement.setDouble(2, obj.totalMoney)
         statement.executeUpdate()
 
         val stmt = connection.createStatement()
@@ -48,9 +44,9 @@ class TotalMoneyDAO : DAO<TotalMoneyModel> {
         return id
     }
 
-    override fun update(obj: TotalMoneyModel) {
-        val statement = connection.prepareStatement("UPDATE total SET total = ? WHERE user = ?")
-        statement.setDouble(1, obj.total)
+    override fun update(obj: UserInfoModel) {
+        val statement = connection.prepareStatement("UPDATE user SET total_money = ? WHERE id = ?")
+        statement.setDouble(1, obj.totalMoney)
         statement.setInt(2, obj.user)
         statement.executeUpdate()
         statement.close()
