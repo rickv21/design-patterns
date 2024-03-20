@@ -11,6 +11,7 @@
 <AnchorPane fx:id="pane" maxHeight="0.0" maxWidth="0.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: E7F2F8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.OverviewController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
+        <Button text="update total" onAction="#handleLoadAction" />
         <Label layoutX="44.0" layoutY="113.0" text="All budgets">
             <font>
                 <Font name="System Bold" size="20.0" />

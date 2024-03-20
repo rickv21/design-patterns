@@ -3,36 +3,69 @@ package com.nhlstenden.morithij.budgettracker.controllers
 import com.nhlstenden.morithij.budgettracker.models.*
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
+import javafx.application.Platform
+import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.Label
-import java.lang.reflect.Field
 
 
-class OverviewController : Controller() {
-    lateinit var records : List<MoneyRecordModel>
+class OverviewController : Controller(), Observer {
+    lateinit var records: List<MoneyRecordModel>
+    lateinit var userInfo: UserInfoModel
+
     @FXML
     lateinit var totalMoneyLabel: Label
 
     fun initialize() {
         //TODO use MoneyRecordsDOA to get all records
+        setTotalAmount()
 
-        val dao = DAOFactory.getDAO(TotalMoneyModel::class.java) as DAO<TotalMoneyModel>
-        //TODO take this out when real users exist
-//        dao.save(TotalMoneyModel(1, 2.2))
-//        val record = dao.get(1)
-        val record = TotalMoneyModel(1, 2.2)
-        totalMoneyLabel.text = "Total Budget: $record"
+    }
+
+    override fun update(obj: Any) {
+        if (obj is UserInfoModel) {
+            val thread = Thread {
+                val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+                dao.update(userInfo)
+                Platform.runLater {
+                    totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
+                }
+            }
+            thread.start()
+        }
+    }
+
+    private fun setTotalAmount() {
+        val thread = Thread {
+            val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+            val record = dao.get(1)
+            //TODO: handle missing record.
+            if (record != null) {
+                userInfo = record
+                onTotalInitialized()
+            }
+        }
+        thread.start()
+    }
+
+    private fun onTotalInitialized(){
+        userInfo.addObserver(this)
+        totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
+    }
+
+    private fun formatMoney(value: Double): String {
+        return String.format("€%.2f", value)
     }
 
     override fun setModels(vararg models: Any) {
-        val fields: Array<Field> = this.javaClass.declaredFields
-        for (field in fields) {
-            for (model in models) {
-                if (model.javaClass == field.type) {
-                    field.isAccessible = true
-                    field.set(this, model)
-                }
+        models.forEach {
+            if (it is UserInfoModel) {
+                userInfo = it
             }
         }
+    }
+
+    fun handleLoadAction(actionEvent: ActionEvent) {
+        userInfo.setTotalAmount(5.5);
     }
 }
