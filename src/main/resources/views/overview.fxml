@@ -4,6 +4,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
@@ -20,21 +22,13 @@
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="404.0" layoutX="202.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="630.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="330.0" layoutX="233.0" layoutY="225.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="569.0" />
         <Label fx:id="totalMoneyLabel" layoutX="250.0" layoutY="564.0" style="-fx-padding: 10 0 0 0" />
-        <Button layoutX="722.0" layoutY="564.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" />
-      <Label layoutX="274.0" layoutY="279.0" text="Auto:">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="358.0" layoutY="281.0" text="€">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="366.0" layoutY="281.0" text="500">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Label>
+        <Button fx:id="addBudgetButton" layoutX="722.0" layoutY="564.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" onAction="#onAddBudgetClick" />
+      <TableView layoutX="272.0" layoutY="242.0" prefHeight="295.0" prefWidth="489.0">
+        <columns>
+          <TableColumn prefWidth="155.33331298828125" text="Type" />
+          <TableColumn minWidth="9.99993896484375" prefWidth="168.66671752929688" text="Currency" />
+            <TableColumn prefWidth="163.99995930989581" text="Budget" />
+        </columns>
+      </TableView>
     </children>
 </AnchorPane>

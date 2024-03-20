@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
+import com.nhlstenden.morithij.budgettracker.SceneManager
 import com.nhlstenden.morithij.budgettracker.models.*
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
@@ -67,5 +68,11 @@ class OverviewController : Controller(), Observer {
 
     fun handleLoadAction(actionEvent: ActionEvent) {
         userInfo.setTotalAmount(5.5);
+    }
+
+    fun onAddBudgetClick()
+    {
+        SceneManager.switchScene("add", TestModel())
+
     }
 }

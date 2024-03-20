@@ -36,6 +36,9 @@ object SceneManager {
             "overview" -> {
                 viewName = "overview"
             }
+            "add" -> {
+                viewName = "addbudgetview"
+            }
             "expense" -> {
                 viewName = "expense"
             }
