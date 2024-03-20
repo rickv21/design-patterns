@@ -6,21 +6,26 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
+import java.awt.Color
 
 object SceneManager {
 
     lateinit var primaryStage: Stage
 
+    private val WINDOW_WIDTH = 1000.0
+    private val WINDOW_HEIGHT = 700.0
+
     fun switchScene(key: String, vararg models: Model)  {
         val createdScene = createScene(key, *models)
         primaryStage.title = createdScene.first.title
-        primaryStage.width = createdScene.first.width
-        primaryStage.height = createdScene.first.height
+        primaryStage.minWidth = WINDOW_WIDTH
+        primaryStage.minHeight = WINDOW_HEIGHT
 
         val root = createdScene.second.getRoot() as Parent
 
         // Update the scene with the new view
         val scene = Scene(root)
+
         primaryStage.scene = scene
         primaryStage.show()
     }
@@ -28,8 +33,8 @@ object SceneManager {
     private fun createScene(key: String, vararg models: Model) : Pair<Controller, FXMLLoader> {
         val viewName : String
         when (key) {
-            "test" -> {
-                viewName = "testview"
+            "overview" -> {
+                viewName = "overview"
             }
             "sqltest" -> {
                 viewName = "sqltestview"
@@ -51,5 +56,4 @@ object SceneManager {
 
         return Pair(controller, fxmlLoader)
     }
-
 }

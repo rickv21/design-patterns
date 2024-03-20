@@ -16,8 +16,15 @@ object DatabaseConnector {
         connection = DriverManager.getConnection(url)
 
         // Date is stored as a string because SQLite does not have a DATEIME column type.
-        val statement = connection!!.createStatement()
+        var statement = connection!!.createStatement()
         statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, money DOUBLE, record_date TEXT, description TEXT)")
+
+        statement = connection!!.createStatement()
+        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE)")
+
+//        //TODO: This is temporary, remove this when we have a proper way to add a user.
+       // statement = connection!!.createStatement()
+       // statement.execute("INSERT INTO user (id, total_money) VALUES (1, 2.0)")
     }
 
     fun getConnection(): Connection {

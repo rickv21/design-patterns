@@ -37,6 +37,25 @@ class MoneyRecordDAO : DAO<MoneyRecordModel> {
         return moneyRecord
     }
 
+     fun getAll():List<MoneyRecordModel>{
+        val statement = connection.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM records")
+
+        val moneyRecords = mutableListOf<MoneyRecordModel>()
+
+        while (resultSet.next()) {
+            val timestamp = resultSet.getLong("record_date")
+            val recordDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
+            moneyRecords.add(MoneyRecordModel(
+                    resultSet.getInt("id"),
+                    resultSet.getDouble("money"),
+                    recordDate,
+                    resultSet.getString("description")
+            ))
+        }
+        return moneyRecords
+    }
+
     override fun save(obj: MoneyRecordModel) : Int {
         val sql = "INSERT INTO records (money, record_date, description) VALUES (?, ?, ?)"
         val statement = connection.prepareStatement(sql)
