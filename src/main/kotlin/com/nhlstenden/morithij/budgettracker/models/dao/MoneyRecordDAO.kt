@@ -28,7 +28,9 @@ class MoneyRecordDAO : DAO<MoneyRecordModel> {
                 resultSet.getInt("id"),
                 resultSet.getDouble("money"),
                 recordDate,
-                resultSet.getString("description")
+                resultSet.getString("description"),
+                resultSet.getString("currency"),
+                resultSet.getInt("tag_id")
             )
         }
 
@@ -50,18 +52,23 @@ class MoneyRecordDAO : DAO<MoneyRecordModel> {
                     resultSet.getInt("id"),
                     resultSet.getDouble("money"),
                     recordDate,
-                    resultSet.getString("description")
+                    resultSet.getString("description"),
+                    resultSet.getString("currency"),
+                    resultSet.getInt("tag_id")
             ))
         }
         return moneyRecords
     }
 
     override fun save(obj: MoneyRecordModel) : Int {
-        val sql = "INSERT INTO records (money, record_date, description) VALUES (?, ?, ?)"
+        val sql = "INSERT INTO records (money, record_date, description, tag_id) VALUES (?, ?, ?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setDouble(1, obj.money)
         statement.setTimestamp(2, Timestamp(obj.recordDate.toInstant(ZoneOffset.UTC).toEpochMilli()))
         statement.setString(3, obj.description)
+        statement.setString(4, obj.currency)
+        statement.setInt(5, obj.tagId ?: 0) // Add tag_id
+
         statement.executeUpdate()
 
         val stmt = connection.createStatement()
@@ -75,11 +82,14 @@ class MoneyRecordDAO : DAO<MoneyRecordModel> {
     }
 
     override fun update(obj: MoneyRecordModel) {
-        val statement = connection.prepareStatement("UPDATE records SET money = ?, record_date = ?, description = ? WHERE id = ?")
+        val statement = connection.prepareStatement("UPDATE records SET money = ?, record_date = ?, description = ?, tag_id = ? WHERE id = ?")
         statement.setDouble(1, obj.money)
         statement.setTimestamp(2, java.sql.Timestamp.valueOf(obj.recordDate))
         statement.setString(3, obj.description)
-        statement.setInt(4, obj.id)
+        statement.setInt(4, obj.tagId ?: 0)
+        statement.setString(5, obj.currency)
+        statement.setInt(6, obj.id)
+
         statement.executeUpdate()
         statement.close()
     }
