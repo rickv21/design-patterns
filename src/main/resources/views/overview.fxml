@@ -13,7 +13,7 @@
 <AnchorPane fx:id="pane" maxHeight="0.0" maxWidth="0.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: E7F2F8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.OverviewController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
-        <Button text="update total" onAction="#handleLoadAction" />
+        <Button onAction="#handleLoadAction" text="update total" />
         <Label layoutX="44.0" layoutY="113.0" text="All budgets">
             <font>
                 <Font name="System Bold" size="20.0" />
@@ -22,12 +22,11 @@
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="404.0" layoutX="202.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="630.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="330.0" layoutX="233.0" layoutY="225.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="569.0" />
         <Label fx:id="totalMoneyLabel" layoutX="250.0" layoutY="564.0" style="-fx-padding: 10 0 0 0" />
-        <Button fx:id="addBudgetButton" layoutX="722.0" layoutY="564.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" onAction="#onAddBudgetClick" />
+        <Button fx:id="addBudgetButton" layoutX="722.0" layoutY="564.0" mnemonicParsing="false" onAction="#onAddBudgetClick" style="-fx-background-color: E7F2F8;" text="Add Budget" />
       <TableView layoutX="272.0" layoutY="242.0" prefHeight="295.0" prefWidth="489.0">
         <columns>
-          <TableColumn prefWidth="155.33331298828125" text="Type" />
-          <TableColumn minWidth="9.99993896484375" prefWidth="168.66671752929688" text="Currency" />
-            <TableColumn prefWidth="163.99995930989581" text="Budget" />
+            <TableColumn prefWidth="240.00003051757812" text="Budget" />
+            <TableColumn prefWidth="247.99993896484375" text="Type" />
         </columns>
       </TableView>
     </children>
