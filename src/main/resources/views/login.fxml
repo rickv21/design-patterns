@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: E7F2F8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.UserController">
+   <children>
+      <Label layoutX="53.0" layoutY="45.0" text="Budget Tracker">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </Label>
+      <Line endX="552.0000610351562" layoutX="420.0" layoutY="100.0" startX="-384.66668701171875" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="418.0" layoutX="190.0" layoutY="176.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="627.0" />
+      <Label layoutX="233.0" layoutY="211.0" text="Log in">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="263.0" layoutX="229.0" layoutY="266.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" width="549.0" />
+      <Label layoutX="262.0" layoutY="324.0" text="Username:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="264.0" layoutY="385.0" text="Password:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField layoutX="366.0" layoutY="324.0" prefHeight="25.0" prefWidth="356.0" />
+      <TextField layoutX="366.0" layoutY="385.0" prefHeight="25.0" prefWidth="356.0" />
+      <Button layoutX="706.0" layoutY="547.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="Log in" />
+   </children>
+</AnchorPane>

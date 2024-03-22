@@ -22,6 +22,9 @@ object DatabaseConnector {
         statement = connection!!.createStatement()
         statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE)")
 
+        statement = connection!!.createStatement()
+        statement.execute("CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY, tag_name TEXT, hexcode TEXT)")
+
 //        //TODO: This is temporary, remove this when we have a proper way to add a user.
        // statement = connection!!.createStatement()
        // statement.execute("INSERT INTO user (id, total_money) VALUES (1, 2.0)")

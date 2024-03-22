@@ -22,22 +22,12 @@ class TestController() : Controller() {
     lateinit var pane: AnchorPane
 
     @FXML
-    lateinit var label: Label
-
-
-    @FXML
     fun initialize() {
         pane.setOnKeyPressed { event: KeyEvent ->
             if (event.code == KeyCode.F5) {
                 SceneManager.switchScene("sqltest")
             }
         }
-    }
-
-    @FXML
-    fun handleButtonAction(event: ActionEvent) {
-        testModel.increment()
-        label.text = "You clicked me ${testModel["counter"]} times!"
     }
 
     override fun setModels(vararg models: Any) {

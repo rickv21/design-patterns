@@ -5,29 +5,29 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="105.0" prefWidth="1000.0" style="-fx-background-color: #E7F2F8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="105.0" prefWidth="1000.0" style="-fx-background-color: #E7F2F8;" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.HeaderController" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label layoutX="43.0" layoutY="35.0" text="Budget Tracker">
             <font>
                 <Font name="System Bold" size="24.0" />
             </font>
         </Label>
-        <Label layoutX="565.0" layoutY="40.0" text="Budgets">
+        <Label fx:id="budgetLabel" layoutX="565.0" layoutY="40.0" text="Budgets">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="664.0" layoutY="40.0" text="Expenses">
+        <Label fx:id="expenseLabel" layoutX="664.0" layoutY="40.0" text="Expenses">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="773.0" layoutY="40.0" text="Accounts">
+        <Label fx:id="accountLabel" layoutX="773.0" layoutY="40.0" text="Accounts">
             <font>
                 <Font size="16.0" />
             </font>
         </Label>
-        <Label layoutX="874.0" layoutY="40.0" text="Planning">
+        <Label fx:id="planningLabel" layoutX="874.0" layoutY="40.0" text="Planning">
             <font>
                 <Font size="16.0" />
             </font>

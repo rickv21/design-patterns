@@ -42,7 +42,7 @@ class SQLTestController() : Controller() {
 
     @FXML
     fun handleSaveAction(event: ActionEvent) {
-        val record = MoneyRecordModel(0, 0.0, LocalDateTime.now(), inputField.text)
+        val record = MoneyRecordModel(0, 0.0, LocalDateTime.now(), inputField.text, "EUR", 0)
         val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>
         id = dao.save(record)
         println("Saved record with id: $id")
