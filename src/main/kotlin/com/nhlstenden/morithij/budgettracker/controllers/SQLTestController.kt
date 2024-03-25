@@ -3,6 +3,7 @@ package com.nhlstenden.morithij.budgettracker.controllers
 import com.nhlstenden.morithij.budgettracker.models.MoneyRecordModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
+import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.Label
@@ -43,23 +44,37 @@ class SQLTestController() : Controller() {
     @FXML
     fun handleSaveAction(event: ActionEvent) {
         val record = MoneyRecordModel(0, 0.0, LocalDateTime.now(), inputField.text, "EUR", 0)
-        val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>
-        id = dao.save(record)
-        println("Saved record with id: $id")
-        label.text = "Saved record with id: $id"
+
+        val thread = Thread {
+            val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>
+            id = dao.create(record)
+            dao.close()
+            println("Saved record with id: $id")
+            Platform.runLater{
+                label.text = "Saved record with id: $id"
+            }
+        }
+        thread.start()
     }
 
     @FXML
     fun handleLoadAction(event: ActionEvent) {
-        val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>
         val id = idField.text.toIntOrNull()
         if(id == null){
             label.text = "Invalid ID"
             return
         }
-        val record = dao.get(id)
-        label.text = record.toString()
-        println("Loaded record: $record")
+
+        val thread = Thread {
+            val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>
+            val record = dao.get(id)
+            dao.close()
+            println("Loaded record: $record")
+            Platform.runLater{
+                label.text = record.toString()
+            }
+        }
+        thread.start()
     }
 
     override fun setModels(vararg models: Any) {

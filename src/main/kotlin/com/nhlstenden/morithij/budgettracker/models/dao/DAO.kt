@@ -1,11 +1,21 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
-/**
- * A Data Access Object (DAO) interface.
- */
-interface DAO<T> {
+import com.nhlstenden.morithij.budgettracker.DatabaseConnector
+import java.sql.Connection
 
-    fun get(id: Int): T?
-    fun save(obj: T) : Int
-    fun update(obj: T)
+/**
+ * A Data Access Object (DAO) abstract class.
+ */
+abstract class DAO<T> {
+
+    protected val connection: Connection = DatabaseConnector.getConnection()
+
+    abstract fun get(id: Int): T?
+    abstract fun getAll(): List<T>
+    abstract fun create(obj: T) : Int
+    abstract fun update(obj: T)
+
+    fun close(){
+        connection.close()
+    }
 }
