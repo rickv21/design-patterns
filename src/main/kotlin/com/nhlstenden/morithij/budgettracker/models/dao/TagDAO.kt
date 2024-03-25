@@ -4,8 +4,7 @@ import com.nhlstenden.morithij.budgettracker.DatabaseConnector
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import java.sql.Connection
 
-class TagDAO  : DAO<TagModel>{
-    private val connection: Connection = DatabaseConnector.getConnection()
+class TagDAO  : DAO<TagModel>() {
 
     override fun get(id: Int): TagModel? {
         val statement = connection.createStatement()
@@ -26,7 +25,11 @@ class TagDAO  : DAO<TagModel>{
         return tagRecord
     }
 
-    override fun save(obj: TagModel): Int {
+    override fun getAll(): List<TagModel> {
+        TODO("Not yet implemented")
+    }
+
+    override fun create(obj: TagModel): Int {
         val sql = "INSERT INTO tag (id, tag_name, hexcode) VALUES (?, ?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setInt(1, obj.id)

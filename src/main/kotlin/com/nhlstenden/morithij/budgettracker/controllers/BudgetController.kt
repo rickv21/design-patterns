@@ -49,7 +49,7 @@ class BudgetController() : Controller() {
                     hexcode = String.format("#%02X%02X%02X", (tagColorHex.red * 255).toInt(), (tagColorHex.green * 255).toInt(), (tagColorHex.blue * 255).toInt())
             )
 
-            val tagId = tagDAO.save(tag)
+            val tagId = tagDAO.create(tag)
 
             // New moneyRecord object
             val moneyRecord = MoneyRecordModel(
@@ -61,7 +61,7 @@ class BudgetController() : Controller() {
             )
 
             // Save record
-            moneyRecordDAO.save(moneyRecord)
+            moneyRecordDAO.create(moneyRecord)
 
             // Success message
             val successAlert = Alert(Alert.AlertType.INFORMATION)

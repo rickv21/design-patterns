@@ -7,8 +7,7 @@ import java.sql.Connection
 /**
  * A DAO for MoneyRecord objects.
  */
-class UserInfoDAO : DAO<UserInfoModel> {
-    private val connection: Connection = DatabaseConnector.getConnection()
+class UserInfoDAO : DAO<UserInfoModel>() {
 
     override fun get(id: Int): UserInfoModel? {
         val statement = connection.createStatement()
@@ -28,7 +27,11 @@ class UserInfoDAO : DAO<UserInfoModel> {
         return total
     }
 
-    override fun save(obj: UserInfoModel) : Int {
+    override fun getAll(): List<UserInfoModel> {
+        TODO("Not yet implemented")
+    }
+
+    override fun create(obj: UserInfoModel): Int {
         val sql = "INSERT INTO user (id, total_money) VALUES (?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setInt(1, obj.user)
@@ -43,6 +46,7 @@ class UserInfoDAO : DAO<UserInfoModel> {
 //        connection.close()
         return id
     }
+
 
     override fun update(obj: UserInfoModel) {
         val statement = connection.prepareStatement("UPDATE user SET total_money = ? WHERE id = ?")
