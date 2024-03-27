@@ -4,15 +4,15 @@ import com.nhlstenden.morithij.budgettracker.DatabaseConnector
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import java.sql.Connection
 
-class TagDAO  : DAO<TagModel>() {
+class TagDAO : DAO<TagModel>() {
 
     override fun get(id: Int): TagModel? {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM tag WHERE id = $id")
 
-        var tagRecord :  TagModel? = null
+        var tagRecord: TagModel? = null
 
-        if(resultSet.next()){
+        if (resultSet.next()) {
             tagRecord = TagModel(
                     resultSet.getInt("id"),
                     resultSet.getString("tag_name"),
@@ -31,13 +31,13 @@ class TagDAO  : DAO<TagModel>() {
 
         val tags = mutableListOf<TagModel>()
 
-        while(resultSet.next()){
+        while (resultSet.next()) {
             tags.add(
-                TagModel(
-                        resultSet.getInt("id"),
-                        resultSet.getString("tag_name"),
-                        resultSet.getString("hexcode")
-                )
+                    TagModel(
+                            resultSet.getInt("id"),
+                            resultSet.getString("tag_name"),
+                            resultSet.getString("hexcode")
+                    )
             )
         }
 
@@ -79,9 +79,9 @@ class TagDAO  : DAO<TagModel>() {
                 TagModel(1, "Car", "#4aaeff"),
                 TagModel(2, "Groceries", "#33de61"),
                 TagModel(3, "Entertainment", "#fff64a"),
-                TagModel(4, "Utilities", "#f03cea" ),
-                TagModel(5, "Health", "#dbfaff" ),
-                TagModel(6, "Housing", "#e3d6ff" )
+                TagModel(4, "Utilities", "#f03cea"),
+                TagModel(5, "Health", "#dbfaff"),
+                TagModel(6, "Housing", "#e3d6ff")
         )
 
         for (tag in standardTags) {

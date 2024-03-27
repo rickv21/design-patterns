@@ -22,15 +22,18 @@ import java.time.LocalDateTime
 class BudgetController() : Controller() {
     @FXML
     lateinit var addBudgetButton: Button
+
     @FXML
     lateinit var addBudgetTextfield: TextField
+
     @FXML
     lateinit var addDescriptionTextfield: TextField
+
     @FXML
     lateinit var addTagCombobox: ComboBox<String>
 
     @FXML
-    fun initialize(){
+    fun initialize() {
 
         val thread = Thread {
             val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
@@ -123,7 +126,6 @@ class BudgetController() : Controller() {
         }
         thread.start()
     }
-
 
 
     override fun setModels(vararg models: Any) {

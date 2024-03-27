@@ -16,18 +16,18 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
         val statement = connection.createStatement()
         val resultSet = statement.executeQuery("SELECT * FROM records WHERE id = $id")
 
-        var moneyRecord :  MoneyRecordModel? = null
+        var moneyRecord: MoneyRecordModel? = null
 
-        if(resultSet.next()){
+        if (resultSet.next()) {
             val timestamp = resultSet.getLong("record_date")
             val recordDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
             moneyRecord = MoneyRecordModel(
-                resultSet.getInt("id"),
-                resultSet.getDouble("money"),
-                recordDate,
-                resultSet.getString("description"),
-                resultSet.getString("currency"),
-                resultSet.getInt("tag_id")
+                    resultSet.getInt("id"),
+                    resultSet.getDouble("money"),
+                    recordDate,
+                    resultSet.getString("description"),
+                    resultSet.getString("currency"),
+                    resultSet.getInt("tag_id")
             )
         }
 
@@ -42,20 +42,20 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
 
         val moneyRecords = mutableListOf<MoneyRecordModel>()
 
-        while(resultSet.next()){
+        while (resultSet.next()) {
             val timestamp = resultSet.getLong("record_date")
             val recordDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
             val currency = resultSet.getString("currency") ?: "EUR"
 
             moneyRecords.add(
-                MoneyRecordModel(
-                    resultSet.getInt("id"),
-                    resultSet.getDouble("money"),
-                    recordDate,
-                    resultSet.getString("description"),
-                    currency,
-                    tagId = resultSet.getInt("tagId")
-                )
+                    MoneyRecordModel(
+                            resultSet.getInt("id"),
+                            resultSet.getDouble("money"),
+                            recordDate,
+                            resultSet.getString("description"),
+                            currency,
+                            tagId = resultSet.getInt("tagId")
+                    )
             )
         }
 
@@ -64,7 +64,7 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
         return moneyRecords
     }
 
-    override fun create(obj: MoneyRecordModel) : Int {
+    override fun create(obj: MoneyRecordModel): Int {
         val sql = "INSERT INTO records (money, record_date, description, tagId) VALUES (?, ?, ?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setDouble(1, obj.money)

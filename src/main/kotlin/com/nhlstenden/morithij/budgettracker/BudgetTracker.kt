@@ -26,7 +26,7 @@ class BudgetTracker : Application() {
                 alert.title = "Error Dialog"
                 var ex = throwable
 
-                while (ex.cause != null){
+                while (ex.cause != null) {
                     ex = ex.cause!!
                 }
                 val message: String = ex.message ?: "Unknown error"
