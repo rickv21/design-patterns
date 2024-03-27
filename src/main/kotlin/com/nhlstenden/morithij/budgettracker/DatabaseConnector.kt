@@ -28,13 +28,14 @@ object DatabaseConnector {
 
     private fun initDatabase(){
         val statement = connection!!.createStatement()
-        //Set the user_id to 1 by default, this is temporary until we have a login system.
-        statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, user_id INTEGER DEFAULT 1, money DOUBLE, record_date TEXT, description TEXT)")
-    
+
+        statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, user_id INTEGER DEFAULT 1, money DOUBLE, record_date TEXT, description TEXT, currency TEXT, tagId INTEGER, FOREIGN KEY(tagId) REFERENCES tag(id))")
+
         statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE)")
 
         statement.execute("CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY, tag_name TEXT, hexcode TEXT)")
     }
+
 
     fun getConnection(): Connection {
         if (connection == null || connection!!.isClosed) {

@@ -1,10 +1,8 @@
 package com.nhlstenden.morithij.budgettracker
 
 import javafx.application.Application
-import javafx.scene.image.Image
 import javafx.scene.control.Alert
 import javafx.stage.Stage
-import java.lang.reflect.InvocationTargetException
 
 // The entry point for the application.
 fun main(args: Array<String>) {

@@ -26,7 +26,24 @@ class TagDAO  : DAO<TagModel>() {
     }
 
     override fun getAll(): List<TagModel> {
-        TODO("Not yet implemented")
+        val statement = connection.createStatement()
+        val resultSet = statement.executeQuery("SELECT * FROM tag")
+
+        val tags = mutableListOf<TagModel>()
+
+        while(resultSet.next()){
+            tags.add(
+                TagModel(
+                        resultSet.getInt("id"),
+                        resultSet.getString("tag_name"),
+                        resultSet.getString("hexcode")
+                )
+            )
+        }
+
+        resultSet.close()
+        statement.close()
+        return tags
     }
 
     override fun create(obj: TagModel): Int {
@@ -55,4 +72,20 @@ class TagDAO  : DAO<TagModel>() {
         statement.close()
     }
 
+    fun createStandardTags() {
+        System.out.println("meep")
+
+        val standardTags = listOf(
+                TagModel(1, "Car", "#4aaeff"),
+                TagModel(2, "Groceries", "#33de61"),
+                TagModel(3, "Entertainment", "#fff64a"),
+                TagModel(4, "Utilities", "#f03cea" ),
+                TagModel(5, "Health", "#dbfaff" ),
+                TagModel(6, "Housing", "#e3d6ff" )
+        )
+
+        for (tag in standardTags) {
+            create(tag)
+        }
+    }
 }

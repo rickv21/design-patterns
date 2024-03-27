@@ -62,13 +62,12 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
     }
 
     override fun create(obj: MoneyRecordModel) : Int {
-        val sql = "INSERT INTO records (money, record_date, description) VALUES (?, ?, ?)"
+        val sql = "INSERT INTO records (money, record_date, description, tagId) VALUES (?, ?, ?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setDouble(1, obj.money)
         statement.setTimestamp(2, Timestamp(obj.recordDate.toInstant(ZoneOffset.UTC).toEpochMilli()))
         statement.setString(3, obj.description)
-        statement.setString(4, obj.currency)
-        statement.setInt(5, obj.tagId ?: 0) // Add tag_id
+        statement.setInt(4, obj.tagId ?: 0)
 
         statement.executeUpdate()
 
