@@ -45,13 +45,16 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
         while(resultSet.next()){
             val timestamp = resultSet.getLong("record_date")
             val recordDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
+            val currency = resultSet.getString("currency") ?: "EUR"
+
             moneyRecords.add(
                 MoneyRecordModel(
                     resultSet.getInt("id"),
                     resultSet.getDouble("money"),
                     recordDate,
                     resultSet.getString("description"),
-                    tagId = null
+                    currency,
+                    tagId = resultSet.getInt("tagId")
                 )
             )
         }
