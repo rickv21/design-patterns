@@ -10,9 +10,9 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.scene.control.Label
-import javafx.scene.control.TableColumn
-import javafx.scene.control.TableView
+import javafx.geometry.Pos
+import javafx.scene.control.*
+import javafx.util.Callback
 
 
 class OverviewController : Controller(), Observer {
@@ -73,10 +73,34 @@ class OverviewController : Controller(), Observer {
         val descriptionColumn = TableColumn<MoneyRecordModel, String>("Description")
         descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
 
-        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn)
+        // Action column
+        val actionColumn = TableColumn<MoneyRecordModel, MoneyRecordModel>("Action")
+        actionColumn.cellFactory = Callback { param ->
+            object : TableCell<MoneyRecordModel, MoneyRecordModel>() {
+                private val button = Button("Edit")
+
+                init {
+                    button.setOnAction {
+                        //To DO action
+                    }
+                    alignment = Pos.CENTER
+                }
+
+                override fun updateItem(item: MoneyRecordModel?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                    } else {
+                        graphic = button
+                    }
+                }
+            }
+        }
+        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn, actionColumn)
 
         thread.start()
     }
+
 
     private fun getTagName(tagId: Int?): String? {
         // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
