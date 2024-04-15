@@ -48,9 +48,10 @@
                 <NumberAxis />
             </yAxis>
         </LineChart>
+        <Label layoutX="556.0" layoutY="200.0" text="Start of period:" />
         <!-- Add DatePicker for Start Date -->
         <DatePicker fx:id="startDatePicker" layoutX="556.0" layoutY="223.0" prefWidth="150.0" />
-
+        <Label layoutX="726.0" layoutY="200.0" text="End of period:" />
         <!-- Add DatePicker for End Date -->
         <DatePicker fx:id="endDatePicker" layoutX="726.0" layoutY="223.0" prefWidth="150.0" />
     </children>

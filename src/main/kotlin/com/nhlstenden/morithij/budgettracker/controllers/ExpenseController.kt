@@ -88,6 +88,9 @@ class ExpenseController() : Controller() {
         val actualBeginDate = beginDate ?: earliestDate ?: LocalDateTime.now()
         val actualEndDate = endDate ?: latestDate ?: LocalDateTime.now()
 
+        startDatePicker.value = actualBeginDate?.toLocalDate()
+        endDatePicker.value = actualEndDate?.toLocalDate()
+
         if(!actualBeginDate.isBefore(actualEndDate)){
             return XYChart.Series<Number, Number>()
         }
