@@ -13,7 +13,7 @@
 <AnchorPane prefHeight="700.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.ExpenseController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
-        <Label layoutX="41.0" layoutY="119.0" text="Expenses">
+        <Label fx:id="test" layoutX="41.0" layoutY="119.0" text="Expenses">
             <font>
                 <Font name="System Bold" size="20.0" />
             </font>
@@ -38,7 +38,6 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <Button layoutX="41.0" layoutY="270.0" mnemonicParsing="false" text="Add expense" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="415.0" layoutX="327.0" layoutY="223.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="632.0" />
         <LineChart fx:id="lineChart" layoutX="336.0" layoutY="232.0" prefHeight="397.0" prefWidth="614.0">
             <xAxis>
@@ -48,11 +47,11 @@
                 <NumberAxis />
             </yAxis>
         </LineChart>
-        <Label layoutX="556.0" layoutY="200.0" text="Start of period:" />
+        <Label layoutX="410.0" layoutY="223.0" text="Start of period:" />
         <!-- Add DatePicker for Start Date -->
-        <DatePicker fx:id="startDatePicker" layoutX="556.0" layoutY="223.0" prefWidth="150.0" />
-        <Label layoutX="726.0" layoutY="200.0" text="End of period:" />
+        <DatePicker fx:id="startDatePicker" layoutX="495.0" layoutY="223.0" prefWidth="150.0" />
+        <Label layoutX="665.0" layoutY="223.0" text="End of period:" />
         <!-- Add DatePicker for End Date -->
-        <DatePicker fx:id="endDatePicker" layoutX="726.0" layoutY="223.0" prefWidth="150.0" />
+        <DatePicker fx:id="endDatePicker" layoutX="746.0" layoutY="223.0" prefWidth="150.0" />
     </children>
 </AnchorPane>

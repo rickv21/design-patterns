@@ -6,6 +6,7 @@ import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
 import javafx.scene.chart.XYChart
 import javafx.scene.control.DatePicker
+import javafx.scene.control.Label
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -21,6 +22,9 @@ class ExpenseController() : Controller() {
 
     @FXML
     private lateinit var endDatePicker : DatePicker
+
+    @FXML
+    private lateinit var test : Label
 
     // This function is called when the FXML file is loaded
     fun initialize() {
@@ -61,8 +65,8 @@ class ExpenseController() : Controller() {
         // Hide the legend
         lineChart.isLegendVisible = false
 
-        startDatePicker.setOnAction { updateChart(records) }
-        endDatePicker.setOnAction { updateChart(records) }
+//        startDatePicker.setOnAction { updateChart(records) }
+//        endDatePicker.setOnAction { updateChart(records) }
     }
 
     private fun updateChart(records: List<MoneyRecordModel>) {
@@ -96,7 +100,6 @@ class ExpenseController() : Controller() {
         }
 
         val filteredRecords = sortedRecords.filter { it.recordDate in actualBeginDate..actualEndDate }
-
         val duration = Duration.between(actualBeginDate, actualEndDate)
         val numberOfDivisions = filteredRecords.size
 
@@ -110,18 +113,17 @@ class ExpenseController() : Controller() {
         val recordsIterator = filteredRecords.iterator()
         var record: MoneyRecordModel? = if (recordsIterator.hasNext()) recordsIterator.next() else null
 
-        repeat(numberOfDivisions) { periodIndex ->
+        repeat(numberOfDivisions + 1) { periodIndex ->
             while (record != null && record!!.recordDate < currentPeriodEnd) {
                 sum += record!!.money
                 record = if (recordsIterator.hasNext()) recordsIterator.next() else null
             }
 
-            val data = XYChart.Data<Number, Number>(currentPeriodEnd.toEpochSecond(ZoneOffset.UTC), sum)
+            val data = XYChart.Data<Number, Number>(currentPeriodStart.toEpochSecond(ZoneOffset.UTC), sum)
             series.data.add(data)
             currentPeriodStart = currentPeriodEnd
             currentPeriodEnd = currentPeriodEnd.plus(periodDuration)
         }
-
         return series
     }
 
