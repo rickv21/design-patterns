@@ -1,8 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
-import com.nhlstenden.morithij.budgettracker.DatabaseConnector
-import com.nhlstenden.morithij.budgettracker.models.*
-import java.sql.Connection
+import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 
 /**
  * A DAO for MoneyRecord objects.
@@ -18,7 +16,8 @@ class UserInfoDAO : DAO<UserInfoModel>() {
         if(resultSet.next()){
             total = UserInfoModel(
                     resultSet.getInt("id"),
-                    resultSet.getDouble("total_money")
+                    resultSet.getDouble("total_money"),
+                    resultSet.getDouble("expense_limit")
             )
         }
 
@@ -28,7 +27,7 @@ class UserInfoDAO : DAO<UserInfoModel>() {
     }
 
     override fun getAll(): List<UserInfoModel> {
-        TODO("Not yet implemented")
+        TODO("Not needed due to the multiple users feature being cut.")
     }
 
     override fun create(obj: UserInfoModel): Int {

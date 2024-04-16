@@ -31,9 +31,11 @@ object DatabaseConnector {
 
         statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, user_id INTEGER DEFAULT 1, money DOUBLE, record_date TEXT, description TEXT, currency TEXT, tagId INTEGER, FOREIGN KEY(tagId) REFERENCES tag(id))")
 
-        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE)")
+        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE, expense_limit DOUBLE DEFAULT 0.0)")
 
         statement.execute("CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY, tag_name TEXT, hexcode TEXT)")
+
+        //statement.execute("INSERT INTO user (id, total_money) VALUES (1, 0.0)")
     }
 
 
