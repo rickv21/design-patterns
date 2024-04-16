@@ -64,9 +64,6 @@ class ExpenseController() : Controller() {
 
         // Hide the legend
         lineChart.isLegendVisible = false
-
-//        startDatePicker.setOnAction { updateChart(records) }
-//        endDatePicker.setOnAction { updateChart(records) }
     }
 
     private fun updateChart(records: List<MoneyRecordModel>) {
