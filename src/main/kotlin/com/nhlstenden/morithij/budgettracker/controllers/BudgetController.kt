@@ -1,22 +1,15 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
-import com.nhlstenden.morithij.budgettracker.models.MoneyRecordModel
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
-import com.nhlstenden.morithij.budgettracker.models.dao.MoneyRecordDAO
-import com.nhlstenden.morithij.budgettracker.models.dao.TagDAO
 import javafx.application.Platform
-import javafx.collections.FXCollections
-import javafx.collections.ObservableList
 import javafx.fxml.FXML
 import javafx.scene.control.Alert
 import javafx.scene.control.Button
-import javafx.scene.control.ColorPicker
 import javafx.scene.control.ComboBox
-import javafx.scene.control.Label
 import javafx.scene.control.TextField
-import java.lang.reflect.Field
 import java.time.LocalDateTime
 
 class BudgetController() : Controller() {
@@ -96,15 +89,14 @@ class BudgetController() : Controller() {
             // Ensure selected tag is not null
             if (selectedTag != null) {
                 // Create a new moneyRecord object with the selected tag's id
-                val moneyRecord = MoneyRecordModel(
-                        money = budget.toDouble(),
-                        recordDate = LocalDateTime.now(),
+                val moneyRecord = BudgetModel(
+                        totalBudget = budget.toDouble(),
+                        currentBudget = budget.toDouble(),
                         description = description,
-                        tagId = selectedTag.id
                 )
 
                 // Save record
-                val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>
+                val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
                 val moneyRecordId = dao.create(moneyRecord)
                 dao.close()
 

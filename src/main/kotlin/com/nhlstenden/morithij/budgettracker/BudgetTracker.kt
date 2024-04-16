@@ -2,6 +2,7 @@ package com.nhlstenden.morithij.budgettracker
 
 import javafx.application.Application
 import javafx.scene.control.Alert
+import javafx.scene.image.Image
 import javafx.stage.Stage
 
 // The entry point for the application.
@@ -16,6 +17,7 @@ class BudgetTracker : Application() {
 
     override fun start(primaryStage: Stage) {
         try {
+            primaryStage.icons.add(Image(javaClass.getResourceAsStream("/budget.png")));
             SceneManager.primaryStage = primaryStage
             SceneManager.switchScene("overview")
 

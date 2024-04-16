@@ -28,12 +28,11 @@ object DatabaseConnector {
 
     private fun initDatabase(){
         val statement = connection!!.createStatement()
-        statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, user_id INTEGER DEFAULT 1, money DOUBLE, record_date TEXT, description TEXT, currency TEXT, tagId INTEGER, FOREIGN KEY(tagId) REFERENCES tag(id))")
 
+        statement.execute("CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY, budget_id INTEGER, money DOUBLE, record_date TEXT, description TEXT)")
+        statement.execute("CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY, total_budget DOUBLE, current_budget DOUBLE, description TEXT, currency TEXT)")
         statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE, expense_limit DOUBLE DEFAULT 0.0)")
-
-        statement.execute("CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY, tag_name TEXT, hexcode TEXT)")
-
+        statement.execute("CREATE TABLE IF NOT EXISTS reminder (id INTEGER PRIMARY KEY, description DOUBLE, reminder_date TEXT)")
         //statement.execute("INSERT INTO user (id, total_money) VALUES (1, 0.0)")
     }
 

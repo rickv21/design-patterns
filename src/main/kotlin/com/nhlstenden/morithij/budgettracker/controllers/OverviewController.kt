@@ -4,7 +4,7 @@ import com.nhlstenden.morithij.budgettracker.SceneManager
 import com.nhlstenden.morithij.budgettracker.models.*
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
-import com.nhlstenden.morithij.budgettracker.models.dao.MoneyRecordDAO
+import com.nhlstenden.morithij.budgettracker.models.dao.BudgetDAO
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
@@ -16,13 +16,13 @@ import javafx.util.Callback
 
 
 class OverviewController : Controller(), Observer {
-    lateinit var records: List<MoneyRecordModel>
+    lateinit var records: List<BudgetModel>
     lateinit var userInfo: UserInfoModel
 
     private val tagNamesMap = mutableMapOf<Int?, String?>()
 
     @FXML
-    private lateinit var overviewBudgetRecords: TableView<MoneyRecordModel>
+    private lateinit var overviewBudgetRecords: TableView<BudgetModel>
 
     @FXML
     lateinit var totalMoneyLabel: Label
@@ -35,7 +35,7 @@ class OverviewController : Controller(), Observer {
     private fun setupTableView() {
         // get budget money records
         val thread = Thread {
-            val moneyRecordDAO = MoneyRecordDAO()
+            val moneyRecordDAO = BudgetDAO()
             val allRecords = moneyRecordDAO.getAll()
             Platform.runLater {
                 overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)
@@ -43,40 +43,20 @@ class OverviewController : Controller(), Observer {
         }
 
         // Get money value for budget column
-        val budgetColumn = TableColumn<MoneyRecordModel, String>("Budget")
-        budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.money)) }
+        val budgetColumn = TableColumn<BudgetModel, String>("Budget")
+        budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.totalBudget)) }
 
         // Get tag name value for type column
-        val typeColumn = TableColumn<MoneyRecordModel, String>("Type")
-        typeColumn.setCellValueFactory { cellData ->
-            val tagId = cellData.value.tagId
-            val tagNameProperty = SimpleStringProperty()
-
-            if (tagNamesMap.containsKey(tagId)) {
-                tagNameProperty.set(tagNamesMap[tagId] ?: "")
-            } else {
-                val thread = Thread {
-                    val tagName = getTagName(tagId)
-
-                    // runLater is used so the property change happens in the javaFX thread.
-                    Platform.runLater {
-                        tagNameProperty.set(tagName ?: "")
-                    }
-                }
-                thread.start()
-            }
-
-            tagNameProperty
-        }
+        val typeColumn = TableColumn<BudgetModel, String>("Type")
 
         // Get record description value for description column
-        val descriptionColumn = TableColumn<MoneyRecordModel, String>("Description")
+        val descriptionColumn = TableColumn<BudgetModel, String>("Description")
         descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
 
         // Action column
-        val actionColumn = TableColumn<MoneyRecordModel, MoneyRecordModel>("Action")
+        val actionColumn = TableColumn<BudgetModel, BudgetModel>("Action")
         actionColumn.cellFactory = Callback { param ->
-            object : TableCell<MoneyRecordModel, MoneyRecordModel>() {
+            object : TableCell<BudgetModel, BudgetModel>() {
                 private val button = Button("Edit")
 
                 init {
@@ -86,7 +66,7 @@ class OverviewController : Controller(), Observer {
                     alignment = Pos.CENTER
                 }
 
-                override fun updateItem(item: MoneyRecordModel?, empty: Boolean) {
+                override fun updateItem(item: BudgetModel?, empty: Boolean) {
                     super.updateItem(item, empty)
                     if (empty) {
                         graphic = null

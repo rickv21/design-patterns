@@ -1,6 +1,7 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
-import com.nhlstenden.morithij.budgettracker.models.MoneyRecordModel
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
+import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import javafx.application.Platform
@@ -16,7 +17,8 @@ object DAOFactory {
         }
 
         return when (modelClass) {
-            MoneyRecordModel::class.java -> MoneyRecordDAO()
+            BudgetModel::class.java -> BudgetDAO()
+            ExpenseModel::class.java -> ExpenseDAO()
             UserInfoModel::class.java -> UserInfoDAO()
             TagModel::class.java -> TagDAO()
             else -> throw IllegalArgumentException("Invalid model class: $modelClass")
