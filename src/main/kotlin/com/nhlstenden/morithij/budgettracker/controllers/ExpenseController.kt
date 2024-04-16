@@ -80,6 +80,9 @@ class ExpenseController() : Controller() {
                             }
 
                             if(textField1.text.toDouble() > userInfo.expenseLimit){
+                                if(userInfo.expenseLimit == 0.0){
+                                    return@setOnAction
+                                }
                                 val errorAlert = Alert(Alert.AlertType.ERROR)
                                 errorAlert.title = "Error"
                                 errorAlert.headerText = "The expense you entered is more then your set limit!"
