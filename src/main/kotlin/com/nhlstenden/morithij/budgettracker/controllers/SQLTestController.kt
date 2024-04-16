@@ -43,7 +43,7 @@ class SQLTestController() : Controller() {
 
     @FXML
     fun handleSaveAction(event: ActionEvent) {
-        val record = MoneyRecordModel(0, 0.0, LocalDateTime.now(), inputField.text, "EUR", 0)
+        val record = MoneyRecordModel(0.0, LocalDateTime.now(), inputField.text, 0)
 
         val thread = Thread {
             val dao = DAOFactory.getDAO(MoneyRecordModel::class.java) as DAO<MoneyRecordModel>

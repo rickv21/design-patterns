@@ -22,12 +22,12 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
             val timestamp = resultSet.getLong("record_date")
             val recordDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
             moneyRecord = MoneyRecordModel(
-                    resultSet.getInt("id"),
-                    resultSet.getDouble("money"),
-                    recordDate,
-                    resultSet.getString("description"),
-                    resultSet.getString("currency"),
-                    resultSet.getInt("tag_id")
+                resultSet.getDouble("money"),
+                recordDate,
+                resultSet.getString("description"),
+                resultSet.getInt("tag_id"),
+                resultSet.getString("currency"),
+                resultSet.getInt("id")
             )
         }
 
@@ -49,12 +49,12 @@ class MoneyRecordDAO : DAO<MoneyRecordModel>() {
 
             moneyRecords.add(
                     MoneyRecordModel(
-                            resultSet.getInt("id"),
                             resultSet.getDouble("money"),
                             recordDate,
                             resultSet.getString("description"),
+                        resultSet.getInt("tagId"),
                             currency,
-                            tagId = resultSet.getInt("tagId")
+                        resultSet.getInt("id"),
                     )
             )
         }

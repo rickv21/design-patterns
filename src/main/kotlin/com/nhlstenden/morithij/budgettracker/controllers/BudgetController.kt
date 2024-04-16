@@ -97,7 +97,6 @@ class BudgetController() : Controller() {
             if (selectedTag != null) {
                 // Create a new moneyRecord object with the selected tag's id
                 val moneyRecord = MoneyRecordModel(
-                        id = 0,                             // Database will generate an id automatically
                         money = budget.toDouble(),
                         recordDate = LocalDateTime.now(),
                         description = description,
@@ -125,10 +124,5 @@ class BudgetController() : Controller() {
             }
         }
         thread.start()
-    }
-
-
-    override fun setModels(vararg models: Any) {
-
     }
 }
