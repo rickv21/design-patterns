@@ -15,7 +15,7 @@ class ExpenseDAO : DAO<ExpenseModel>() {
 
     override fun get(id: Int): ExpenseModel? {
         val statement = connection.createStatement()
-        val resultSet = statement.executeQuery("SELECT * FROM budgets WHERE id = $id")
+        val resultSet = statement.executeQuery("SELECT * FROM expenses WHERE id = $id")
 
         var expense: ExpenseModel? = null
 
@@ -115,6 +115,14 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         statement.setTimestamp(2, Timestamp(obj.recordDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
         statement.setString(3, obj.description)
         statement.setInt(4, obj.id)
+
+        statement.executeUpdate()
+        statement.close()
+    }
+
+    override fun delete(obj: ExpenseModel){
+        val statement = connection.prepareStatement("DELETE FROM expenses WHERE id = ?")
+        statement.setInt(1, obj.id)
 
         statement.executeUpdate()
         statement.close()
