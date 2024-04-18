@@ -35,8 +35,6 @@ class ViewBudgetController : Controller() {
 
     @FXML
     fun initialize() {
-        overviewExpensesTable()
-
         goBackButton.setOnAction {
             SceneManager.switchScene("overview", TestModel())
         }
@@ -76,7 +74,7 @@ class ViewBudgetController : Controller() {
         val descriptionColumn = TableColumn<ExpenseModel, String>("Description")
         descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
         descriptionColumn.isResizable = false
-        descriptionColumn.prefWidth = 385.0
+        descriptionColumn.prefWidth = 383.0
 
         // Edit column
         val editColumn = TableColumn<ExpenseModel, ExpenseModel>("Edit")
@@ -213,9 +211,9 @@ class ViewBudgetController : Controller() {
     fun isDateFormatValid(dateString: String): Boolean {
         return try {
             LocalDate.parse(dateString)
-            true // Datum formaat is geldig
+            true // valid
         } catch (e: Exception) {
-            false // Datum formaat is ongeldig
+            false // invalid
         }
     }
 }
