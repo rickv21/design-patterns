@@ -197,16 +197,6 @@ class OverviewController : Controller(), Observer {
         }
     }
 
-    fun handleLoadAction(actionEvent: ActionEvent) {
-        val thread = Thread {
-            val daoBudgets = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
-            daoBudgets.addObserver(this)
-            daoBudgets.create(BudgetModel(50.0, 40.0, "test"))
-            val daoExpenses = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
-            daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))
-        }
-        thread.start()
-    }
 
     fun search(actionEvent: ActionEvent){
         val result = mutableListOf<BudgetModel>()

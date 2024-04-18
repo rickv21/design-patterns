@@ -76,7 +76,7 @@ class BudgetDAO : DAO<BudgetModel>() {
 
         statement.close()
         Platform.runLater {
-            notifyObservers()
+            notifyObservers(getAll())
         }
 
         return id
@@ -91,7 +91,7 @@ class BudgetDAO : DAO<BudgetModel>() {
 
         statement.executeUpdate()
         Platform.runLater {
-            notifyObservers()
+            notifyObservers(getAll())
         }
         statement.close()
     }
@@ -103,7 +103,7 @@ class BudgetDAO : DAO<BudgetModel>() {
         statement.executeUpdate()
         statement.close()
         Platform.runLater {
-            notifyObservers()
+            notifyObservers(getAll())
         }
     }
 
@@ -111,9 +111,9 @@ class BudgetDAO : DAO<BudgetModel>() {
         observers.add(observer)
     }
 
-    override fun notifyObservers() {
+    override fun notifyObservers(obj: Any) {
         observers.forEach { observer ->
-            observer.update(getAll())
+            observer.update(obj)
         }
     }
 }
