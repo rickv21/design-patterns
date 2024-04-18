@@ -100,9 +100,17 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         statement.setDouble(2, obj.money)
         statement.setTimestamp(3, Timestamp(obj.recordDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
         statement.setString(4, obj.description)
-        statement.setString(5, obj.interval)
-        statement.setTimestamp(6, Timestamp(obj.endDate?.atStartOfDay()!!.toInstant(ZoneOffset.UTC).toEpochMilli()))
+        if (obj.interval != null) {
+            statement.setString(5, obj.interval)
+        } else {
+            statement.setNull(5, java.sql.Types.VARCHAR)
+        }
 
+        if (obj.endDate != null) {
+            statement.setTimestamp(6, Timestamp(obj.endDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
+        } else {
+            statement.setNull(6, java.sql.Types.TIMESTAMP)
+        }
         statement.executeUpdate()
 
         val stmt = connection.createStatement()

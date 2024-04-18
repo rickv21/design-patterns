@@ -87,6 +87,10 @@ class BudgetDAO : DAO<BudgetModel>() {
     }
 
     override fun delete(id: Int){
+        val statement = connection.prepareStatement("DELETE FROM budgets WHERE id = ?")
+        statement.setInt(1, id)
 
+        statement.executeUpdate()
+        statement.close()
     }
 }

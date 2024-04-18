@@ -13,10 +13,10 @@ import javafx.fxml.FXML
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.util.Callback
+import java.time.LocalDate
 
 
 class OverviewController : Controller(), Observer {
-    lateinit var records: List<BudgetModel>
     lateinit var userInfo: UserInfoModel
 
     private val tagNamesMap = mutableMapOf<Int?, String?>()
@@ -61,7 +61,7 @@ class OverviewController : Controller(), Observer {
 
                 init {
                     button.setOnAction {
-                        //To DO action
+
                     }
                     alignment = Pos.CENTER
                 }
@@ -76,7 +76,34 @@ class OverviewController : Controller(), Observer {
                 }
             }
         }
-        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn, actionColumn)
+        val deleteColumn = TableColumn<BudgetModel, BudgetModel>("Delete")
+        deleteColumn.cellFactory = Callback { param ->
+            object : TableCell<BudgetModel, BudgetModel>() {
+                private val button = Button("Delete")
+
+                init {
+                    button.setOnAction {
+                        val budgetModel = tableView.items[index]
+                        val thread = Thread {
+                            val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                            dao.delete(budgetModel.id)
+                        }
+                        thread.start()
+                    }
+                    alignment = Pos.CENTER
+                }
+
+                override fun updateItem(item: BudgetModel?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                    } else {
+                        graphic = button
+                    }
+                }
+            }
+        }
+        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn, actionColumn, deleteColumn)
 
         thread.start()
     }
@@ -143,6 +170,13 @@ class OverviewController : Controller(), Observer {
     }
 
     fun handleLoadAction(actionEvent: ActionEvent) {
+        val thread = Thread {
+            val daoBudgets = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            daoBudgets.create(BudgetModel(50.0, 40.0, "test"))
+            val daoExpenses = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))
+        }
+        thread.start()
     }
 
     fun onAddBudgetClick() {

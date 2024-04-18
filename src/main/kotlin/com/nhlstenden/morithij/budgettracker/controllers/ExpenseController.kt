@@ -126,6 +126,9 @@ class ExpenseController() : Controller() {
                 sortedRecords.filter { it.recordDate.atStartOfDay() in actualBeginDate..actualEndDate }
             val duration = Duration.between(actualBeginDate, actualEndDate)
             val numberOfDivisions = filteredRecords.size
+        if(filteredRecords.isEmpty()){
+            return XYChart.Series<Number, Number>()
+        }
         try {
             val periodDuration = duration.dividedBy(numberOfDivisions.toLong())
             val series = XYChart.Series<Number, Number>()
