@@ -14,12 +14,13 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
-import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.util.Callback
+import java.time.LocalDate
+
 
 class OverviewController : Controller(), Observer {
     lateinit var userInfo: UserInfoModel
@@ -27,46 +28,49 @@ class OverviewController : Controller(), Observer {
     private val tagNamesMap = mutableMapOf<Int?, String?>()
 
     @FXML
-    lateinit var addBudgetButton: Button
-
-    @FXML
-    lateinit var anchorPane: AnchorPane
-
-    @FXML
     private lateinit var overviewBudgetRecords: TableView<BudgetModel>
+
+    @FXML
+    lateinit var addBudgetButton: Button
 
     @FXML
     lateinit var totalMoneyLabel: Label
 
+    @FXML
+    lateinit var searchTerm: TextField
+
+    private lateinit var allRecords : List<BudgetModel>
+
     fun initialize() {
         // setTotalAmount()
-        setupTableView()
+        val moneyRecordDAO = BudgetDAO()
+        val allRecords = moneyRecordDAO.getAll()
+        this.allRecords = allRecords
+        setupTableView(allRecords)
         setupAddBudgetButtonAction()
     }
 
-    private fun setupTableView() {
-        // Get budget money records
+    private fun setupTableView(allRecords: List<BudgetModel>) {
+        // get budget money records
         val thread = Thread {
-            val budgetDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
-            val allRecords = budgetDAO.getAll()
             Platform.runLater {
                 overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)
             }
         }
 
-        // budget column
+        // Get money value for budget column
         val budgetColumn = TableColumn<BudgetModel, String>("Budget")
         budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.totalBudget)) }
         budgetColumn.isResizable = false
         budgetColumn.prefWidth = 100.0
 
-        // description column
+        // Get record description value for description column
         val descriptionColumn = TableColumn<BudgetModel, String>("Description")
         descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
         descriptionColumn.isResizable = false
-        descriptionColumn.prefWidth = 346.0
+        descriptionColumn.prefWidth = 220.0
 
-        // action column
+        // Action column
         val actionColumn = TableColumn<BudgetModel, BudgetModel>("Action")
         actionColumn.isResizable = false
         actionColumn.prefWidth = 100.0
@@ -94,21 +98,125 @@ class OverviewController : Controller(), Observer {
                 }
             }
         }
+        val deleteColumn = TableColumn<BudgetModel, BudgetModel>("Delete")
+        deleteColumn.cellFactory = Callback { param ->
+            object : TableCell<BudgetModel, BudgetModel>() {
+                private val button = Button("Delete")
 
-        overviewBudgetRecords.columns.setAll(budgetColumn, descriptionColumn, actionColumn)
+                init {
+                    button.setOnAction {
+                        val budgetModel = tableView.items[index]
+                        val thread = Thread {
+                            val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                            dao.addObserver(this@OverviewController)
+                            dao.delete(budgetModel.id)
+                        }
+                        thread.start()
+                    }
+                    alignment = Pos.CENTER
+                }
+
+                override fun updateItem(item: BudgetModel?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                    } else {
+                        graphic = button
+                    }
+                }
+            }
+        }
+        overviewBudgetRecords.columns.setAll(budgetColumn, descriptionColumn, actionColumn, deleteColumn)
 
         thread.start()
     }
 
-    private fun getSelectedBudgetModel(): BudgetModel? {
-        val selectedIndex = overviewBudgetRecords.selectionModel.selectedIndex
-        return if (selectedIndex != -1) {
-            overviewBudgetRecords.items[selectedIndex]
-        } else {
-            null
+
+    private fun getTagName(tagId: Int?): String? {
+        // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
+        if (tagNamesMap.containsKey(tagId)) {
+            return tagNamesMap[tagId]
+        }
+
+        var tagName: String? = null
+        val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
+        val tag = dao.get(tagId ?: return null)
+        tagName = tag?.tag_name
+
+        // if not exist save
+        tagNamesMap[tagId] = tagName
+
+        return tagName
+    }
+
+    override fun update(obj: Any) {
+        if (obj is UserInfoModel) {
+            val thread = Thread {
+                val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+                dao.addObserver(this)
+                dao.update(userInfo)
+                Platform.runLater {
+                    totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
+                }
+            }
+            thread.start()
+        }else if (obj is List<*>) {
+            val budgetModels = obj.filterIsInstance<BudgetModel>()
+            allRecords = budgetModels
+            setupTableView(allRecords)
         }
     }
 
+    private fun setTotalAmount() {
+        val thread = Thread {
+            val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+            val record = dao.get(1)
+            //TODO: handle missing record.
+            if (record != null) {
+                userInfo = record
+                onTotalInitialized()
+            }
+        }
+        thread.start()
+    }
+
+    private fun onTotalInitialized() {
+        userInfo.addObserver(this)
+        totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
+    }
+
+    private fun formatMoney(value: Double): String {
+        return String.format("€%.2f", value)
+    }
+
+    override fun setModels(vararg models: Any) {
+        models.forEach {
+            if (it is UserInfoModel) {
+                userInfo = it
+            }
+        }
+    }
+
+    fun handleLoadAction(actionEvent: ActionEvent) {
+        val thread = Thread {
+            val daoBudgets = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            daoBudgets.addObserver(this)
+            daoBudgets.create(BudgetModel(50.0, 40.0, "test"))
+            val daoExpenses = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))
+        }
+        thread.start()
+    }
+
+    fun search(actionEvent: ActionEvent){
+        val result = mutableListOf<BudgetModel>()
+        allRecords.forEach{budget ->
+            if(budget.description.contains(searchTerm.text)){
+                result.add(budget)
+            }
+        }
+        setupTableView(result)
+    }
 
     private fun setupAddBudgetButtonAction() {
         addBudgetButton.setOnAction {
@@ -188,70 +296,5 @@ class OverviewController : Controller(), Observer {
 
             popup.showAndWait()
         }
-    }
-
-
-    private fun getTagName(tagId: Int?): String? {
-        // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
-        if (tagNamesMap.containsKey(tagId)) {
-            return tagNamesMap[tagId]
-        }
-
-        var tagName: String? = null
-        val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
-        val tag = dao.get(tagId ?: return null)
-        tagName = tag?.tag_name
-
-        // if not exist save
-        tagNamesMap[tagId] = tagName
-
-        return tagName
-    }
-
-    override fun update(obj: Any) {
-        if (obj is UserInfoModel) {
-            val thread = Thread {
-                val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-                dao.update(userInfo)
-                Platform.runLater {
-                    totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
-                }
-            }
-            thread.start()
-        }
-    }
-
-    private fun setTotalAmount() {
-        val thread = Thread {
-            val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-            val record = dao.get(1)
-            //TODO: handle missing record.
-            if (record != null) {
-                userInfo = record
-                onTotalInitialized()
-            }
-        }
-        thread.start()
-    }
-
-    private fun onTotalInitialized() {
-        userInfo.addObserver(this)
-        totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
-    }
-
-    private fun formatMoney(value: Double): String {
-        return String.format("€%.2f", value)
-    }
-
-    override fun setModels(vararg models: Any) {
-        models.forEach {
-            if (it is UserInfoModel) {
-                userInfo = it
-            }
-        }
-    }
-
-    fun handleLoadAction(actionEvent: ActionEvent) {
-        userInfo.setTotalAmount(5.5);
     }
 }

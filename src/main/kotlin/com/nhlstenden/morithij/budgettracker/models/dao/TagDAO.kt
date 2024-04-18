@@ -1,6 +1,8 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.DatabaseConnector
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import java.sql.Connection
 
@@ -14,9 +16,9 @@ class TagDAO : DAO<TagModel>() {
 
         if (resultSet.next()) {
             tagRecord = TagModel(
-                    resultSet.getInt("id"),
-                    resultSet.getString("tag_name"),
-                    resultSet.getString("hexcode")
+                resultSet.getInt("id"),
+                resultSet.getString("tag_name"),
+                resultSet.getString("hexcode")
             )
         }
 
@@ -33,17 +35,29 @@ class TagDAO : DAO<TagModel>() {
 
         while (resultSet.next()) {
             tags.add(
-                    TagModel(
-                            resultSet.getInt("id"),
-                            resultSet.getString("tag_name"),
-                            resultSet.getString("hexcode")
-                    )
+                TagModel(
+                    resultSet.getInt("id"),
+                    resultSet.getString("tag_name"),
+                    resultSet.getString("hexcode")
+                )
             )
         }
 
         resultSet.close()
         statement.close()
         return tags
+    }
+
+    override fun delete(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
+        TODO("Not yet implemented")
     }
 
     override fun create(obj: TagModel): Int {
@@ -76,16 +90,17 @@ class TagDAO : DAO<TagModel>() {
         System.out.println("meep")
 
         val standardTags = listOf(
-                TagModel(1, "Car", "#4aaeff"),
-                TagModel(2, "Groceries", "#33de61"),
-                TagModel(3, "Entertainment", "#fff64a"),
-                TagModel(4, "Utilities", "#f03cea"),
-                TagModel(5, "Health", "#dbfaff"),
-                TagModel(6, "Housing", "#e3d6ff")
+            TagModel(1, "Car", "#4aaeff"),
+            TagModel(2, "Groceries", "#33de61"),
+            TagModel(3, "Entertainment", "#fff64a"),
+            TagModel(4, "Utilities", "#f03cea"),
+            TagModel(5, "Health", "#dbfaff"),
+            TagModel(6, "Housing", "#e3d6ff")
         )
 
         for (tag in standardTags) {
             create(tag)
         }
     }
+
 }
