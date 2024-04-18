@@ -252,5 +252,6 @@ class OverviewController : Controller(), Observer {
     }
 
     fun handleLoadAction(actionEvent: ActionEvent) {
+        userInfo.setTotalAmount(5.5);
     }
 }

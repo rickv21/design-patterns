@@ -15,15 +15,13 @@ class ExpenseDAO : DAO<ExpenseModel>() {
 
     override fun get(id: Int): ExpenseModel? {
         val statement = connection.createStatement()
-        val resultSet = statement.executeQuery("SELECT * FROM expenses WHERE id = $id")
+        val resultSet = statement.executeQuery("SELECT * FROM budgets WHERE id = $id")
 
         var expense: ExpenseModel? = null
 
         if (resultSet.next()) {
-            val recordDateTimestamp = resultSet.getLong("record_date")
-            val recordDate = LocalDate.ofInstant(Instant.ofEpochMilli(recordDateTimestamp), ZoneId.systemDefault())
-            val endDateTimestamp = resultSet.getLong("endDate")
-            val endDate = LocalDate.ofInstant(Instant.ofEpochMilli(endDateTimestamp), ZoneId.systemDefault())
+            val timestamp = resultSet.getLong("record_date")
+            val recordDate = LocalDate.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
             expense = ExpenseModel(
                     resultSet.getInt("budget_id"),
                     resultSet.getDouble("money"),
@@ -93,14 +91,12 @@ class ExpenseDAO : DAO<ExpenseModel>() {
     }
 
     override fun create(obj: ExpenseModel): Int {
-        val sql = "INSERT INTO expenses (budget_id, money, record_date, description, `interval`, endDate) VALUES (?, ?, ?, ?, ?, ?)"
+        val sql = "INSERT INTO expenses (budget_id, money, record_date, description) VALUES (?, ?, ?, ?)"
         val statement = connection.prepareStatement(sql)
         statement.setInt(1, obj.budgetID)
         statement.setDouble(2, obj.money)
         statement.setTimestamp(3, Timestamp(obj.recordDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
         statement.setString(4, obj.description)
-        statement.setString(5, obj.interval)
-        statement.setTimestamp(6, Timestamp(obj.endDate?.atStartOfDay()!!.toInstant(ZoneOffset.UTC).toEpochMilli()))
 
         statement.executeUpdate()
 
@@ -115,22 +111,11 @@ class ExpenseDAO : DAO<ExpenseModel>() {
     }
 
     override fun update(obj: ExpenseModel) {
-        val statement = connection.prepareStatement("UPDATE expenses SET budget_id = ?, money = ?, record_date = ?, description = ?, `interval` = ?, endDate = ? WHERE id = ?")
-        statement.setInt(1, obj.budgetID)
-        statement.setDouble(2, obj.money)
-        statement.setTimestamp(3, Timestamp(obj.recordDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
-        statement.setString(4, obj.description)
-        statement.setString(5, obj.interval)
-        statement.setTimestamp(6, Timestamp(obj.endDate?.atStartOfDay()!!.toInstant(ZoneOffset.UTC).toEpochMilli()))
-        statement.setInt(7, obj.id)
-
-        statement.executeUpdate()
-        statement.close()
-    }
-
-    override fun delete(id: Int){
-        val statement = connection.prepareStatement("DELETE FROM expenses WHERE id = ?")
-        statement.setInt(1, id)
+        val statement = connection.prepareStatement("UPDATE expenses SET money = ?, record_date = ?, description = ? WHERE id = ?")
+        statement.setDouble(1, obj.money)
+        statement.setTimestamp(2, Timestamp(obj.recordDate.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()))
+        statement.setString(3, obj.description)
+        statement.setInt(4, obj.id)
 
         statement.executeUpdate()
         statement.close()
