@@ -23,10 +23,11 @@ class ExpenseDAO : DAO<ExpenseModel>() {
             val timestamp = resultSet.getLong("record_date")
             val recordDate = LocalDate.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
             expense = ExpenseModel(
-                resultSet.getInt("budget_id"),
-                resultSet.getDouble("money"),
-                recordDate,
-                resultSet.getString("description"),
+                    resultSet.getInt("budget_id"),
+                    resultSet.getDouble("money"),
+                    recordDate,
+                    resultSet.getString("description"),
+                    resultSet.getInt("id")
             )
         }
 
@@ -46,12 +47,13 @@ class ExpenseDAO : DAO<ExpenseModel>() {
             val recordDate = LocalDate.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
 
             expenses.add(
-                ExpenseModel(
-                    resultSet.getInt("budget_id"),
-                    resultSet.getDouble("money"),
-                    recordDate,
-                    resultSet.getString("description")
-                )
+                    ExpenseModel(
+                            resultSet.getInt("budget_id"),
+                            resultSet.getDouble("money"),
+                            recordDate,
+                            resultSet.getString("description"),
+                            resultSet.getInt("id")
+                    )
             )
         }
 
@@ -60,27 +62,26 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         return expenses
     }
 
-    fun getAllByBudgetID(budgetID : Int): List<ExpenseModel> {
+    fun getAllByBudgetID(budgetID: Int): List<ExpenseModel> {
         val sql = "SELECT * FROM expenses WHERE budget_id = ?"
         val statement = connection.prepareStatement(sql)
-
         statement.setInt(1, budgetID)
-
         val resultSet = statement.executeQuery()
 
         val expenses = mutableListOf<ExpenseModel>()
 
         while (resultSet.next()) {
             val timestamp = resultSet.getLong("record_date")
-            val recordDate = LocalDate.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
+            val recordDate = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate()
 
             expenses.add(
-                ExpenseModel(
-                    resultSet.getInt("budget_id"),
-                    resultSet.getDouble("money"),
-                    recordDate,
-                    resultSet.getString("description")
-                )
+                    ExpenseModel(
+                            resultSet.getInt("budget_id"),
+                            resultSet.getDouble("money"),
+                            recordDate,
+                            resultSet.getString("description"),
+                            resultSet.getInt("id")
+                    )
             )
         }
 

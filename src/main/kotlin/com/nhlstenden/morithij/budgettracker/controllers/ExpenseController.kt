@@ -23,19 +23,19 @@ import java.time.LocalDateTime
 class ExpenseController() : Controller() {
 
     @FXML
-    lateinit var anchorPane : AnchorPane
+    lateinit var anchorPane: AnchorPane
 
     @FXML
     lateinit var button: Button
 
-    private lateinit var userInfo : UserInfoModel
+    private lateinit var userInfo: UserInfoModel
 
     @FXML
     fun initialize() {
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
             userInfo = dao.get(1) as UserInfoModel
-            Platform.runLater{
+            Platform.runLater {
                 anchorPane.setOnKeyPressed { event ->
                     if (event.code == KeyCode.INSERT) {
                         val popup = Stage()
@@ -71,7 +71,7 @@ class ExpenseController() : Controller() {
                         val okButton = Button("Add")
                         okButton.setOnAction {
 
-                            if(textField1.text.isEmpty() || textField2.value == null || textField3.text.isEmpty()){
+                            if (textField1.text.isEmpty() || textField2.value == null || textField3.text.isEmpty()) {
                                 val errorAlert = Alert(Alert.AlertType.ERROR)
                                 errorAlert.title = "Error"
                                 errorAlert.headerText = "Please fill in all fields!"
@@ -79,8 +79,8 @@ class ExpenseController() : Controller() {
                                 return@setOnAction
                             }
 
-                            if(textField1.text.toDouble() > userInfo.expenseLimit){
-                                if(userInfo.expenseLimit == 0.0){
+                            if (textField1.text.toDouble() > userInfo.expenseLimit) {
+                                if (userInfo.expenseLimit == 0.0) {
                                     return@setOnAction
                                 }
                                 val errorAlert = Alert(Alert.AlertType.ERROR)
@@ -92,8 +92,8 @@ class ExpenseController() : Controller() {
 
                             val thread = Thread {
                                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
-                                dao.create(ExpenseModel(1, textField1.text.toDouble(), textField2.value, textField3.text))
-                                Platform.runLater{
+                                dao.create(ExpenseModel(1, textField1.text.toDouble(), textField2.value, textField3.text, 1))
+                                Platform.runLater {
                                     val successAlert = Alert(Alert.AlertType.INFORMATION)
                                     successAlert.title = "Success"
                                     successAlert.headerText = "Added expense!"
@@ -127,11 +127,5 @@ class ExpenseController() : Controller() {
             }
         }
         thread.start()
-
-
-
-
-
     }
-
 }
