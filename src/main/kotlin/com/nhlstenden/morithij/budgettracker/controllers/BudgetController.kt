@@ -1,6 +1,7 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
+import com.nhlstenden.morithij.budgettracker.models.Observable
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
@@ -27,7 +28,6 @@ class BudgetController() : Controller() {
 
     @FXML
     fun initialize() {
-
         val thread = Thread {
             val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
             val tags = dao.getAll()
@@ -117,4 +117,6 @@ class BudgetController() : Controller() {
         }
         thread.start()
     }
+
+
 }

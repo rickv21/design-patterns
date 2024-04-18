@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import java.sql.Timestamp
 import java.time.Instant
@@ -143,5 +144,13 @@ class ExpenseDAO : DAO<ExpenseModel>() {
 
         statement.executeUpdate()
         statement.close()
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
+        TODO("Not yet implemented")
     }
 }

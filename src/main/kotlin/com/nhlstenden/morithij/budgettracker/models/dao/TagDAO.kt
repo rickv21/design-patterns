@@ -1,6 +1,7 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.DatabaseConnector
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import java.sql.Connection
@@ -48,6 +49,14 @@ class TagDAO : DAO<TagModel>() {
     }
 
     override fun delete(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
         TODO("Not yet implemented")
     }
 

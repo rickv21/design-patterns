@@ -92,6 +92,7 @@ class OverviewController : Controller(), Observer {
                         val budgetModel = tableView.items[index]
                         val thread = Thread {
                             val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                            dao.addObserver(this@OverviewController)
                             dao.delete(budgetModel.id)
                         }
                         thread.start()
@@ -136,12 +137,17 @@ class OverviewController : Controller(), Observer {
         if (obj is UserInfoModel) {
             val thread = Thread {
                 val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+                dao.addObserver(this)
                 dao.update(userInfo)
                 Platform.runLater {
                     totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
                 }
             }
             thread.start()
+        }else if (obj is List<*>) {
+            val budgetModels = obj.filterIsInstance<BudgetModel>()
+            allRecords = budgetModels
+            setupTableView(allRecords)
         }
     }
 
@@ -178,6 +184,7 @@ class OverviewController : Controller(), Observer {
     fun handleLoadAction(actionEvent: ActionEvent) {
         val thread = Thread {
             val daoBudgets = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            daoBudgets.addObserver(this)
             daoBudgets.create(BudgetModel(50.0, 40.0, "test"))
             val daoExpenses = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
             daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))

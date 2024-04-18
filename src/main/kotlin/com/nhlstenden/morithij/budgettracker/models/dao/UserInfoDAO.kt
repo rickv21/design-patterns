@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 
 /**
@@ -30,6 +31,14 @@ class UserInfoDAO : DAO<UserInfoModel>() {
     }
 
     override fun delete(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
         TODO("Not yet implemented")
     }
 
