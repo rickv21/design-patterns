@@ -171,9 +171,15 @@ class ExpenseController() : Controller(), Observer{
     }
 
     override fun update(obj: Any) {
+        val chartThread = Thread{
+            val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            updateChart(dao.getAll())
+        }
+        chartThread.start()
+
         if(obj is Pair<*, *>){
             val pair = obj as Pair<Int, Double>
-            val thread = Thread{
+            val currentBudgetThread = Thread{
                 val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
                 val oldBudget = dao.get(pair.first)
                 if(oldBudget != null){
@@ -181,7 +187,7 @@ class ExpenseController() : Controller(), Observer{
                 }
                 setCurrentAndTotal(dao.getAll())
             }
-            thread.start()
+            currentBudgetThread.start()
 
         }
     }
