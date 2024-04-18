@@ -14,7 +14,6 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
-import javafx.scene.input.KeyCode
 import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
@@ -22,9 +21,7 @@ import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.util.Callback
 
-
 class OverviewController : Controller(), Observer {
-    lateinit var records: List<BudgetModel>
     lateinit var userInfo: UserInfoModel
 
     private val tagNamesMap = mutableMapOf<Int?, String?>()
@@ -33,7 +30,7 @@ class OverviewController : Controller(), Observer {
     lateinit var addBudgetButton: Button
 
     @FXML
-    lateinit var anchorPane : AnchorPane
+    lateinit var anchorPane: AnchorPane
 
     @FXML
     private lateinit var overviewBudgetRecords: TableView<BudgetModel>
@@ -76,12 +73,15 @@ class OverviewController : Controller(), Observer {
 
         actionColumn.cellFactory = Callback { _ ->
             object : TableCell<BudgetModel, BudgetModel>() {
-                private val editButton = Button("Edit")
+                private val viewButton = Button("View")
+                private val buttonBox = HBox(viewButton)
 
                 init {
-                    editButton.setOnAction {
+                    viewButton.setOnAction {
                         val budget = tableView.items[index]
+                        SceneManager.switchScene("viewbudget", budget)
                     }
+                    buttonBox.alignment = Pos.CENTER
                 }
 
                 override fun updateItem(item: BudgetModel?, empty: Boolean) {
@@ -89,7 +89,7 @@ class OverviewController : Controller(), Observer {
                     if (empty) {
                         graphic = null
                     } else {
-                        graphic = editButton
+                        graphic = buttonBox
                     }
                 }
             }
@@ -98,6 +98,15 @@ class OverviewController : Controller(), Observer {
         overviewBudgetRecords.columns.setAll(budgetColumn, descriptionColumn, actionColumn)
 
         thread.start()
+    }
+
+    private fun getSelectedBudgetModel(): BudgetModel? {
+        val selectedIndex = overviewBudgetRecords.selectionModel.selectedIndex
+        return if (selectedIndex != -1) {
+            overviewBudgetRecords.items[selectedIndex]
+        } else {
+            null
+        }
     }
 
 
@@ -182,8 +191,6 @@ class OverviewController : Controller(), Observer {
     }
 
 
-
-
     private fun getTagName(tagId: Int?): String? {
         // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
         if (tagNamesMap.containsKey(tagId)) {
@@ -246,10 +253,5 @@ class OverviewController : Controller(), Observer {
 
     fun handleLoadAction(actionEvent: ActionEvent) {
         userInfo.setTotalAmount(5.5);
-    }
-
-    fun onAddBudgetClick() {
-        SceneManager.switchScene("add", TestModel())
-
     }
 }
