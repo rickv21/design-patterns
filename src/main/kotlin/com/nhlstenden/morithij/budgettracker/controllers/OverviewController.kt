@@ -115,20 +115,50 @@ class OverviewController : Controller(), Observer {
             layout.vgap = 10.0
             layout.padding = Insets(25.0, 25.0, 25.0, 25.0)
 
-            val label1 = Label("Budget:")
-            val textField1 = TextField()
+            val label1 = Label("Total Budget:")
+            val textFieldBudget = TextField()
             layout.add(label1, 0, 0)
-            layout.add(textField1, 1, 0)
+            layout.add(textFieldBudget, 1, 0)
 
-            val label3 = Label("Description:")
-            val textField3 = TextField()
-            layout.add(label3, 0, 2)
-            layout.add(textField3, 1, 2)
+            val label2 = Label("Description:")
+            val textFieldDescription = TextField()
+            layout.add(label2, 0, 1)
+            layout.add(textFieldDescription, 1, 1)
 
             val okButton = Button("Add")
             okButton.setOnAction {
-                // TO DO add budgett
-                popup.close()
+                val totalBudget = textFieldBudget.text.toDoubleOrNull()
+                val description = textFieldDescription.text
+
+                if (totalBudget == null || description.isEmpty()) {
+                    val errorAlert = Alert(Alert.AlertType.ERROR)
+                    errorAlert.title = "Error"
+                    errorAlert.headerText = "Please fill in all the fields!"
+                    errorAlert.showAndWait()
+                } else {
+                    val newBudget = BudgetModel(totalBudget, totalBudget, description)
+
+                    val thread = Thread {
+                        val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                        val id = dao.create(newBudget)
+
+                        Platform.runLater {
+                            if (id != -1) {
+                                val successAlert = Alert(Alert.AlertType.INFORMATION)
+                                successAlert.title = "Success"
+                                successAlert.headerText = "Budget added successfully"
+                                successAlert.showAndWait()
+                                popup.close()
+                            } else {
+                                val errorAlert = Alert(Alert.AlertType.ERROR)
+                                errorAlert.title = "Error"
+                                errorAlert.headerText = "Failed to add budget"
+                                errorAlert.showAndWait()
+                            }
+                        }
+                    }
+                    thread.start()
+                }
             }
 
             val cancelButton = Button("Cancel")
@@ -139,14 +169,16 @@ class OverviewController : Controller(), Observer {
             val buttonBox = HBox(10.0)
             buttonBox.alignment = Pos.CENTER
             buttonBox.children.addAll(okButton, cancelButton)
-            layout.add(buttonBox, 0, 3, 2, 1)
+            layout.add(buttonBox, 0, 2, 2, 1)
 
-            val scene = Scene(layout, 300.0, 200.0)
+            val scene = Scene(layout, 300.0, 150.0)
             popup.scene = scene
 
             popup.showAndWait()
         }
     }
+
+
 
 
     private fun getTagName(tagId: Int?): String? {
