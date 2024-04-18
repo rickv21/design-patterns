@@ -27,16 +27,22 @@ class OverviewController : Controller(), Observer {
     @FXML
     lateinit var totalMoneyLabel: Label
 
+    @FXML
+    lateinit var searchTerm: TextField
+
+    private lateinit var allRecords : List<BudgetModel>
+
     fun initialize() {
         // setTotalAmount()
-        setupTableView()
+        val moneyRecordDAO = BudgetDAO()
+        val allRecords = moneyRecordDAO.getAll()
+        this.allRecords = allRecords
+        setupTableView(allRecords)
     }
 
-    private fun setupTableView() {
+    private fun setupTableView(allRecords: List<BudgetModel>) {
         // get budget money records
         val thread = Thread {
-            val moneyRecordDAO = BudgetDAO()
-            val allRecords = moneyRecordDAO.getAll()
             Platform.runLater {
                 overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)
             }
@@ -177,6 +183,16 @@ class OverviewController : Controller(), Observer {
             daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))
         }
         thread.start()
+    }
+
+    fun search(actionEvent: ActionEvent){
+        val result = mutableListOf<BudgetModel>()
+        allRecords.forEach{budget ->
+            if(budget.description.contains(searchTerm.text)){
+                result.add(budget)
+            }
+        }
+        setupTableView(result)
     }
 
     fun onAddBudgetClick() {
