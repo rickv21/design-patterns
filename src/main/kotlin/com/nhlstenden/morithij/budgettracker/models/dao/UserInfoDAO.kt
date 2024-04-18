@@ -17,7 +17,8 @@ class UserInfoDAO : DAO<UserInfoModel>() {
             total = UserInfoModel(
                     resultSet.getInt("id"),
                     resultSet.getDouble("total_money"),
-0.0            )
+                    resultSet.getDouble("expense_limit")
+            )
         }
 
         resultSet.close()
@@ -27,10 +28,6 @@ class UserInfoDAO : DAO<UserInfoModel>() {
 
     override fun getAll(): List<UserInfoModel> {
         TODO("Not needed due to the multiple users feature being cut.")
-    }
-
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun create(obj: UserInfoModel): Int {
