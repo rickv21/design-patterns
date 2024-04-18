@@ -7,7 +7,7 @@ import javafx.scene.layout.GridPane
 import javafx.stage.Modality
 import javafx.stage.Stage
 
-abstract class PopUp(private val userInfo: UserInfoModel) {
+abstract class PopUp(private val userInfo: UserInfoModel?) {
     protected val stage : Stage
     protected val layout : GridPane
 

@@ -24,6 +24,6 @@
          </font>
       </Label>
       <TextField fx:id="expenseLimit" layoutX="443.0" layoutY="337.0" prefHeight="25.0" prefWidth="268.0" />
-      <Button fx:id="saveButton" layoutX="658.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Save" />
+      <Button fx:id="saveButton" layoutX="658.0" layoutY="515.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="89.0" text="Save" style="-fx-cursor: hand"/>
     </children>
 </AnchorPane>

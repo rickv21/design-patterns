@@ -21,6 +21,8 @@ object SceneManager {
         primaryStage.minWidth = WINDOW_WIDTH
         primaryStage.minHeight = WINDOW_HEIGHT
 
+        primaryStage.isResizable = false
+
         val root = createdScene.second.getRoot() as Parent
 
         // Update the scene with the new view

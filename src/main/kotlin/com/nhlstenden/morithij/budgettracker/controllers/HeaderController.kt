@@ -8,6 +8,9 @@ import javafx.scene.control.Label
 class HeaderController() : Controller() {
 
     @FXML
+    lateinit var homeLabel : Label
+
+    @FXML
     lateinit var expenseLabel: Label
 
     @FXML
@@ -21,24 +24,24 @@ class HeaderController() : Controller() {
 
     @FXML
     fun initialize() {
+        homeLabel.setOnMouseClicked {
+            SceneManager.switchScene("overview")
+        }
+
         expenseLabel.setOnMouseClicked {
-            SceneManager.switchScene("expense", TestModel())
+            SceneManager.switchScene("expense")
         }
 
         budgetLabel.setOnMouseClicked {
-            SceneManager.switchScene("overview", TestModel())
+            SceneManager.switchScene("overview")
         }
 
         planningLabel.setOnMouseClicked {
-            SceneManager.switchScene("planner", TestModel())
+            SceneManager.switchScene("planner")
         }
 
         settingsLabel.setOnMouseClicked {
             SceneManager.switchScene("settings")
         }
-    }
-
-    override fun setModels(vararg models: Any) {
-        //
     }
 }
