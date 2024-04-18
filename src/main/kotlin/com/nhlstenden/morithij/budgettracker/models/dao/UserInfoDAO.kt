@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 
 /**
@@ -28,6 +29,18 @@ class UserInfoDAO : DAO<UserInfoModel>() {
 
     override fun getAll(): List<UserInfoModel> {
         TODO("Not needed due to the multiple users feature being cut.")
+    }
+
+    override fun delete(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
+        TODO("Not yet implemented")
     }
 
     override fun create(obj: UserInfoModel): Int {

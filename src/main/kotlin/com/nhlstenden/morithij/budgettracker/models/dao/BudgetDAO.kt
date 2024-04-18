@@ -1,6 +1,9 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
+import com.nhlstenden.morithij.budgettracker.models.Observable
+import javafx.application.Platform
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
@@ -11,6 +14,8 @@ import java.time.ZoneOffset
  * A DAO for Budget objects.
  */
 class BudgetDAO : DAO<BudgetModel>() {
+
+    private var observers = mutableListOf<Observer>()
 
     override fun get(id: Int): BudgetModel? {
         val statement = connection.createStatement()
@@ -70,7 +75,9 @@ class BudgetDAO : DAO<BudgetModel>() {
         val id = if (resultSet.next()) resultSet.getInt(1) else -1
 
         statement.close()
-        connection.close()
+        Platform.runLater {
+            notifyObservers()
+        }
 
         return id
     }
@@ -83,6 +90,9 @@ class BudgetDAO : DAO<BudgetModel>() {
         statement.setInt(4, obj.id)
 
         statement.executeUpdate()
+        Platform.runLater {
+            notifyObservers()
+        }
         statement.close()
     }
 
@@ -92,5 +102,18 @@ class BudgetDAO : DAO<BudgetModel>() {
 
         statement.executeUpdate()
         statement.close()
+        Platform.runLater {
+            notifyObservers()
+        }
+    }
+
+    override fun addObserver(observer: Observer) {
+        observers.add(observer)
+    }
+
+    override fun notifyObservers() {
+        observers.forEach { observer ->
+            observer.update(getAll())
+        }
     }
 }
