@@ -29,10 +29,9 @@
         <Button fx:id="searchButton" layoutX="425.0" layoutY="180.0" mnemonicParsing="false" text="Search" onAction="#search"/>
         <TableView fx:id="overviewBudgetRecords" layoutX="242.0" layoutY="225.0" prefHeight="327.0" prefWidth="549.0">
             <columns>
-                <TableColumn prefWidth="83.33331298828125" text="Budget" />
-                <TableColumn prefWidth="88.6666259765625" text="Type" />
-                <TableColumn prefWidth="262.0000305175781" text="Description" />
-                <TableColumn prefWidth="114.66668701171875" text="Action" />
+                <TableColumn prefWidth="105.99992370605469" text="Budget" />
+                <TableColumn prefWidth="342.6667785644531" text="Description" />
+                <TableColumn prefWidth="99.99993896484375" text="Action" />
             </columns>
         </TableView>
     </children>

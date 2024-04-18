@@ -37,7 +37,6 @@ class BudgetTracker : Application() {
                 alert.contentText = ex.message
 
                 alert.showAndWait()
-
             }
 
         } catch (e: Exception) {

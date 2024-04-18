@@ -18,7 +18,8 @@ class UserInfoDAO : DAO<UserInfoModel>() {
             total = UserInfoModel(
                     resultSet.getInt("id"),
                     resultSet.getDouble("total_money"),
-0.0            )
+                    resultSet.getDouble("expense_limit")
+            )
         }
 
         resultSet.close()
