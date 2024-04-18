@@ -85,4 +85,8 @@ class BudgetDAO : DAO<BudgetModel>() {
         statement.executeUpdate()
         statement.close()
     }
+
+    override fun delete(id: Int){
+
+    }
 }
