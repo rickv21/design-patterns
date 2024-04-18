@@ -15,6 +15,7 @@ abstract class DAO<T> : Observable{
     abstract fun getAll(): List<T>
     abstract fun create(obj: T) : Int
     abstract fun update(obj: T)
+    abstract fun delete(id: Int)
 
     fun close(){
         connection.close()

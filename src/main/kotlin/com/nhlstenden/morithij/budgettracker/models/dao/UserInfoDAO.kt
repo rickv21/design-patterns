@@ -61,9 +61,10 @@ class UserInfoDAO : DAO<UserInfoModel>() {
 
 
     override fun update(obj: UserInfoModel) {
-        val statement = connection.prepareStatement("UPDATE user SET total_money = ? WHERE id = ?")
+        val statement = connection.prepareStatement("UPDATE user SET total_money = ?, expense_limit = ? WHERE id = ?")
         statement.setDouble(1, obj.totalMoney)
-        statement.setInt(2, obj.user)
+        statement.setDouble(2, obj.expenseLimit)
+        statement.setInt(3, obj.user)
         statement.executeUpdate()
         statement.close()
     }

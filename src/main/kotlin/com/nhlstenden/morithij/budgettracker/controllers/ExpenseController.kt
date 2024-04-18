@@ -1,8 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
-import com.nhlstenden.morithij.budgettracker.controllers.popUps.CreatePopUp
-import com.nhlstenden.morithij.budgettracker.controllers.popUps.DeletePopUp
-import com.nhlstenden.morithij.budgettracker.controllers.popUps.UpdatePopUp
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
@@ -12,13 +10,15 @@ import javafx.fxml.FXML
 import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
 import javafx.scene.chart.XYChart
-import javafx.scene.control.*
-import javafx.scene.input.KeyCode
+import javafx.scene.control.DatePicker
+import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
+import java.text.DecimalFormat
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 class ExpenseController() : Controller() {
 
@@ -31,7 +31,11 @@ class ExpenseController() : Controller() {
     private lateinit var startDatePicker : DatePicker
     @FXML
     private lateinit var endDatePicker : DatePicker
-
+    private lateinit var allBudgets : List<BudgetModel>
+    @FXML
+    private lateinit var totalBudgetLabel : Label
+    @FXML
+    private lateinit var currentBudgetLabel : Label
 
     @FXML
     // This function is called when the FXML file is loaded
@@ -43,17 +47,15 @@ class ExpenseController() : Controller() {
             val expenseDAO = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
             val expenses = expenseDAO.getAll()
 
-            Platform.runLater{
-                anchorPane.setOnKeyPressed { event ->
-                    if (event.code == KeyCode.C) {
-                        CreatePopUp(userInfo)
-                    }else if(event.code == KeyCode.U){
-                        UpdatePopUp(userInfo)
-                    }else if(event.code == KeyCode.D){
-                        DeletePopUp(userInfo)
-                    }
-                }
+            val budgetDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            allBudgets = budgetDAO.getAll()
 
+            val totalBudget = allBudgets.sumOf { it.totalBudget }
+            val currentBudget = allBudgets.sumOf { it.currentBudget }
+            val currency = Currency.getInstance("EUR").symbol //Can just hardcode this since we dropped support for multiple currencies.
+            Platform.runLater{
+                totalBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(totalBudget)
+                currentBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(currentBudget)
                 startDatePicker.setOnAction {updateChart(expenses)}
                 endDatePicker.setOnAction { updateChart(expenses)}
 

@@ -10,8 +10,14 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
+import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.HBox
+import javafx.stage.Modality
+import javafx.stage.Stage
 import javafx.util.Callback
 import java.time.LocalDate
 
@@ -23,6 +29,9 @@ class OverviewController : Controller(), Observer {
 
     @FXML
     private lateinit var overviewBudgetRecords: TableView<BudgetModel>
+
+    @FXML
+    lateinit var addBudgetButton: Button
 
     @FXML
     lateinit var totalMoneyLabel: Label
@@ -38,6 +47,7 @@ class OverviewController : Controller(), Observer {
         val allRecords = moneyRecordDAO.getAll()
         this.allRecords = allRecords
         setupTableView(allRecords)
+        setupAddBudgetButtonAction()
     }
 
     private fun setupTableView(allRecords: List<BudgetModel>) {
@@ -51,25 +61,31 @@ class OverviewController : Controller(), Observer {
         // Get money value for budget column
         val budgetColumn = TableColumn<BudgetModel, String>("Budget")
         budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.totalBudget)) }
-
-        // Get tag name value for type column
-        val typeColumn = TableColumn<BudgetModel, String>("Type")
+        budgetColumn.isResizable = false
+        budgetColumn.prefWidth = 100.0
 
         // Get record description value for description column
         val descriptionColumn = TableColumn<BudgetModel, String>("Description")
         descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
+        descriptionColumn.isResizable = false
+        descriptionColumn.prefWidth = 220.0
 
         // Action column
         val actionColumn = TableColumn<BudgetModel, BudgetModel>("Action")
-        actionColumn.cellFactory = Callback { param ->
+        actionColumn.isResizable = false
+        actionColumn.prefWidth = 100.0
+
+        actionColumn.cellFactory = Callback { _ ->
             object : TableCell<BudgetModel, BudgetModel>() {
-                private val button = Button("Edit")
+                private val viewButton = Button("View")
+                private val buttonBox = HBox(viewButton)
 
                 init {
-                    button.setOnAction {
-
+                    viewButton.setOnAction {
+                        val budget = tableView.items[index]
+                        SceneManager.switchScene("viewbudget", budget)
                     }
-                    alignment = Pos.CENTER
+                    buttonBox.alignment = Pos.CENTER
                 }
 
                 override fun updateItem(item: BudgetModel?, empty: Boolean) {
@@ -77,7 +93,7 @@ class OverviewController : Controller(), Observer {
                     if (empty) {
                         graphic = null
                     } else {
-                        graphic = button
+                        graphic = buttonBox
                     }
                 }
             }
@@ -110,7 +126,7 @@ class OverviewController : Controller(), Observer {
                 }
             }
         }
-        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn, actionColumn, deleteColumn)
+        overviewBudgetRecords.columns.setAll(budgetColumn, descriptionColumn, actionColumn, deleteColumn)
 
         thread.start()
     }
@@ -202,8 +218,83 @@ class OverviewController : Controller(), Observer {
         setupTableView(result)
     }
 
-    fun onAddBudgetClick() {
-        SceneManager.switchScene("add", TestModel())
+    private fun setupAddBudgetButtonAction() {
+        addBudgetButton.setOnAction {
+            val popup = Stage()
+            popup.initModality(Modality.APPLICATION_MODAL)
+            popup.title = "Add Budget"
+            popup.isResizable = false
+            popup.minWidth = 400.0
+            popup.maxWidth = 400.0
+            popup.minHeight = 200.0
+            popup.maxHeight = 200.0
 
+            val layout = GridPane()
+            layout.alignment = Pos.CENTER
+            layout.hgap = 10.0
+            layout.vgap = 10.0
+            layout.padding = Insets(25.0, 25.0, 25.0, 25.0)
+
+            val label1 = Label("Total Budget:")
+            val textFieldBudget = TextField()
+            layout.add(label1, 0, 0)
+            layout.add(textFieldBudget, 1, 0)
+
+            val label2 = Label("Description:")
+            val textFieldDescription = TextField()
+            layout.add(label2, 0, 1)
+            layout.add(textFieldDescription, 1, 1)
+
+            val okButton = Button("Add")
+            okButton.setOnAction {
+                val totalBudget = textFieldBudget.text.toDoubleOrNull()
+                val description = textFieldDescription.text
+
+                if (totalBudget == null || description.isEmpty()) {
+                    val errorAlert = Alert(Alert.AlertType.ERROR)
+                    errorAlert.title = "Error"
+                    errorAlert.headerText = "Please fill in all the fields!"
+                    errorAlert.showAndWait()
+                } else {
+                    val newBudget = BudgetModel(totalBudget, totalBudget, description)
+
+                    val thread = Thread {
+                        val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                        val id = dao.create(newBudget)
+
+                        Platform.runLater {
+                            if (id != -1) {
+                                val successAlert = Alert(Alert.AlertType.INFORMATION)
+                                successAlert.title = "Success"
+                                successAlert.headerText = "Budget added successfully"
+                                successAlert.showAndWait()
+                                popup.close()
+                            } else {
+                                val errorAlert = Alert(Alert.AlertType.ERROR)
+                                errorAlert.title = "Error"
+                                errorAlert.headerText = "Failed to add budget"
+                                errorAlert.showAndWait()
+                            }
+                        }
+                    }
+                    thread.start()
+                }
+            }
+
+            val cancelButton = Button("Cancel")
+            cancelButton.setOnAction {
+                popup.close()
+            }
+
+            val buttonBox = HBox(10.0)
+            buttonBox.alignment = Pos.CENTER
+            buttonBox.children.addAll(okButton, cancelButton)
+            layout.add(buttonBox, 0, 2, 2, 1)
+
+            val scene = Scene(layout, 300.0, 150.0)
+            popup.scene = scene
+
+            popup.showAndWait()
+        }
     }
 }
