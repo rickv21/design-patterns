@@ -47,7 +47,7 @@ class TagDAO : DAO<TagModel>() {
         return tags
     }
 
-    override fun delete(obj: TagModel) {
+    override fun delete(id: Int) {
         TODO("Not yet implemented")
     }
 

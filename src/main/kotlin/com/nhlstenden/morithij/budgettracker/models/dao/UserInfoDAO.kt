@@ -29,7 +29,7 @@ class UserInfoDAO : DAO<UserInfoModel>() {
         TODO("Not needed due to the multiple users feature being cut.")
     }
 
-    override fun delete(obj: UserInfoModel) {
+    override fun delete(id: Int) {
         TODO("Not yet implemented")
     }
 
