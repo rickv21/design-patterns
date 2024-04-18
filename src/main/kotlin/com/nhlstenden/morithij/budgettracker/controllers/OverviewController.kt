@@ -45,58 +45,61 @@ class OverviewController : Controller(), Observer {
         // setTotalAmount()
         setupTableView()
         setupAddBudgetButtonAction()
-
     }
 
     private fun setupTableView() {
+        // Get budget money records
+        val thread = Thread {
+            val budgetDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            val allRecords = budgetDAO.getAll()
+            Platform.runLater {
+                overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)
+            }
+        }
 
-//        // get budget money records
-//        val thread = Thread {
-//            val moneyRecordDAO = BudgetDAO()
-//            val allRecords = moneyRecordDAO.getAll()
-//            Platform.runLater {
-//                overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)
-//            }
-//        }
-//
-//        // Get money value for budget column
-//        val budgetColumn = TableColumn<BudgetModel, String>("Budget")
-//        budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.totalBudget)) }
-//
-//        // Get tag name value for type column
-//        val typeColumn = TableColumn<BudgetModel, String>("Type")
-//
-//        // Get record description value for description column
-//        val descriptionColumn = TableColumn<BudgetModel, String>("Description")
-//        descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
-//
-//        // Action column
-//        val actionColumn = TableColumn<BudgetModel, BudgetModel>("Action")
-//        actionColumn.cellFactory = Callback { param ->
-//            object : TableCell<BudgetModel, BudgetModel>() {
-//                private val button = Button("Edit")
-//
-//                init {
-//                    button.setOnAction {
-//                        //To DO action
-//                    }
-//                    alignment = Pos.CENTER
-//                }
-//
-//                override fun updateItem(item: BudgetModel?, empty: Boolean) {
-//                    super.updateItem(item, empty)
-//                    if (empty) {
-//                        graphic = null
-//                    } else {
-//                        graphic = button
-//                    }
-//                }
-//            }
-//        }
-//        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn, actionColumn)
-//
-//        thread.start()
+        // budget column
+        val budgetColumn = TableColumn<BudgetModel, String>("Budget")
+        budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.totalBudget)) }
+        budgetColumn.isResizable = false
+        budgetColumn.prefWidth = 100.0
+
+        // description column
+        val descriptionColumn = TableColumn<BudgetModel, String>("Description")
+        descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
+        descriptionColumn.isResizable = false
+        descriptionColumn.prefWidth = 346.0
+
+        // action column
+        val actionColumn = TableColumn<BudgetModel, BudgetModel>("Action")
+        actionColumn.isResizable = false
+        actionColumn.prefWidth = 100.0
+
+        actionColumn.cellFactory = Callback { _ ->
+            object : TableCell<BudgetModel, BudgetModel>() {
+                private val editButton = Button("Edit")
+
+                init {
+                    editButton.setOnAction {
+                        val budget = tableView.items[index]
+                    }
+                }
+
+                override fun updateItem(item: BudgetModel?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                    } else {
+                        graphic = editButton
+                    }
+                }
+            }
+        }
+
+        overviewBudgetRecords.columns.setAll(budgetColumn, descriptionColumn, actionColumn)
+
+        thread.start()
     }
+
 
     private fun setupAddBudgetButtonAction() {
         addBudgetButton.setOnAction {

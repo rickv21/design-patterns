@@ -22,13 +22,12 @@
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="473.0" layoutX="125.0" layoutY="162.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="786.0" />
         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="385.0" layoutX="186.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="662.0" />
         <Label fx:id="totalMoneyLabel" layoutX="250.0" layoutY="564.0" style="-fx-padding: 10 0 0 0" />
-        <Button fx:id="addBudgetButton" layoutX="768.0" layoutY="601.0" mnemonicParsing="false"  style="-fx-background-color: E7F2F8;" text="Add Budget" />
+        <Button fx:id="addBudgetButton" layoutX="768.0" layoutY="601.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" />
         <TableView fx:id="overviewBudgetRecords" layoutX="242.0" layoutY="225.0" prefHeight="327.0" prefWidth="549.0">
             <columns>
-                <TableColumn prefWidth="83.33331298828125" text="Budget" />
-                <TableColumn prefWidth="88.6666259765625" text="Type" />
-                <TableColumn prefWidth="262.0000305175781" text="Description" />
-            <TableColumn prefWidth="114.66668701171875" text="Action" />
+                <TableColumn prefWidth="105.99992370605469" text="Budget" />
+                <TableColumn prefWidth="342.6667785644531" text="Description" />
+            <TableColumn prefWidth="99.99993896484375" text="Action" />
             </columns>
         </TableView>
     </children>
