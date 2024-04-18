@@ -6,6 +6,10 @@ abstract class Controller {
     open val width = 900.0
     open val height = 600.0
 
-    abstract fun setModels(vararg models: Any)
+    open fun setModels(vararg models: Any){
+        //Empty implementation for controllers to implement.
+        //Is not abstract due to it being empty also being valid.
+        //This way, controllers can choose to implement this method or not.
+    }
 
 }

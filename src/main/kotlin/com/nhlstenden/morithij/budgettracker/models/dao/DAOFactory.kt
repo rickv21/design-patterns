@@ -1,6 +1,10 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
-import com.nhlstenden.morithij.budgettracker.models.*
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
+import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
+import com.nhlstenden.morithij.budgettracker.models.TagModel
+import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
+import javafx.application.Platform
 
 /**
  * A factory for creating DAO objects.
@@ -8,9 +12,15 @@ import com.nhlstenden.morithij.budgettracker.models.*
 object DAOFactory {
 
     fun <T> getDAO(modelClass: Class<T>): DAO<*> {
+        if(Platform.isFxApplicationThread()) {
+            throw IllegalStateException("DAO classes should not be called on the main thread due to database connection!")
+        }
+
         return when (modelClass) {
-            MoneyRecordModel::class.java -> MoneyRecordDAO()
+            BudgetModel::class.java -> BudgetDAO()
+            ExpenseModel::class.java -> ExpenseDAO()
             UserInfoModel::class.java -> UserInfoDAO()
+            TagModel::class.java -> TagDAO()
             else -> throw IllegalArgumentException("Invalid model class: $modelClass")
         }
     }

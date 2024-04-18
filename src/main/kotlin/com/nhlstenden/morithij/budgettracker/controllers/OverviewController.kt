@@ -4,23 +4,99 @@ import com.nhlstenden.morithij.budgettracker.SceneManager
 import com.nhlstenden.morithij.budgettracker.models.*
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
+import com.nhlstenden.morithij.budgettracker.models.dao.BudgetDAO
 import javafx.application.Platform
+import javafx.beans.property.SimpleStringProperty
+import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.scene.control.Label
+import javafx.geometry.Pos
+import javafx.scene.control.*
+import javafx.util.Callback
 
 
 class OverviewController : Controller(), Observer {
-    lateinit var records: List<MoneyRecordModel>
+    lateinit var records: List<BudgetModel>
     lateinit var userInfo: UserInfoModel
+
+    private val tagNamesMap = mutableMapOf<Int?, String?>()
+
+    @FXML
+    private lateinit var overviewBudgetRecords: TableView<BudgetModel>
 
     @FXML
     lateinit var totalMoneyLabel: Label
 
     fun initialize() {
-        //TODO use MoneyRecordsDOA to get all records
-        setTotalAmount()
+        // setTotalAmount()
+        setupTableView()
+    }
 
+    private fun setupTableView() {
+        // get budget money records
+        val thread = Thread {
+            val moneyRecordDAO = BudgetDAO()
+            val allRecords = moneyRecordDAO.getAll()
+            Platform.runLater {
+                overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)
+            }
+        }
+
+        // Get money value for budget column
+        val budgetColumn = TableColumn<BudgetModel, String>("Budget")
+        budgetColumn.setCellValueFactory { cellData -> SimpleStringProperty(formatMoney(cellData.value.totalBudget)) }
+
+        // Get tag name value for type column
+        val typeColumn = TableColumn<BudgetModel, String>("Type")
+
+        // Get record description value for description column
+        val descriptionColumn = TableColumn<BudgetModel, String>("Description")
+        descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
+
+        // Action column
+        val actionColumn = TableColumn<BudgetModel, BudgetModel>("Action")
+        actionColumn.cellFactory = Callback { param ->
+            object : TableCell<BudgetModel, BudgetModel>() {
+                private val button = Button("Edit")
+
+                init {
+                    button.setOnAction {
+                        //To DO action
+                    }
+                    alignment = Pos.CENTER
+                }
+
+                override fun updateItem(item: BudgetModel?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                    } else {
+                        graphic = button
+                    }
+                }
+            }
+        }
+        overviewBudgetRecords.columns.setAll(budgetColumn, typeColumn, descriptionColumn, actionColumn)
+
+        thread.start()
+    }
+
+
+    private fun getTagName(tagId: Int?): String? {
+        // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
+        if (tagNamesMap.containsKey(tagId)) {
+            return tagNamesMap[tagId]
+        }
+
+        var tagName: String? = null
+        val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
+        val tag = dao.get(tagId ?: return null)
+        tagName = tag?.tag_name
+
+        // if not exist save
+        tagNamesMap[tagId] = tagName
+
+        return tagName
     }
 
     override fun update(obj: Any) {
@@ -49,7 +125,7 @@ class OverviewController : Controller(), Observer {
         thread.start()
     }
 
-    private fun onTotalInitialized(){
+    private fun onTotalInitialized() {
         userInfo.addObserver(this)
         totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
     }
@@ -67,11 +143,9 @@ class OverviewController : Controller(), Observer {
     }
 
     fun handleLoadAction(actionEvent: ActionEvent) {
-        userInfo.setTotalAmount(5.5);
     }
 
-    fun onAddBudgetClick()
-    {
+    fun onAddBudgetClick() {
         SceneManager.switchScene("add", TestModel())
 
     }

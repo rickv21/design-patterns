@@ -48,6 +48,9 @@ object SceneManager {
             "account" -> {
                 viewName = "account"
             }
+            "settings" -> {
+                viewName = "settings"
+            }
             else -> {
                 throw IllegalArgumentException("No such key: $key")
             }

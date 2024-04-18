@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker
 
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
 
@@ -8,27 +9,33 @@ import java.sql.DriverManager
  */
 object DatabaseConnector {
 
+    const val DATABASE_FILE = "budgetDB.db"
+    const val RESET_ON_START = false
+
     private var connection: Connection? = null
 
-    private fun init() {
-        //Hardcoded for now.
-        val url = "jdbc:sqlite:budgetDB.db"
+    private fun init(startup: Boolean = false) {
+        val dbFile = File(DATABASE_FILE)
+
+        if (dbFile.exists() && startup && RESET_ON_START) {
+            println("Deleting database file")
+            dbFile.delete()
+        }
+        val url = "jdbc:sqlite:$DATABASE_FILE"
         connection = DriverManager.getConnection(url)
-
-        // Date is stored as a string because SQLite does not have a DATEIME column type.
-        var statement = connection!!.createStatement()
-        statement.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, money DOUBLE, record_date TEXT, description TEXT)")
-
-        statement = connection!!.createStatement()
-        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE)")
-
-        statement = connection!!.createStatement()
-        statement.execute("CREATE TABLE IF NOT EXISTS tag (id INTEGER PRIMARY KEY, tag_name TEXT, hexcode TEXT)")
-
-//        //TODO: This is temporary, remove this when we have a proper way to add a user.
-       // statement = connection!!.createStatement()
-       // statement.execute("INSERT INTO user (id, total_money) VALUES (1, 2.0)")
+        initDatabase()
     }
+
+    private fun initDatabase(){
+        val statement = connection!!.createStatement()
+
+        statement.execute("CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY, budget_id INTEGER, money DOUBLE, record_date TEXT, description TEXT, `interval` TEXT, endDate TEXT)")
+        statement.execute("CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY, total_budget DOUBLE, current_budget DOUBLE, description TEXT, currency TEXT)")
+        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE, expense_limit DOUBLE DEFAULT 0.0)")
+        statement.execute("CREATE TABLE IF NOT EXISTS reminder (id INTEGER PRIMARY KEY, description DOUBLE, reminder_date TEXT)")
+        //statement.execute("INSERT INTO user (id, total_money) VALUES (1, 0.0)")
+    }
+
 
     fun getConnection(): Connection {
         if (connection == null || connection!!.isClosed) {
