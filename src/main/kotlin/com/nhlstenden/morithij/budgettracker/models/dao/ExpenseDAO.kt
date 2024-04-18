@@ -54,7 +54,8 @@ class ExpenseDAO : DAO<ExpenseModel>() {
                     resultSet.getInt("budget_id"),
                     resultSet.getDouble("money"),
                     recordDate,
-                    resultSet.getString("description")
+                    resultSet.getString("description"),
+                    resultSet.getInt("id")
                 )
             )
         }
@@ -83,7 +84,8 @@ class ExpenseDAO : DAO<ExpenseModel>() {
                     resultSet.getInt("budget_id"),
                     resultSet.getDouble("money"),
                     recordDate,
-                    resultSet.getString("description")
+                    resultSet.getString("description"),
+                    resultSet.getInt("id")
                 )
             )
         }

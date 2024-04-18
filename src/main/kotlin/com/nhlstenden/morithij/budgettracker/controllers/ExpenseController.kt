@@ -33,7 +33,7 @@ class ExpenseController() : Controller() {
     private lateinit var endDatePicker : DatePicker
 
 
-	@FXML
+    @FXML
     // This function is called when the FXML file is loaded
     fun initialize() {
         val thread = Thread {
@@ -122,10 +122,10 @@ class ExpenseController() : Controller() {
             return XYChart.Series<Number, Number>()
         }
 
-            val filteredRecords =
-                sortedRecords.filter { it.recordDate.atStartOfDay() in actualBeginDate..actualEndDate }
-            val duration = Duration.between(actualBeginDate, actualEndDate)
-            val numberOfDivisions = filteredRecords.size
+        val filteredRecords =
+            sortedRecords.filter { it.recordDate.atStartOfDay() in actualBeginDate..actualEndDate }
+        val duration = Duration.between(actualBeginDate, actualEndDate)
+        val numberOfDivisions = filteredRecords.size
         if(filteredRecords.isEmpty()){
             return XYChart.Series<Number, Number>()
         }

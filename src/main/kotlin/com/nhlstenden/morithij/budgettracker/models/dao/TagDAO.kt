@@ -1,7 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.DatabaseConnector
-import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import java.sql.Connection
 
@@ -47,10 +46,6 @@ class TagDAO : DAO<TagModel>() {
         return tags
     }
 
-    override fun delete(id: Int) {
-        TODO("Not yet implemented")
-    }
-
     override fun create(obj: TagModel): Int {
         val sql = "INSERT INTO tag (id, tag_name, hexcode) VALUES (?, ?, ?)"
         val statement = connection.prepareStatement(sql)
@@ -93,5 +88,4 @@ class TagDAO : DAO<TagModel>() {
             create(tag)
         }
     }
-
 }
