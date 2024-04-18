@@ -3,7 +3,6 @@ package com.nhlstenden.morithij.budgettracker.controllers
 import com.nhlstenden.morithij.budgettracker.SceneManager
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
-import com.nhlstenden.morithij.budgettracker.models.Model
 import com.nhlstenden.morithij.budgettracker.models.TestModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
@@ -21,8 +20,9 @@ import javafx.scene.layout.HBox
 import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.util.Callback
+import java.text.DecimalFormat
 import java.time.LocalDate
-import java.util.regex.Pattern
+import java.util.*
 
 class ViewBudgetController : Controller() {
     private lateinit var budgetModel: BudgetModel
@@ -60,7 +60,13 @@ class ViewBudgetController : Controller() {
 
         // Expense column
         val expenseColumn = TableColumn<ExpenseModel, String>("Expense")
-        expenseColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.money.toString()) }
+        expenseColumn.setCellValueFactory { cellData ->
+            run {
+                val currency = Currency.getInstance(budgetModel.currency).symbol
+                SimpleStringProperty(currency + DecimalFormat("#,##0.00").format(cellData.value.money))
+            }
+        }
+
         expenseColumn.isResizable = false
         expenseColumn.prefWidth = 100.0
 
