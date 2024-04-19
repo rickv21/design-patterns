@@ -9,7 +9,6 @@ om overzicht te houden op financiële inkomsten en uitgaven.
 
 De applicatie zal ontwikkeld worden met **Java en Kotlin**.
 
-
 ## MosCow analyse
 
 Must haves:
@@ -42,6 +41,18 @@ Could haves:
 Won't have:
 
 - Geen aparte server
+
+## Aangepaste musthave
+
+Wegens tijdtekort en andere prioriteiten zijn de musthaves aangepast:
+
+- Categoriseren van uitkomsten
+- Vaste uitgaven moet je voor de volgende maand kunnen inzien.
+- Uitgaven kunnen invoeren.
+- Herhalende uitgaven kunnen instellen. (Werkt niet helemaal)
+- Filteren en sorteren op inkomsten en uitgaven. 
+- Een limiet kunnen instellen voor maximale uitgaven.
+- Je inkomsten kunnen verdelen in verschillende budgets bijvoorbeeld boodschappen, vrije tijd en vaste lasten.
 
 ## Design patterns
 Voor deze opdracht moeten er drie patterns gebruikt worden. Hierbij worden de volgende patterns gebruikt:
