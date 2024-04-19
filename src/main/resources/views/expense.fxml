@@ -14,7 +14,7 @@
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
-        <Label  layoutX="41.0" layoutY="187.0" text="Total budget:">
+        <Label  layoutX="41.0" layoutY="187.0" text="Total budgets:">
             <font>
                 <Font size="16.0" />
             </font>
@@ -24,7 +24,7 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <Label layoutX="41.0" layoutY="220.0" text="Current budget:">
+        <Label layoutX="41.0" layoutY="220.0" text="Current budgets:">
             <font>
                 <Font size="16.0" />
             </font>

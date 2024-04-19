@@ -6,7 +6,6 @@ import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
 import javafx.application.Platform
-import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
@@ -16,7 +15,6 @@ import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import java.text.DecimalFormat
 import java.time.Duration
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -38,6 +36,8 @@ class ExpenseController() : Controller(), Observer{
     private lateinit var totalBudgetLabel : Label
     @FXML
     private lateinit var currentBudgetLabel : Label
+
+    override val title = super.title + " - Expenses"
 
     @FXML
     // This function is called when the FXML file is loaded

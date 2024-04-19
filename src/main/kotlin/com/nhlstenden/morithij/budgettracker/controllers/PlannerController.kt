@@ -26,6 +26,8 @@ class PlannerController() : Controller() {
     lateinit var calendarContainer: AnchorPane
     lateinit var calendarView: CalendarView
 
+    override val title = super.title + " - Planning"
+
     @FXML
     fun initialize() {
         val thread = Thread {
@@ -60,9 +62,9 @@ class PlannerController() : Controller() {
                         val formattedEndDate: String = it.endDate!!.format(formatter)
 
                         when(it.interval){
-                            "Weekly" -> entry.recurrenceRule = "RRULE:FREQ=WEEKLY;UNTIL=$formattedEndDate";
-                            "Monthly" -> entry.recurrenceRule = "RRULE:FREQ=MONTHLY;UNTIL=$formattedEndDate";
-                            "Annually" -> entry.recurrenceRule = "RRULE:FREQ=YEARLY;UNTIL=$formattedEndDate";
+                            "Weekly" -> entry.recurrenceRule = "RRULE:FREQ=WEEKLY;UNTIL=$formattedEndDate"
+                            "Monthly" -> entry.recurrenceRule = "RRULE:FREQ=MONTHLY;UNTIL=$formattedEndDate"
+                            "Annually" -> entry.recurrenceRule = "RRULE:FREQ=YEARLY;UNTIL=$formattedEndDate"
                         }
                     }
                     entry.isFullDay = true

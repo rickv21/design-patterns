@@ -6,7 +6,6 @@ import com.nhlstenden.morithij.budgettracker.controllers.popUps.DeletePopUp
 import com.nhlstenden.morithij.budgettracker.controllers.popUps.UpdatePopUp
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
-import com.nhlstenden.morithij.budgettracker.models.TestModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
@@ -16,16 +15,11 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.input.KeyCode
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
-import javafx.stage.Modality
-import javafx.stage.Stage
 import javafx.util.Callback
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -50,8 +44,11 @@ class ViewBudgetController : Controller(), Observer {
 
     private lateinit var expenseRecords : List<ExpenseModel>
 
+    override val title = super.title + " - View Budget"
+
     @FXML
     fun initialize() {
+
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
             userInfo = dao.get(1) as UserInfoModel
@@ -63,7 +60,7 @@ class ViewBudgetController : Controller(), Observer {
                     }
                 }
                 goBackButton.setOnAction {
-                    SceneManager.switchScene("overview", TestModel())
+                    SceneManager.switchScene("overview")
                 }
             }
         }

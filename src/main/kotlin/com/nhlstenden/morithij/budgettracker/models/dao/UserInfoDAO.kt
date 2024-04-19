@@ -19,7 +19,6 @@ class UserInfoDAO : DAO<UserInfoModel>() {
         if(resultSet.next()){
             total = UserInfoModel(
                     resultSet.getInt("id"),
-                    resultSet.getDouble("total_money"),
                     resultSet.getDouble("expense_limit")
             )
         }
@@ -46,10 +45,9 @@ class UserInfoDAO : DAO<UserInfoModel>() {
     }
 
     override fun create(obj: UserInfoModel): Int {
-        val sql = "INSERT INTO user (id, total_money) VALUES (?, ?)"
+        val sql = "INSERT INTO user (id) VALUES (?)"
         val statement = connection.prepareStatement(sql)
         statement.setInt(1, obj.user)
-        statement.setDouble(2, obj.totalMoney)
         statement.executeUpdate()
 
         val stmt = connection.createStatement()
@@ -62,10 +60,9 @@ class UserInfoDAO : DAO<UserInfoModel>() {
 
 
     override fun update(obj: UserInfoModel) {
-        val statement = connection.prepareStatement("UPDATE user SET total_money = ?, expense_limit = ? WHERE id = ?")
-        statement.setDouble(1, obj.totalMoney)
-        statement.setDouble(2, obj.expenseLimit)
-        statement.setInt(3, obj.user)
+        val statement = connection.prepareStatement("UPDATE user SET expense_limit = ? WHERE id = ?")
+        statement.setDouble(1, obj.expenseLimit)
+        statement.setInt(2, obj.user)
         statement.executeUpdate()
         statement.close()
     }

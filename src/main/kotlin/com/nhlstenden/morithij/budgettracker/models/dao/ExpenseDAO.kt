@@ -3,12 +3,10 @@ package com.nhlstenden.morithij.budgettracker.models.dao
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.controllers.commands.DeleteCommand
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
-import com.nhlstenden.morithij.budgettracker.models.Observable
 import javafx.application.Platform
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
 
@@ -136,7 +134,7 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         val id = if (resultSet.next()) resultSet.getInt(1) else -1
 
         statement.close()
-        notifyObservers(Pair<Int, Double>(obj.budgetID, -obj.money))
+        notifyObservers(Pair(obj.budgetID, -obj.money))
         return id
     }
 
@@ -167,7 +165,7 @@ class ExpenseDAO : DAO<ExpenseModel>() {
 
         statement.executeUpdate()
         statement.close()
-        notifyObservers(Pair<Int, Double>(obj.budgetID, money))
+        notifyObservers(Pair(obj.budgetID, money))
     }
 
     override fun delete(id: Int){
@@ -178,7 +176,7 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         }
         deleteCommand.execute(id, connection)
         Platform.runLater {
-            notifyObservers(Pair<Int, Double>(expense!!.budgetID, money!!))
+            notifyObservers(Pair(expense!!.budgetID, money))
         }
     }
 

@@ -1,7 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 /**
  * A model class representing a budget.
