@@ -19,6 +19,7 @@ class DeletePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
         okButton.setOnAction {
             val thread = Thread {
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+                dao.addObserver(observer)
                 val record = dao.get(1)
                 dao.delete(1)
                 Platform.runLater {

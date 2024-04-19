@@ -52,6 +52,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
         var scene = Scene(layout, 300.0, 200.0)
         val thread = Thread {
             val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            dao.addObserver(observer)
             val old = dao.get(1)
             if(old?.interval != null) {
                 // Set default selection
@@ -109,6 +110,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
 
             val thread = Thread {
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+                dao.addObserver(observer)
                 dao.update(ExpenseModel(budgetModel.id, textField1.text.toDouble(), textField2.value, textField3.text, interval.value, endDate.value, expenseModel.id))
                 Platform.runLater {
                     val successAlert = Alert(Alert.AlertType.INFORMATION)

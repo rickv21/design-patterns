@@ -2,6 +2,7 @@ package com.nhlstenden.morithij.budgettracker.controllers
 
 import com.nhlstenden.morithij.budgettracker.SceneManager
 import com.nhlstenden.morithij.budgettracker.controllers.popUps.CreatePopUp
+import com.nhlstenden.morithij.budgettracker.controllers.popUps.DeletePopUp
 import com.nhlstenden.morithij.budgettracker.controllers.popUps.UpdatePopUp
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
@@ -133,14 +134,46 @@ class ViewBudgetController : Controller(), Observer {
             }
         }
 
+        // Delete column
+        val deleteColumn = TableColumn<ExpenseModel, ExpenseModel>("Delete")
+        deleteColumn.isResizable = false
+        deleteColumn.prefWidth = 75.0
+        deleteColumn.cellFactory = Callback { _ ->
+            object : TableCell<ExpenseModel, ExpenseModel>() {
+                private val deleteButton = Button("Delete")
+                private val buttonBox = HBox(deleteButton)
+
+                init {
+                    deleteButton.setOnAction {
+                        val expense = tableView.items[index]
+                        setupDeleteExpenseButtonAction(expense)
+                    }
+                    buttonBox.alignment = Pos.CENTER
+                }
+
+                override fun updateItem(item: ExpenseModel?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (empty) {
+                        graphic = null
+                    } else {
+                        graphic = buttonBox
+                    }
+                }
+            }
+        }
+
         Platform.runLater {
-            overviewExpenseRecords.columns.setAll(expenseColumn, dateColumn, descriptionColumn, editColumn)
+            overviewExpenseRecords.columns.setAll(expenseColumn, dateColumn, descriptionColumn, editColumn, deleteColumn)
         }
         thread.start()
     }
 
     private fun setupEditExpenseButtonAction(expense: ExpenseModel) {
         UpdatePopUp(userInfo, budgetModel, expense, this)
+    }
+
+    private fun setupDeleteExpenseButtonAction(expense: ExpenseModel) {
+        DeletePopUp(userInfo, budgetModel, expense, this)
     }
 
     fun isDateFormatValid(dateString: String): Boolean {
