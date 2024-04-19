@@ -14,6 +14,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox
 
 class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, observer: Observer) : PopUp(userInfo, observer) {
+
     init {
         stage.title = "Create Expense"
         val label1 = Label("Money:")
@@ -34,13 +35,8 @@ class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, observer:
         val intervalLabel = Label("Interval:")
         val interval = ComboBox<String>()
 
-        // Add items to the ComboBox
         interval.items = FXCollections.observableArrayList("Weekly", "Monthly", "Annually")
-
-        // Set default selection
         interval.selectionModel.selectFirst()
-
-        // Handle selection change
         interval.setOnAction {
             val selectedOption = interval.value
         }
@@ -48,6 +44,7 @@ class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, observer:
         val endDateLabel = Label("End date:")
         val endDate = DatePicker()
 
+        // Checkbox to specify whether the expense is reoccurring or not
         val checkbox = CheckBox("Returning expense")
         layout.add(checkbox, 1, 4, 1, 1)
 

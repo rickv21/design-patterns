@@ -40,10 +40,10 @@ class ExpenseController() : Controller(), Observer{
     private lateinit var currentBudgetLabel : Label
 
     @FXML
-    // This function is called when the FXML file is loaded
     fun initialize() {
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+            // Hardcoded because multiple users was scratched
             userInfo = dao.get(1) as UserInfoModel
 
             val expenseDAO = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
@@ -56,13 +56,9 @@ class ExpenseController() : Controller(), Observer{
                 startDatePicker.setOnAction {updateChart(expenses)}
                 endDatePicker.setOnAction { updateChart(expenses)}
 
-                // Add data to the chart
+                // Generate data for the chart
                 val series = generatePeriodicSeriesData(expenses)
-
-                // Add the series to the line chart
                 lineChart.data.add(series)
-
-                // Set the labels for the axes
                 lineChart.xAxis.label = "Date"
                 lineChart.yAxis.label = "Amount"
 
@@ -78,8 +74,6 @@ class ExpenseController() : Controller(), Observer{
                         return formatter.format(dateTime)
                     }
                 }
-
-                // Hide the legend
                 lineChart.isLegendVisible = false
             }
         }
@@ -87,7 +81,9 @@ class ExpenseController() : Controller(), Observer{
     }
 
     private fun setCurrentAndTotal(budgets: List<BudgetModel>){
+        // Updates the list of all budgets
         allBudgets = budgets
+        // Calculates the total of all totals and currents of the budgets
         val totalBudget = allBudgets.sumOf { it.totalBudget }
         val currentBudget = allBudgets.sumOf { it.currentBudget }
         val currency = Currency.getInstance("EUR").symbol //Can just hardcode this since we dropped support for multiple currencies.
@@ -97,6 +93,7 @@ class ExpenseController() : Controller(), Observer{
         }
     }
 
+    // Used to update the chart when the date pickers are used to select what period needs to be shown
     private fun updateChart(records: List<ExpenseModel>) {
         try {
             val startDate = startDatePicker.value?.atStartOfDay()
@@ -122,6 +119,9 @@ class ExpenseController() : Controller(), Observer{
         val earliestDate = sortedRecords.firstOrNull()?.recordDate?.atStartOfDay()
         val latestDate = sortedRecords.lastOrNull()?.recordDate?.atStartOfDay()
 
+        // Sets the dates to the specified date.
+        // If no dates are specified, the earliest and latest record dates are taken.
+        // If that fails, the current date is taken.
         val actualBeginDate = beginDate ?: earliestDate ?: LocalDateTime.now()
         val actualEndDate = endDate ?: latestDate ?: LocalDateTime.now()
 
@@ -132,14 +132,17 @@ class ExpenseController() : Controller(), Observer{
             return XYChart.Series<Number, Number>()
         }
 
+        // Filters the records to only show the ones between the selected dates.
         val filteredRecords =
             sortedRecords.filter { it.recordDate.atStartOfDay() in actualBeginDate..actualEndDate }
+        // Divides the period between the start and end-date in even parts to make up the x-axis values
         val duration = Duration.between(actualBeginDate, actualEndDate)
         val numberOfDivisions = filteredRecords.size
         if(filteredRecords.isEmpty()){
             return XYChart.Series<Number, Number>()
         }
         try {
+            //calculates the total expenses per period. Each period becomes a point in the graph
             val periodDuration = duration.dividedBy(numberOfDivisions.toLong())
             val series = XYChart.Series<Number, Number>()
 

@@ -20,8 +20,7 @@ class DeletePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
             val thread = Thread {
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
                 dao.addObserver(observer)
-                val record = dao.get(1)
-                dao.delete(1)
+                dao.delete(expenseModel.id)
                 Platform.runLater {
                     val successAlert = Alert(Alert.AlertType.INFORMATION)
                     successAlert.title = "Success"

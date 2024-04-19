@@ -46,6 +46,15 @@ class ViewBudgetController : Controller(), Observer {
     @FXML
     private lateinit var searchTerm : TextField
 
+    @FXML
+    private lateinit var totalBudgetLabel: Label
+
+    @FXML
+    private lateinit var currentBudgetLabel: Label
+
+    @FXML
+    private lateinit var titleLabel: Label
+
     private lateinit var userInfo : UserInfoModel
 
     private lateinit var expenseRecords : List<ExpenseModel>
@@ -84,12 +93,15 @@ class ViewBudgetController : Controller(), Observer {
         super.setModels(*models)
         budgetModel = models.firstOrNull() as BudgetModel
         setRecords()
+        titleLabel.text = "View ${budgetModel.description}"
     }
 
     fun overviewExpensesTable(records: List<ExpenseModel>) {
         // Get expense records for the given budget ID
         Platform.runLater {
-                overviewExpenseRecords.items = FXCollections.observableArrayList(records)
+            overviewExpenseRecords.items = FXCollections.observableArrayList(records)
+            totalBudgetLabel.text = budgetModel.totalBudget.toString()
+            currentBudgetLabel.text = budgetModel.currentBudget.toString()
         }
 
         // Expense column
@@ -218,7 +230,9 @@ class ViewBudgetController : Controller(), Observer {
                 val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
                 val oldBudget = dao.get(pair.first)
                 if(oldBudget != null){
-                    dao.update(BudgetModel(oldBudget.totalBudget, (oldBudget.currentBudget + pair.second), oldBudget.description, oldBudget.currency, pair.first))
+                    val newBudget = BudgetModel(oldBudget.totalBudget, (oldBudget.currentBudget + pair.second), oldBudget.description, oldBudget.currency, pair.first)
+                    dao.update(newBudget)
+                    budgetModel = newBudget
                 }
             }
             currentBudgetThread.start()
