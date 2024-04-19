@@ -6,11 +6,15 @@ Java 21 is vereist om dit programma te draaien.
 
 ### Patterns 
 
-- Factory pattern: in de applicatie hebben wij een DAO Factory die wordt gebruikt om instanties van Data Access Object (DAO) klassen te maken. Dit helpt bij het creëren van een abstractielaag tussen de applicatiecode en de database-implementatie. Met behulp van de Factory kunnen we op een gestructureerde manier DAO-objecten aanmaken zonder de details van hun implementatie te kennen. Dit bevordert de modulariteit, flexibiliteit en onderhoudbaarheid van de code, omdat het gemakkelijk is om DAO-implementaties te wijzigen of nieuwe toe te voegen zonder de rest van de code te beïnvloeden.
+- Factory pattern: in de applicatie hebben wij een DAO Factory die wordt gebruikt om instanties van Data Access Object (DAO) klassen te maken. Dit helpt bij het creëren van een abstractielaag tussen de applicatiecode en de database-implementatie. Met behulp van de Factory kunnen we op een gestructureerde manier DAO-objecten aanmaken zonder de details van hun implementatie te kennen. Dit bevordert de modulariteit, flexibiliteit en onderhoudbaarheid van de code, omdat het gemakkelijk is om DAO-implementaties te wijzigen of nieuwe toe te voegen zonder de rest van de code te beïnvloeden. Er is voor gekozen geen concrete factory te maken voor iedere DOA om 'class bloat' te voorkomen. De factory kan met 1 methode alle verschillende producten maken.
+![factory](README_resources/factory.png)
+
 
 - Observer pattern: Het Observer-patroon wordt gebruikt om een "publish-subscribe" mechanisme te implementeren, waarbij objecten (observers) automatisch worden geïnformeerd en bijgewerkt over de wijzigingen in een ander object (subject of observable). Dit patroon wordt gebruikt om afhankelijkheden tussen objecten los te koppelen, waardoor een flexibeler en onderhoudbaar ontwerp ontstaat.
 
-    In dit  geval wordt het Observer-patroon gebruikt om te reageren op wijzigingen in de gegevens van de budgetten en gebruikersinformatie. De BudgetDAO en UserInfoModel fungeren als de observables, terwijl de Observer interface en de implementerende klassen (BudgetController, etc.) fungeren als de observers. Wanneer er wijzigingen worden aangebracht in de budgetten of de gebruikersinformatie, worden alle geregistreerde observers automatisch bijgewerkt via de notifyObservers() methode. Dit zorgt voor een losse koppeling tussen de data access layer en de gebruikersinterface, waardoor de code beter onderhoudbaar en uitbreidbaar wordt.
+    In dit  geval wordt het Observer-patroon gebruikt om te reageren op wijzigingen in de gegevens van de database door de DOA classes Publishers/Observable te maken en bij CRUD handelingen de observers te notifyen, terwijl de Observer interface en de implementerende klassen (BudgetController, etc.) fungeren als de observers. Wanneer er wijzigingen worden aangebracht in de database of de gebruikersinformatie, worden alle geregistreerde observers automatisch via de notifyObservers() methode bijgwerkt. Zodat deze de visuele apsecten van de app bij kunnen werken. Dit zorgt voor een losse koppeling tussen de data access layer en de gebruikersinterface, waardoor de code beter onderhoudbaar en uitbreidbaar wordt.
+
+![Observer](README_resources/observer.png)
 
 - Command pattern: Het Command-patroon wordt gebruikt om operaties te encapsuleren als objecten, waardoor ze kunnen worden geparametriseerd met verschillende aanvragen, in de wachtrij kunnen worden gezet, worden gelogd en teruggedaan. Dit patroon zorgt voor een scheiding tussen de opdrachtgever (client) die een aanvraag initieert, en de ontvanger (receiver) die de aanvraag uitvoert.
 
@@ -18,6 +22,7 @@ Java 21 is vereist om dit programma te draaien.
 
     Alle dao klasses gebruiken de DeleteCommand om delete-operaties uit te voeren voor respectievelijk budgetten en gebruikersinformatie. Door deze commando's te gebruiken, wordt de delete-logica gescheiden van de DAO implementatie, waardoor het onderhoud en de uitbreidbaarheid van de code worden vergemakkelijkt.
 
+![Command](README_resources/command.png)
 ### Must have veranderingen
 
 Oude must haves:
