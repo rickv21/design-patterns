@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
@@ -13,7 +14,7 @@ import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 
-class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel) : PopUp(userInfo){
+class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel, observer: Observer) : PopUp(userInfo, observer){
     init {
         stage.title = "Update Expense"
         val label1 = Label("Money:")

@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers.popUps;
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
@@ -12,7 +13,7 @@ import javafx.scene.Scene
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox
 
-class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel) : PopUp(userInfo) {
+class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, observer: Observer) : PopUp(userInfo, observer) {
     init {
         stage.title = "Create Expense"
         val label1 = Label("Money:")
@@ -88,6 +89,7 @@ class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel) : PopUp(u
 
             val thread = Thread {
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+                dao.addObserver(observer)
                 println("Add" + textField1.text.toDouble() + " " + textField2.value + " " + textField3.text + " " + interval.value + " " + endDate.value)
                 if(checkbox.isSelected){
                     dao.create(ExpenseModel(budgetModel.id, textField1.text.toDouble(), textField2.value, textField3.text, interval.value, endDate.value))

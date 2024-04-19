@@ -250,6 +250,7 @@ class OverviewController : Controller(), Observer {
 
                     val thread = Thread {
                         val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                        dao.addObserver(this)
                         val id = dao.create(newBudget)
 
                         Platform.runLater {

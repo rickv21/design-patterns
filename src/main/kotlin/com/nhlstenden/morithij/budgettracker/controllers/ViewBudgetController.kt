@@ -29,7 +29,7 @@ import java.text.DecimalFormat
 import java.time.LocalDate
 import java.util.*
 
-class ViewBudgetController : Controller() {
+class ViewBudgetController : Controller(), Observer {
     private lateinit var budgetModel: BudgetModel
 
     @FXML
@@ -52,7 +52,7 @@ class ViewBudgetController : Controller() {
             Platform.runLater {
                 anchorPane.setOnKeyPressed { event ->
                     if (event.code == KeyCode.C || event.code == KeyCode.INSERT) {
-                        CreatePopUp(userInfo, budgetModel)
+                        CreatePopUp(userInfo, budgetModel, this)
                     }
                 }
                 goBackButton.setOnAction {
@@ -133,13 +133,14 @@ class ViewBudgetController : Controller() {
             }
         }
 
-        overviewExpenseRecords.columns.setAll(expenseColumn, dateColumn, descriptionColumn, editColumn)
-
+        Platform.runLater {
+            overviewExpenseRecords.columns.setAll(expenseColumn, dateColumn, descriptionColumn, editColumn)
+        }
         thread.start()
     }
 
     private fun setupEditExpenseButtonAction(expense: ExpenseModel) {
-        UpdatePopUp(userInfo, budgetModel, expense)
+        UpdatePopUp(userInfo, budgetModel, expense, this)
     }
 
     fun isDateFormatValid(dateString: String): Boolean {
@@ -149,5 +150,21 @@ class ViewBudgetController : Controller() {
         } catch (e: Exception) {
             false // invalid
         }
+    }
+
+    override fun update(obj: Any) {
+        if(obj is Pair<*, *>){
+            val pair = obj as Pair<Int, Double>
+            val currentBudgetThread = Thread{
+                val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                val oldBudget = dao.get(pair.first)
+                if(oldBudget != null){
+                    dao.update(BudgetModel(oldBudget.totalBudget, (oldBudget.currentBudget + pair.second), oldBudget.description, oldBudget.currency, pair.first))
+                }
+            }
+            currentBudgetThread.start()
+
+        }
+        overviewExpensesTable()
     }
 }
