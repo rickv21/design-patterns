@@ -104,7 +104,7 @@ class ViewBudgetController : Controller(), Observer {
         val descriptionColumn = TableColumn<ExpenseModel, String>("Description")
         descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value.description) }
         descriptionColumn.isResizable = false
-        descriptionColumn.prefWidth = 383.0
+        descriptionColumn.prefWidth = 300.0
 
         // Edit column
         val editColumn = TableColumn<ExpenseModel, ExpenseModel>("Edit")
