@@ -32,13 +32,13 @@ class ExpenseDAO : DAO<ExpenseModel>() {
             val endDateTimestamp = resultSet.getLong("end_date")
             val endDate = LocalDate.ofInstant(Instant.ofEpochMilli(endDateTimestamp), ZoneId.systemDefault())
             expense = ExpenseModel(
-                    resultSet.getInt("budget_id"),
-                    resultSet.getDouble("money"),
-                    recordDate,
-                    resultSet.getString("description"),
-                    resultSet.getString("interval"),
-                    endDate,
-                    resultSet.getInt("id")
+                resultSet.getInt("budget_id"),
+                resultSet.getDouble("money"),
+                recordDate,
+                resultSet.getString("description"),
+                resultSet.getString("interval"),
+                endDate,
+                resultSet.getInt("id")
             )
         }
 
@@ -60,15 +60,15 @@ class ExpenseDAO : DAO<ExpenseModel>() {
             val endDate = LocalDate.ofInstant(Instant.ofEpochMilli(endDateTimestamp), ZoneId.systemDefault())
 
             expenses.add(
-                    ExpenseModel(
-                        resultSet.getInt("budget_id"),
-                        resultSet.getDouble("money"),
-                        recordDate,
-                        resultSet.getString("description"),
-                        resultSet.getString("interval"),
-                        endDate,
-                        resultSet.getInt("id")
-                    )
+                ExpenseModel(
+                    resultSet.getInt("budget_id"),
+                    resultSet.getDouble("money"),
+                    recordDate,
+                    resultSet.getString("description"),
+                    resultSet.getString("interval"),
+                    endDate,
+                    resultSet.getInt("id")
+                )
             )
         }
 
@@ -94,15 +94,15 @@ class ExpenseDAO : DAO<ExpenseModel>() {
             val endDate = LocalDate.ofInstant(Instant.ofEpochMilli(endDateTimestamp), ZoneId.systemDefault())
 
             expenses.add(
-                    ExpenseModel(
-                        resultSet.getInt("budget_id"),
-                        resultSet.getDouble("money"),
-                        recordDate,
-                        resultSet.getString("description"),
-                        resultSet.getString("interval"),
-                        endDate,
-                        resultSet.getInt("id")
-                    )
+                ExpenseModel(
+                    resultSet.getInt("budget_id"),
+                    resultSet.getDouble("money"),
+                    recordDate,
+                    resultSet.getString("description"),
+                    resultSet.getString("interval"),
+                    endDate,
+                    resultSet.getInt("id")
+                )
             )
         }
 

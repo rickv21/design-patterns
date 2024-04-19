@@ -14,12 +14,14 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.util.Callback
 import java.time.LocalDate
+import java.util.ArrayList
 
 
 class OverviewController : Controller(), Observer {
@@ -41,13 +43,49 @@ class OverviewController : Controller(), Observer {
 
     private lateinit var allRecords : List<BudgetModel>
 
+    @FXML
+    private lateinit var reminderBanner : AnchorPane
+
+    @FXML
+    private lateinit var reminderLabel : Label
+
     fun initialize() {
-        // setTotalAmount()
-        val moneyRecordDAO = BudgetDAO()
-        val allRecords = moneyRecordDAO.getAll()
-        this.allRecords = allRecords
-        setupTableView(allRecords)
-        setupAddBudgetButtonAction()
+        val thread = Thread {
+            val moneyRecordDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            val allRecords = moneyRecordDAO.getAll()
+            this.allRecords = allRecords
+
+            val reminderDAO = DAOFactory.getDAO(ReminderModel::class.java) as DAO<ReminderModel>
+            val allReminders = reminderDAO.getAll()
+            val today = LocalDate.now()
+            val reminders = ArrayList<ReminderModel>()
+            for(reminder in allReminders){
+                if(reminder.remindDate.isEqual(today)){
+                    reminders.add(reminder)
+                }
+            }
+                Platform.runLater {
+                    setupTableView(allRecords)
+                    setupAddBudgetButtonAction()
+                    if(reminders.isNotEmpty()) {
+                        reminderBanner.isVisible = true
+                        if (reminders.count() > 1) {
+                            reminderLabel.text = "You have ${reminders.count()} reminders today: "
+                        } else {
+                            reminderLabel.text = "You have a reminder today: "
+                        }
+                        for ((count, reminder) in reminders.withIndex()) {
+                            if (count == 0) {
+                                reminderLabel.text += reminder.description
+                            } else {
+                                reminderLabel.text = reminderLabel.text + ", " + reminder.description
+                            }
+                        }
+                        reminderLabel.text += "."
+                    }
+            }
+        }
+        thread.start()
     }
 
     private fun setupTableView(allRecords: List<BudgetModel>) {

@@ -57,7 +57,6 @@ class UserInfoDAO : DAO<UserInfoModel>() {
         val id = if (resultSet.next()) resultSet.getInt(1) else -1
 
         statement.close()
-//        connection.close()
         return id
     }
 
