@@ -4,6 +4,7 @@ import javafx.application.Application
 import javafx.scene.control.Alert
 import javafx.scene.image.Image
 import javafx.stage.Stage
+import java.time.format.DateTimeParseException
 
 // The entry point for the application.
 fun main(args: Array<String>) {
@@ -24,6 +25,16 @@ class BudgetTracker : Application() {
             //Error handler.
             Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
                 throwable.printStackTrace()
+
+                //Handle datetime issues here since they get redirected here.
+                if(throwable is DateTimeParseException){
+                    val errorAlert = Alert(Alert.AlertType.ERROR)
+                    errorAlert.title = "Date error"
+                    errorAlert.headerText = "The date value is incorrect!"
+                    errorAlert.showAndWait()
+                    return@setDefaultUncaughtExceptionHandler
+                }
+
                 val alert = Alert(Alert.AlertType.ERROR)
                 alert.title = "Error Dialog"
                 var ex = throwable
