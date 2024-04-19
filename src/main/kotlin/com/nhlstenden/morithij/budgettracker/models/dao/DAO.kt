@@ -11,6 +11,7 @@ abstract class DAO<T> : Observable{
 
     protected val connection: Connection = DatabaseConnector.getConnection()
 
+
     abstract fun get(id: Int): T?
     abstract fun getAll(): List<T>
     abstract fun create(obj: T) : Int
