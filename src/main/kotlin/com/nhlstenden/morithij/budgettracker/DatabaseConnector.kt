@@ -43,7 +43,7 @@ object DatabaseConnector {
         //check if user exist otherwise create:
         val resultSet = statement.executeQuery("SELECT * FROM user WHERE id = 1")
         if(!resultSet.next()){
-            statement.execute("INSERT INTO user (id) VALUES (1)")
+            statement.execute("INSERT INTO user (id, expense_limit) VALUES (1, 50.0)")
         }
     }
 

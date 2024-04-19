@@ -36,23 +36,19 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
 
         val intervalLabel = Label("Interval:")
         val interval = ComboBox<String>()
-
-        // Add items to the ComboBox
         interval.items = FXCollections.observableArrayList("Weekly", "Monthly", "Annually")
-
-
-        // Handle selection change
         interval.setOnAction {
             val selectedOption = interval.value
         }
 
         val endDateLabel = Label("End date:")
         val endDate = DatePicker()
+
         var scene = Scene(layout, 300.0, 200.0)
         val thread = Thread {
             val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
             dao.addObserver(observer)
-            val old = dao.get(1)
+            val old = dao.get(expenseModel.id)
             if(old?.interval != null) {
                 // Set default selection
                 interval.selectionModel.select(old.interval)
@@ -93,7 +89,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
                 if (userInfo.expenseLimit != 0.0) {
                     val errorAlert = Alert(Alert.AlertType.ERROR)
                     errorAlert.title = "Error"
-                    errorAlert.headerText = "The expense you entered is more than your set limit!"
+                    errorAlert.headerText = "The expense you entered is more than your set limit (${userInfo.expenseLimit})!"
                     errorAlert.showAndWait()
                     return@setOnAction
                 }
