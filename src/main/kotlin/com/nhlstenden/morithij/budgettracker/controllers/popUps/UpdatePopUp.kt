@@ -8,7 +8,6 @@ import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
 import javafx.application.Platform
 import javafx.collections.FXCollections
-import javafx.fxml.FXML
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*

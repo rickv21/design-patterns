@@ -1,6 +1,5 @@
 package com.nhlstenden.morithij.budgettracker.controllers.commands
 
-import javafx.application.Platform
 import java.sql.Connection
 
 class DeleteCommand(private val tableName: String): Command {

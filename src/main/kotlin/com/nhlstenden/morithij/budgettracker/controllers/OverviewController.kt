@@ -1,10 +1,11 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
 import com.nhlstenden.morithij.budgettracker.SceneManager
-import com.nhlstenden.morithij.budgettracker.models.*
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
+import com.nhlstenden.morithij.budgettracker.models.ReminderModel
+import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
-import com.nhlstenden.morithij.budgettracker.models.dao.BudgetDAO
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
@@ -21,13 +22,10 @@ import javafx.stage.Modality
 import javafx.stage.Stage
 import javafx.util.Callback
 import java.time.LocalDate
-import java.util.ArrayList
 
 
 class OverviewController : Controller(), Observer {
     lateinit var userInfo: UserInfoModel
-
-    private val tagNamesMap = mutableMapOf<Int?, String?>()
 
     @FXML
     private lateinit var overviewBudgetRecords: TableView<BudgetModel>
@@ -48,6 +46,8 @@ class OverviewController : Controller(), Observer {
 
     @FXML
     private lateinit var reminderLabel : Label
+
+    override val title = super.title + " - Overview"
 
     fun initialize() {
         val thread = Thread {
@@ -169,44 +169,13 @@ class OverviewController : Controller(), Observer {
         thread.start()
     }
 
-
-    private fun getTagName(tagId: Int?): String? {
-        // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
-        if (tagNamesMap.containsKey(tagId)) {
-            return tagNamesMap[tagId]
-        }
-
-        var tagName: String? = null
-        val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
-        val tag = dao.get(tagId ?: return null)
-        tagName = tag?.tag_name
-
-        // if not exist save
-        tagNamesMap[tagId] = tagName
-
-        return tagName
-    }
-
     override fun update(obj: Any) {
-        // May be obsolete
-        if (obj is UserInfoModel) {
-            val thread = Thread {
-                val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-                dao.addObserver(this)
-                dao.update(userInfo)
-                Platform.runLater {
-                    totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
-                }
-            }
-            thread.start()
-            // When the publisher sends a list of budgetmodels that means allRecords has changed and the table should be refreshed
-        }else if (obj is List<*>) {
+        if (obj is List<*>) {
             val budgetModels = obj.filterIsInstance<BudgetModel>()
             allRecords = budgetModels
             setupTableView(allRecords)
         }
     }
-
 
     private fun formatMoney(value: Double): String {
         return String.format("€%.2f", value)
@@ -219,7 +188,6 @@ class OverviewController : Controller(), Observer {
             }
         }
     }
-
 
     fun search(actionEvent: ActionEvent){
         if(searchTerm.text.isEmpty()){

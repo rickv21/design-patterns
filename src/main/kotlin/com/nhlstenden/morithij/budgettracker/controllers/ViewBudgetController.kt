@@ -6,7 +6,6 @@ import com.nhlstenden.morithij.budgettracker.controllers.popUps.DeletePopUp
 import com.nhlstenden.morithij.budgettracker.controllers.popUps.UpdatePopUp
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
-import com.nhlstenden.morithij.budgettracker.models.TestModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
@@ -54,8 +53,11 @@ class ViewBudgetController : Controller(), Observer {
 
     private lateinit var expenseRecords : List<ExpenseModel>
 
+    override val title = super.title + " - View Budget"
+
     @FXML
     fun initialize() {
+
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
             userInfo = dao.get(1) as UserInfoModel
@@ -67,7 +69,7 @@ class ViewBudgetController : Controller(), Observer {
                     }
                 }
                 goBackButton.setOnAction {
-                    SceneManager.switchScene("overview", TestModel())
+                    SceneManager.switchScene("overview")
                 }
             }
         }

@@ -5,13 +5,8 @@ import com.nhlstenden.morithij.budgettracker.controllers.Observer
 /**
  * A model class representing a money record.
  */
-data class UserInfoModel(val user: Int, var totalMoney: Double, var expenseLimit : Double) : Model, Observable {
+data class UserInfoModel(val user: Int, var expenseLimit : Double) : Model, Observable {
     private val observers : ArrayList<Observer>  = ArrayList()
-
-    fun setTotalAmount(amount : Double){
-        totalMoney = amount
-        notifyObservers(this)
-    }
 
     override fun addObserver(observer: Observer) {
         observers.add(observer)
