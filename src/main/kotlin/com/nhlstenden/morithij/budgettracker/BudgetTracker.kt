@@ -17,7 +17,7 @@ class BudgetTracker : Application() {
 
     override fun start(primaryStage: Stage) {
         try {
-            primaryStage.icons.add(Image(javaClass.getResourceAsStream("/budget.png")));
+            primaryStage.icons.add(Image(javaClass.getResourceAsStream("/budget.png")))
             SceneManager.primaryStage = primaryStage
             SceneManager.switchScene("overview")
 

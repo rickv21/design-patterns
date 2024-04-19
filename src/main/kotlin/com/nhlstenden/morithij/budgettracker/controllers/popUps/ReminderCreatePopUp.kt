@@ -1,4 +1,4 @@
-package com.nhlstenden.morithij.budgettracker.controllers.popUps;
+package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
 import com.calendarfx.model.Entry
 import com.nhlstenden.morithij.budgettracker.calendar.CustomEntry
@@ -13,8 +13,12 @@ import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import java.time.LocalDate
 
-class ReminderCreatePopUp () : PopUp(null, null) {
+class ReminderCreatePopUp : PopUp(null, null) {
 
+    /**
+     * Shows the pop-up to create a reminder.
+     * The ReminderCreatePopUp uses a show function instead of the init due to it not working well with the CalendarFX callbacks.
+     */
     fun show(date: LocalDate? = LocalDate.now()) : Entry<String> {
         stage.title = "Create Reminder"
         val label1 = Label("Description:")
@@ -71,10 +75,9 @@ class ReminderCreatePopUp () : PopUp(null, null) {
         stage.scene = scene
         stage.showAndWait()
 
-        //CalendarFX always wants a entry and ALWAYS adds it.
-        //So we always need to return and add a Entry even if we cancel the popup.
-        //So instead we add a entry to a place you would never look and then refresh the calendar ourselves later.
-        var entry = CustomEntry(EntryType.TEMP)
-        return entry
+        //CalendarFX always wants an entry and ALWAYS adds it.
+        //So we always need to return and add an Entry even if we cancel the popup.
+        //It should almost never be visible because the calendar is updated with database values immediately after adding this.
+        return CustomEntry(EntryType.TEMP)
     }
 }

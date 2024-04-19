@@ -1,4 +1,4 @@
-package com.nhlstenden.morithij.budgettracker.controllers.popUps;
+package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
@@ -10,7 +10,7 @@ import javafx.application.Platform
 import javafx.collections.FXCollections
 import javafx.geometry.Pos
 import javafx.scene.Scene
-import javafx.scene.control.*;
+import javafx.scene.control.*
 import javafx.scene.layout.HBox
 
 class CreatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, observer: Observer) : PopUp(userInfo, observer) {

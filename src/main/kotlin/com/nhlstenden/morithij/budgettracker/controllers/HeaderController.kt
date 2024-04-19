@@ -1,7 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
 import com.nhlstenden.morithij.budgettracker.SceneManager
-import com.nhlstenden.morithij.budgettracker.models.TestModel
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 
