@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
@@ -10,7 +11,7 @@ import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 
-class DeletePopUp(userInfo: UserInfoModel) : PopUp(userInfo) {
+class DeletePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel) : PopUp(userInfo){
     init {
         stage.title = "Delete Expense"
         val okButton = Button("Delete")

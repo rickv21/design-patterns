@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
@@ -12,21 +13,24 @@ import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 
-class UpdatePopUp (userInfo: UserInfoModel) : PopUp(userInfo){
+class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel) : PopUp(userInfo){
     init {
         stage.title = "Update Expense"
         val label1 = Label("Money:")
         val textField1 = TextField()
+        textField1.text = expenseModel.money.toString()
         layout.add(label1, 0, 0)
         layout.add(textField1, 1, 0)
 
         val label2 = Label("Date:")
         val textField2 = DatePicker()
+        textField2.value = expenseModel.recordDate
         layout.add(label2, 0, 1)
         layout.add(textField2, 1, 1)
 
         val label3 = Label("Description:")
         val textField3 = TextField()
+        textField3.text = expenseModel.description
         layout.add(label3, 0, 2)
         layout.add(textField3, 1, 2)
 
@@ -76,18 +80,25 @@ class UpdatePopUp (userInfo: UserInfoModel) : PopUp(userInfo){
                 return@setOnAction
             }
 
-            if (textField1.text.toDouble() > userInfo.expenseLimit) {
-                if (userInfo.expenseLimit == 0.0) {
-                    return@setOnAction
-                }
+            if(textField1.text.toDoubleOrNull() == null){
                 val errorAlert = Alert(Alert.AlertType.ERROR)
                 errorAlert.title = "Error"
-                errorAlert.headerText = "The expense you entered is more than your set limit!"
+                errorAlert.headerText = "Please enter a valid number!"
                 errorAlert.showAndWait()
                 return@setOnAction
             }
 
-            if(endDate != null && endDate.value.isBefore(textField2.value)){
+            if (textField1.text.toDouble() > userInfo.expenseLimit) {
+                if (userInfo.expenseLimit != 0.0) {
+                    val errorAlert = Alert(Alert.AlertType.ERROR)
+                    errorAlert.title = "Error"
+                    errorAlert.headerText = "The expense you entered is more than your set limit!"
+                    errorAlert.showAndWait()
+                    return@setOnAction
+                }
+            }
+
+            if(endDate.value != null && endDate.value.isBefore(textField2.value)){
                 val errorAlert = Alert(Alert.AlertType.ERROR)
                 errorAlert.title = "Error"
                 errorAlert.headerText = "End date must be after the Date"
@@ -96,9 +107,8 @@ class UpdatePopUp (userInfo: UserInfoModel) : PopUp(userInfo){
             }
 
             val thread = Thread {
-
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
-                dao.update(ExpenseModel(1, textField1.text.toDouble(), textField2.value, textField3.text, interval.value, endDate.value, 1))
+                dao.update(ExpenseModel(budgetModel.id, textField1.text.toDouble(), textField2.value, textField3.text, interval.value, endDate.value, expenseModel.id))
                 Platform.runLater {
                     val successAlert = Alert(Alert.AlertType.INFORMATION)
                     successAlert.title = "Success"
@@ -108,8 +118,6 @@ class UpdatePopUp (userInfo: UserInfoModel) : PopUp(userInfo){
                 }
             }
             thread.start()
-
-
             stage.close()
         }
 

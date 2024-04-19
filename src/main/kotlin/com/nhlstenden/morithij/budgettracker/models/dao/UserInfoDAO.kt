@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 
 /**
@@ -17,7 +18,8 @@ class UserInfoDAO : DAO<UserInfoModel>() {
             total = UserInfoModel(
                     resultSet.getInt("id"),
                     resultSet.getDouble("total_money"),
-0.0            )
+                    resultSet.getDouble("expense_limit")
+            )
         }
 
         resultSet.close()
@@ -30,6 +32,14 @@ class UserInfoDAO : DAO<UserInfoModel>() {
     }
 
     override fun delete(id: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
         TODO("Not yet implemented")
     }
 
@@ -50,9 +60,10 @@ class UserInfoDAO : DAO<UserInfoModel>() {
 
 
     override fun update(obj: UserInfoModel) {
-        val statement = connection.prepareStatement("UPDATE user SET total_money = ? WHERE id = ?")
+        val statement = connection.prepareStatement("UPDATE user SET total_money = ?, expense_limit = ? WHERE id = ?")
         statement.setDouble(1, obj.totalMoney)
-        statement.setInt(2, obj.user)
+        statement.setDouble(2, obj.expenseLimit)
+        statement.setInt(3, obj.user)
         statement.executeUpdate()
         statement.close()
     }

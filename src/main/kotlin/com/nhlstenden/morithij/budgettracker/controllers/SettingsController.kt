@@ -5,6 +5,7 @@ import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
 import javafx.application.Platform
 import javafx.fxml.FXML
+import javafx.scene.control.Alert
 import javafx.scene.control.Button
 import javafx.scene.control.TextField
 
@@ -24,21 +25,27 @@ class SettingsController() : Controller() {
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
             userInfo = dao.get(1)!!;
-            println("Limt: " + userInfo.expenseLimit)
             Platform.runLater {
                 expenseLimit.text = userInfo.expenseLimit.toString()
 
-                expenseLimit.textProperty().addListener { _, _, newValue ->
-                    if (!newValue.matches("\\d*".toRegex())) {
-                        expenseLimit.text = newValue.replace("\\D".toRegex(), "")
-                    }
-                }
-
                 saveButton.setOnAction {
+                    if(expenseLimit.text.toDoubleOrNull() == null){
+                        val errorAlert = Alert(Alert.AlertType.ERROR)
+                        errorAlert.title = "Error"
+                        errorAlert.headerText = "Please enter a valid number!"
+                        errorAlert.showAndWait()
+                        return@setOnAction
+                    }
                     userInfo.expenseLimit = expenseLimit.text.toDouble()
                     val thread = Thread {
                         val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
                         dao.update(userInfo)
+                        Platform.runLater {
+                            val successAlert = Alert(Alert.AlertType.INFORMATION)
+                            successAlert.title = "Success"
+                            successAlert.headerText = "Updated settings!"
+                            successAlert.showAndWait()
+                        }
                     }
                     thread.start()
                 }
