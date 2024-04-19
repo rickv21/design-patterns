@@ -6,6 +6,7 @@ import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
 import javafx.application.Platform
+import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.chart.LineChart
 import javafx.scene.chart.NumberAxis
@@ -15,12 +16,13 @@ import javafx.scene.control.Label
 import javafx.scene.layout.AnchorPane
 import java.text.DecimalFormat
 import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ExpenseController() : Controller() {
+class ExpenseController() : Controller(), Observer{
 
     @FXML
     lateinit var anchorPane : AnchorPane
@@ -49,13 +51,8 @@ class ExpenseController() : Controller() {
 
             val budgetDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
             allBudgets = budgetDAO.getAll()
-
-            val totalBudget = allBudgets.sumOf { it.totalBudget }
-            val currentBudget = allBudgets.sumOf { it.currentBudget }
-            val currency = Currency.getInstance("EUR").symbol //Can just hardcode this since we dropped support for multiple currencies.
+            setCurrentAndTotal(allBudgets)
             Platform.runLater{
-                totalBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(totalBudget)
-                currentBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(currentBudget)
                 startDatePicker.setOnAction {updateChart(expenses)}
                 endDatePicker.setOnAction { updateChart(expenses)}
 
@@ -87,6 +84,17 @@ class ExpenseController() : Controller() {
             }
         }
         thread.start()
+    }
+
+    private fun setCurrentAndTotal(budgets: List<BudgetModel>){
+        allBudgets = budgets
+        val totalBudget = allBudgets.sumOf { it.totalBudget }
+        val currentBudget = allBudgets.sumOf { it.currentBudget }
+        val currency = Currency.getInstance("EUR").symbol //Can just hardcode this since we dropped support for multiple currencies.
+        Platform.runLater {
+            totalBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(totalBudget)
+            currentBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(currentBudget)
+        }
     }
 
     private fun updateChart(records: List<ExpenseModel>) {
@@ -160,5 +168,27 @@ class ExpenseController() : Controller() {
             e.printStackTrace()
         }
         return XYChart.Series<Number, Number>()
+    }
+
+    override fun update(obj: Any) {
+        val chartThread = Thread{
+            val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            updateChart(dao.getAll())
+        }
+        chartThread.start()
+
+        if(obj is Pair<*, *>){
+            val pair = obj as Pair<Int, Double>
+            val currentBudgetThread = Thread{
+                val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                val oldBudget = dao.get(pair.first)
+                if(oldBudget != null){
+                    dao.update(BudgetModel(oldBudget.totalBudget, (oldBudget.currentBudget + pair.second), oldBudget.description, oldBudget.currency, pair.first))
+                }
+                setCurrentAndTotal(dao.getAll())
+            }
+            currentBudgetThread.start()
+
+        }
     }
 }

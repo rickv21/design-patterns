@@ -2,11 +2,13 @@ package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.DatabaseConnector
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
+import com.nhlstenden.morithij.budgettracker.controllers.commands.DeleteCommand
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.TagModel
 import java.sql.Connection
 
 class TagDAO : DAO<TagModel>() {
+    private val deleteCommand = DeleteCommand("tags")
 
     override fun get(id: Int): TagModel? {
         val statement = connection.createStatement()
@@ -49,14 +51,14 @@ class TagDAO : DAO<TagModel>() {
     }
 
     override fun delete(id: Int) {
-        TODO("Not yet implemented")
+        deleteCommand.execute(id, connection)
     }
 
     override fun addObserver(observer: Observer) {
         TODO("Not yet implemented")
     }
 
-    override fun notifyObservers() {
+    override fun notifyObservers(obj: Any) {
         TODO("Not yet implemented")
     }
 

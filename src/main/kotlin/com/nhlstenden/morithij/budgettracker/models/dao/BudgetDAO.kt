@@ -1,14 +1,9 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
+import com.nhlstenden.morithij.budgettracker.controllers.commands.DeleteCommand
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
-import com.nhlstenden.morithij.budgettracker.models.Observable
 import javafx.application.Platform
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 
 /**
  * A DAO for Budget objects.
@@ -16,6 +11,7 @@ import java.time.ZoneOffset
 class BudgetDAO : DAO<BudgetModel>() {
 
     private var observers = mutableListOf<Observer>()
+    private val deleteCommand = DeleteCommand("budgets")
 
     override fun get(id: Int): BudgetModel? {
         val statement = connection.createStatement()
@@ -76,7 +72,7 @@ class BudgetDAO : DAO<BudgetModel>() {
 
         statement.close()
         Platform.runLater {
-            notifyObservers()
+            notifyObservers(getAll())
         }
 
         return id
@@ -91,19 +87,15 @@ class BudgetDAO : DAO<BudgetModel>() {
 
         statement.executeUpdate()
         Platform.runLater {
-            notifyObservers()
+            notifyObservers(getAll())
         }
         statement.close()
     }
 
     override fun delete(id: Int){
-        val statement = connection.prepareStatement("DELETE FROM budgets WHERE id = ?")
-        statement.setInt(1, id)
-
-        statement.executeUpdate()
-        statement.close()
+        deleteCommand.execute(id, connection)
         Platform.runLater {
-            notifyObservers()
+            notifyObservers(getAll())
         }
     }
 
@@ -111,9 +103,9 @@ class BudgetDAO : DAO<BudgetModel>() {
         observers.add(observer)
     }
 
-    override fun notifyObservers() {
+    override fun notifyObservers(obj: Any) {
         observers.forEach { observer ->
-            observer.update(getAll())
+            observer.update(obj)
         }
     }
 }

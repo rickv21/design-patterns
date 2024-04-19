@@ -235,18 +235,11 @@ class OverviewController : Controller(), Observer {
         }
     }
 
-    fun handleLoadAction(actionEvent: ActionEvent) {
-        val thread = Thread {
-            val daoBudgets = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
-            daoBudgets.addObserver(this)
-            daoBudgets.create(BudgetModel(50.0, 40.0, "test"))
-            val daoExpenses = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
-            daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))
-        }
-        thread.start()
-    }
 
     fun search(actionEvent: ActionEvent){
+        if(searchTerm.text.isEmpty()){
+            setupTableView(allRecords)
+        }
         val result = mutableListOf<BudgetModel>()
         allRecords.forEach{budget ->
             if(budget.description.contains(searchTerm.text)){
@@ -298,6 +291,7 @@ class OverviewController : Controller(), Observer {
 
                     val thread = Thread {
                         val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                        dao.addObserver(this)
                         val id = dao.create(newBudget)
 
                         Platform.runLater {

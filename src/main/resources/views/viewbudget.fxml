@@ -7,6 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
 <AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.ViewBudgetController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
@@ -15,6 +16,9 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
+        <TextField fx:id="searchTerm" layoutX="144.0" layoutY="100.0" promptText="Search" />
+        <Button fx:id="searchButton" layoutX="300.0" layoutY="100.0" mnemonicParsing="false" text="Search" onAction="#search"/>
+
         <TableView fx:id="overviewExpenseRecords" layoutX="144.0" layoutY="172.0" prefHeight="411.0" prefWidth="711.0">
             <columns>
                 <TableColumn prefWidth="75.0" text="Expense" />
@@ -24,6 +28,7 @@
             </columns>
         </TableView>
         <Button fx:id="goBackButton" layoutX="795.0" layoutY="604.0"  mnemonicParsing="false" text="Go back" />
+        <Button fx:id="addExpenseButton" layoutX="775.0" layoutY="604.0"  mnemonicParsing="false" text="Add Expense" onAction="#addExpense" />
     </children>
 
 </AnchorPane>
