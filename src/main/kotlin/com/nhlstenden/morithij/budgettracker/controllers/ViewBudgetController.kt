@@ -14,6 +14,7 @@ import com.nhlstenden.morithij.budgettracker.models.dao.ExpenseDAO
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
+import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.geometry.Insets
 import javafx.geometry.Pos
@@ -42,7 +43,12 @@ class ViewBudgetController : Controller(), Observer {
     @FXML
     private lateinit var anchorPane: AnchorPane
 
+    @FXML
+    private lateinit var searchTerm : TextField
+
     private lateinit var userInfo : UserInfoModel
+
+    private lateinit var expenseRecords : List<ExpenseModel>
 
     @FXML
     fun initialize() {
@@ -64,22 +70,26 @@ class ViewBudgetController : Controller(), Observer {
         thread.start()
     }
 
+
+
+    fun setRecords(){
+        val expensesThread = Thread {
+            val expenseDAO = DAOFactory.getDAO(ExpenseModel::class.java) as ExpenseDAO
+            expenseRecords = expenseDAO.getAllByBudgetID(budgetModel.id)
+            overviewExpensesTable(expenseRecords)
+        }
+        expensesThread.start()
+    }
     override fun setModels(vararg models: Any) {
         super.setModels(*models)
         budgetModel = models.firstOrNull() as BudgetModel
-        if (budgetModel != null) {
-            overviewExpensesTable()
-        }
+        setRecords()
     }
 
-    fun overviewExpensesTable() {
+    fun overviewExpensesTable(records: List<ExpenseModel>) {
         // Get expense records for the given budget ID
-        val thread = Thread {
-            val expenseDAO = DAOFactory.getDAO(ExpenseModel::class.java) as ExpenseDAO
-            val expenseRecords = expenseDAO.getAllByBudgetID(budgetModel.id)
-            Platform.runLater {
-                overviewExpenseRecords.items = FXCollections.observableArrayList(expenseRecords)
-            }
+        Platform.runLater {
+                overviewExpenseRecords.items = FXCollections.observableArrayList(records)
         }
 
         // Expense column
@@ -165,7 +175,6 @@ class ViewBudgetController : Controller(), Observer {
         Platform.runLater {
             overviewExpenseRecords.columns.setAll(expenseColumn, dateColumn, descriptionColumn, editColumn, deleteColumn)
         }
-        thread.start()
     }
 
     private fun setupEditExpenseButtonAction(expense: ExpenseModel) {
@@ -185,6 +194,23 @@ class ViewBudgetController : Controller(), Observer {
         }
     }
 
+    fun search(actionEvent: ActionEvent){
+        if(searchTerm.text.isEmpty()){
+            overviewExpensesTable(expenseRecords)
+        }
+        val result = mutableListOf<ExpenseModel>()
+        expenseRecords.forEach{budget ->
+            if(budget.description.contains(searchTerm.text)){
+                result.add(budget)
+            }
+        }
+        overviewExpensesTable(result)
+    }
+
+    fun addExpense(actionEvent: ActionEvent){
+        CreatePopUp(userInfo, budgetModel, this)
+    }
+
     override fun update(obj: Any) {
         if(obj is Pair<*, *>){
             val pair = obj as Pair<Int, Double>
@@ -198,6 +224,7 @@ class ViewBudgetController : Controller(), Observer {
             currentBudgetThread.start()
 
         }
-        overviewExpensesTable()
+        setRecords()
+        overviewExpensesTable(expenseRecords)
     }
 }

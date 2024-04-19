@@ -199,6 +199,9 @@ class OverviewController : Controller(), Observer {
 
 
     fun search(actionEvent: ActionEvent){
+        if(searchTerm.text.isEmpty()){
+            setupTableView(allRecords)
+        }
         val result = mutableListOf<BudgetModel>()
         allRecords.forEach{budget ->
             if(budget.description.contains(searchTerm.text)){
