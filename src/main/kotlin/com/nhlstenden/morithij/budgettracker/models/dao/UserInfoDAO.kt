@@ -39,7 +39,7 @@ class UserInfoDAO : DAO<UserInfoModel>() {
         TODO("Not yet implemented")
     }
 
-    override fun notifyObservers() {
+    override fun notifyObservers(obj: Any) {
         TODO("Not yet implemented")
     }
 

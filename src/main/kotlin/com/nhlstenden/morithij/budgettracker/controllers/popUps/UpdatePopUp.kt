@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
@@ -13,7 +14,7 @@ import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 
-class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel) : PopUp(userInfo){
+class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel, observer: Observer) : PopUp(userInfo, observer){
     init {
         stage.title = "Update Expense"
         val label1 = Label("Money:")
@@ -51,6 +52,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
         var scene = Scene(layout, 300.0, 200.0)
         val thread = Thread {
             val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            dao.addObserver(observer)
             val old = dao.get(1)
             if(old?.interval != null) {
                 // Set default selection
@@ -108,6 +110,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
 
             val thread = Thread {
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+                dao.addObserver(observer)
                 dao.update(ExpenseModel(budgetModel.id, textField1.text.toDouble(), textField2.value, textField3.text, interval.value, endDate.value, expenseModel.id))
                 Platform.runLater {
                     val successAlert = Alert(Alert.AlertType.INFORMATION)

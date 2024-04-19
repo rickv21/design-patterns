@@ -2,6 +2,8 @@ package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
+import com.nhlstenden.morithij.budgettracker.models.Observable
+import javafx.application.Platform
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDate
@@ -13,6 +15,8 @@ import java.time.ZoneOffset
  * A DAO for Expense objects.
  */
 class ExpenseDAO : DAO<ExpenseModel>() {
+    private var observers = mutableListOf<Observer>()
+
 
     override fun get(id: Int): ExpenseModel? {
         val statement = connection.createStatement()
@@ -130,12 +134,16 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         val id = if (resultSet.next()) resultSet.getInt(1) else -1
 
         statement.close()
-        connection.close()
-
+        notifyObservers(Pair<Int, Double>(obj.budgetID, -obj.money))
         return id
     }
 
     override fun update(obj: ExpenseModel) {
+        val old = get(obj.id)
+        var money = 0.0
+        if(old != null){
+            money = old.money - obj.money
+        }
         val statement = connection.prepareStatement("UPDATE expenses SET budget_id = ?, money = ?, record_date = ?, description = ?, `interval` = ?, end_date = ? WHERE id = ?")
         statement.setInt(1, obj.budgetID)
         statement.setDouble(2, obj.money)
@@ -157,21 +165,32 @@ class ExpenseDAO : DAO<ExpenseModel>() {
 
         statement.executeUpdate()
         statement.close()
+        notifyObservers(Pair<Int, Double>(obj.budgetID, money))
     }
 
     override fun delete(id: Int){
+        var money = 0.0
+        val expense = get(id)
+        if(expense != null){
+            money = expense.money
+        }
         val statement = connection.prepareStatement("DELETE FROM expenses WHERE id = ?")
         statement.setInt(1, id)
 
         statement.executeUpdate()
         statement.close()
+        Platform.runLater {
+            notifyObservers(Pair<Int, Double>(expense!!.budgetID, money!!))
+        }
     }
 
     override fun addObserver(observer: Observer) {
-        TODO("Not yet implemented")
+        observers.add(observer)
     }
 
-    override fun notifyObservers() {
-        TODO("Not yet implemented")
+    override fun notifyObservers(obj: Any) {
+        observers.forEach {observer ->
+            observer.update(obj)
+        }
     }
 }

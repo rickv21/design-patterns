@@ -10,15 +10,15 @@ data class UserInfoModel(val user: Int, var totalMoney: Double, var expenseLimit
 
     fun setTotalAmount(amount : Double){
         totalMoney = amount
-        notifyObservers()
+        notifyObservers(this)
     }
 
     override fun addObserver(observer: Observer) {
         observers.add(observer)
     }
 
-    override fun notifyObservers() {
-        observers.forEach { it.update(this) }
+    override fun notifyObservers(obj: Any) {
+        observers.forEach { it.update(obj) }
     }
 }
 
