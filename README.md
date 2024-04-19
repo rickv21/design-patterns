@@ -36,13 +36,31 @@ Aangepaste must haves:
 - Categoriseren van uitkomsten
 - Vaste uitgaven moet je voor de volgende maand kunnen inzien.
 - Uitgaven kunnen invoeren.
-- Herhalende uitgaven kunnen instellen.
+- Herhalende uitgaven kunnen instellen. (Werkt niet helemaal)
 - Filteren en sorteren op inkomsten en uitgaven. 
 - Een limiet kunnen instellen voor maximale uitgaven.
 - Je inkomsten kunnen verdelen in verschillende budgets bijvoorbeeld boodschappen, vrije tijd en vaste lasten.
 
-### Opmerkingen
-- Op de kalender kan een reminder aangemaakt worden, dit kan je doen door te dubbelklikken op een dag of rechts te klikken voor een context menu.
-- Op de kalendar een reminder verwijdert worden, dit kan je doen door rechts te klikken op een reminder en dan Delete in het context menu.
+### Kleine handleiding
+
+#### Budget pagina
+
+Op de budget pagina kan je alle budgets inzien, toevoegen en verwijderen. Wanneer je op add budget toevoeg kan er een budget worden toegevoegd voor bijvoorbeeld 'Boodschappen' met een budget van 200 euro. De currency staat voor nu vast als EUR. 
+
+Wanneer de budget is toegevoegd, komt het in de tabel te staan. In de 1 na laatste kolom komt er een button te staan genaamd "View". Als je hierop klikt, kan je alle uitgaven zien die onder boodschappen valt. In deze pagina kan je uitgaven toevoegen, aanpassen en verwijderen. 
+
+Bij de Budget tabel en de uitgaven tabel kan er gesorteerd en gefiltered worden met behulp van de zoekbalk, Wanneer je op de kolumn titel klikt, kan er gesorteerd worden.
+
+#### Expenses pagina
+
+In de expenses pagina wordt er een lijndiagram weergegeven met alle uitgaven. Achter Total Budgets staat de totale hoeveelheid van alle budgets bij elkaar opgeteld. Achter Current budget staat de totale budget min de uitgaven. 
+
+In de lijndiagram kan je ook aangeven tussen welke twee datums je de uitgaven wilt zien.
+
+#### Planning pagina
+
+Op de planning pagina wordt een kalender weergegeven. Hierbij kan er een reminder aangemaakt worden door te dubbelklikken op een dag of rechts te klikken voor een context menu. Daarnaast kan er een reminder verwijdert worden, dit kan je doen door rechts te klikken op een reminder en dan Delete in het context menu.
+
+#### Overige opmerkingen
 - Expense limiet kan aangepast worden in settings.
 - In de header is er een item genaamd "Account". Op dit moment kan je er niks mee. Niet gelukt om meerdere accounts te implementeren. 

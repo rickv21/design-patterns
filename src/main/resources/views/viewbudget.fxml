@@ -4,10 +4,10 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.TextField?>
 <AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.ViewBudgetController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
@@ -16,15 +16,15 @@
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
-        <TextField fx:id="searchTerm" layoutX="144.0" layoutY="100.0" promptText="Search" />
-        <Button fx:id="searchButton" layoutX="300.0" layoutY="100.0" mnemonicParsing="false" text="Search" onAction="#search"/>
+        <TextField fx:id="searchTerm" layoutX="535.0" layoutY="132.0" prefHeight="25.0" prefWidth="247.0" promptText="Search" />
+        <Button fx:id="searchButton" layoutX="803.0" layoutY="132.0" mnemonicParsing="false" onAction="#search" text="Search" />
 
-        <Label layoutX="500.0" layoutY="100.0" text="Total Budget:" />
-        <Label fx:id="totalBudgetLabel" layoutX="600.0" layoutY="100.0" />
+        <Label layoutX="144.0" layoutY="605.0" text="Total Budget:" />
+        <Label fx:id="totalBudgetLabel" layoutX="244.0" layoutY="605.0" />
 
         <!-- Current Budget Label -->
-        <Label layoutX="500.0" layoutY="130.0" text="Current Budget:" />
-        <Label fx:id="currentBudgetLabel" layoutX="600.0" layoutY="130.0" />
+        <Label layoutX="144.0" layoutY="635.0" text="Current Budget:" />
+        <Label fx:id="currentBudgetLabel" layoutX="244.0" layoutY="635.0" />
 
         <TableView fx:id="overviewExpenseRecords" layoutX="144.0" layoutY="172.0" prefHeight="411.0" prefWidth="711.0">
             <columns>
@@ -34,8 +34,8 @@
             <TableColumn prefWidth="75.0" text="Edit" />
             </columns>
         </TableView>
-        <Button fx:id="goBackButton" layoutX="795.0" layoutY="604.0"  mnemonicParsing="false" text="Go back" />
-        <Button fx:id="addExpenseButton" layoutX="775.0" layoutY="604.0"  mnemonicParsing="false" text="Add Expense" onAction="#addExpense" />
+        <Button fx:id="goBackButton" layoutX="795.0" layoutY="604.0" mnemonicParsing="false" text="Go back" />
+        <Button fx:id="addExpenseButton" layoutX="775.0" layoutY="604.0" mnemonicParsing="false" onAction="#addExpense" text="Add Expense" />
     </children>
 
 </AnchorPane>
