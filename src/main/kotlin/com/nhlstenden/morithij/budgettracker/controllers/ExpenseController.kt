@@ -174,12 +174,14 @@ class ExpenseController() : Controller(), Observer{
     }
 
     override fun update(obj: Any) {
+        // When one of the publishers notifies ExpenseController, the chart is updated.
         val chartThread = Thread{
             val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
             updateChart(dao.getAll())
         }
         chartThread.start()
 
+        // When the notice from the publishers consists of a budgetID and a money value, the current budget should be updated
         if(obj is Pair<*, *>){
             val pair = obj as Pair<Int, Double>
             val currentBudgetThread = Thread{

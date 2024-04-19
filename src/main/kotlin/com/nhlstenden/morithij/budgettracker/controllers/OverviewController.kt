@@ -188,6 +188,7 @@ class OverviewController : Controller(), Observer {
     }
 
     override fun update(obj: Any) {
+        // May be obsolete
         if (obj is UserInfoModel) {
             val thread = Thread {
                 val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
@@ -198,6 +199,7 @@ class OverviewController : Controller(), Observer {
                 }
             }
             thread.start()
+            // When the publisher sends a list of budgetmodels that means allRecords has changed and the table should be refreshed
         }else if (obj is List<*>) {
             val budgetModels = obj.filterIsInstance<BudgetModel>()
             allRecords = budgetModels
@@ -205,23 +207,6 @@ class OverviewController : Controller(), Observer {
         }
     }
 
-    private fun setTotalAmount() {
-        val thread = Thread {
-            val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-            val record = dao.get(1)
-            //TODO: handle missing record.
-            if (record != null) {
-                userInfo = record
-                onTotalInitialized()
-            }
-        }
-        thread.start()
-    }
-
-    private fun onTotalInitialized() {
-        userInfo.addObserver(this)
-        totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
-    }
 
     private fun formatMoney(value: Double): String {
         return String.format("€%.2f", value)

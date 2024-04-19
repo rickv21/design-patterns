@@ -16,16 +16,11 @@ import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
-import javafx.geometry.Insets
 import javafx.geometry.Pos
-import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.input.KeyCode
 import javafx.scene.layout.AnchorPane
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
-import javafx.stage.Modality
-import javafx.stage.Stage
 import javafx.util.Callback
 import java.text.DecimalFormat
 import java.time.LocalDate
@@ -81,11 +76,11 @@ class ViewBudgetController : Controller(), Observer {
 
 
 
-    fun setRecords(){
+    private fun setRecords(){
         val expensesThread = Thread {
             val expenseDAO = DAOFactory.getDAO(ExpenseModel::class.java) as ExpenseDAO
             expenseRecords = expenseDAO.getAllByBudgetID(budgetModel.id)
-            overviewExpensesTable(expenseRecords)
+            updatePage(expenseRecords)
         }
         expensesThread.start()
     }
@@ -96,7 +91,7 @@ class ViewBudgetController : Controller(), Observer {
         titleLabel.text = "View ${budgetModel.description}"
     }
 
-    fun overviewExpensesTable(records: List<ExpenseModel>) {
+    private fun updatePage(records: List<ExpenseModel>) {
         // Get expense records for the given budget ID
         Platform.runLater {
             overviewExpenseRecords.items = FXCollections.observableArrayList(records)
@@ -197,18 +192,9 @@ class ViewBudgetController : Controller(), Observer {
         DeletePopUp(userInfo, budgetModel, expense, this)
     }
 
-    fun isDateFormatValid(dateString: String): Boolean {
-        return try {
-            LocalDate.parse(dateString)
-            true // valid
-        } catch (e: Exception) {
-            false // invalid
-        }
-    }
-
     fun search(actionEvent: ActionEvent){
         if(searchTerm.text.isEmpty()){
-            overviewExpensesTable(expenseRecords)
+            updatePage(expenseRecords)
         }
         val result = mutableListOf<ExpenseModel>()
         expenseRecords.forEach{budget ->
@@ -216,7 +202,7 @@ class ViewBudgetController : Controller(), Observer {
                 result.add(budget)
             }
         }
-        overviewExpensesTable(result)
+        updatePage(result)
     }
 
     fun addExpense(actionEvent: ActionEvent){
@@ -224,6 +210,7 @@ class ViewBudgetController : Controller(), Observer {
     }
 
     override fun update(obj: Any) {
+        // When the notice from the publishers consists of a budgetID and a money value, the current budget should be updated
         if(obj is Pair<*, *>){
             val pair = obj as Pair<Int, Double>
             val currentBudgetThread = Thread{
@@ -239,6 +226,6 @@ class ViewBudgetController : Controller(), Observer {
 
         }
         setRecords()
-        overviewExpensesTable(expenseRecords)
+        updatePage(expenseRecords)
     }
 }
