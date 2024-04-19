@@ -29,24 +29,27 @@ object DatabaseConnector {
         initDatabase()
     }
 
+    /**
+     * Initializes the database by creating the tables if they do not exist.
+     */
     private fun initDatabase(){
         val statement = connection!!.createStatement()
 
         statement.execute("CREATE TABLE IF NOT EXISTS expenses (id INTEGER PRIMARY KEY, budget_id INTEGER, money DOUBLE, record_date TEXT, description TEXT, `interval` TEXT, end_date TEXT, FOREIGN KEY (budget_id) REFERENCES budgets(id) ON DELETE CASCADE)")
         statement.execute("CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY, total_budget DOUBLE, current_budget DOUBLE, description TEXT, currency TEXT)")
-        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, total_money DOUBLE, expense_limit DOUBLE DEFAULT 0.0)")
-        statement.execute("CREATE TABLE IF NOT EXISTS reminder (id INTEGER PRIMARY KEY, description DOUBLE, reminder_date TEXT)")
+        statement.execute("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY, expense_limit DOUBLE DEFAULT 0.0)")
+        statement.execute("CREATE TABLE IF NOT EXISTS reminder (id INTEGER PRIMARY KEY, description TEXT, reminder_date TEXT)")
 
-        //check if user exist other while create:
+        //check if user exist otherwise create:
         val resultSet = statement.executeQuery("SELECT * FROM user WHERE id = 1")
         if(!resultSet.next()){
-            statement.execute("INSERT INTO user (id, total_money) VALUES (1, 0.0)")
+            statement.execute("INSERT INTO user (id, expense_limit) VALUES (1, 50.0)")
         }
-
-        //statement.execute("INSERT INTO user (id, total_money) VALUES (1, 0.0)")
     }
 
-
+    /**
+     * Returns the connection to the database.
+     */
     fun getConnection(): Connection {
         if (connection == null || connection!!.isClosed) {
             init()

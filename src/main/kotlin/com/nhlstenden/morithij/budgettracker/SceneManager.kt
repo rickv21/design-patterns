@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
-import java.awt.Color
 
 object SceneManager {
 
@@ -20,6 +19,8 @@ object SceneManager {
         primaryStage.title = createdScene.first.title
         primaryStage.minWidth = WINDOW_WIDTH
         primaryStage.minHeight = WINDOW_HEIGHT
+
+        primaryStage.isResizable = false
 
         val root = createdScene.second.getRoot() as Parent
 

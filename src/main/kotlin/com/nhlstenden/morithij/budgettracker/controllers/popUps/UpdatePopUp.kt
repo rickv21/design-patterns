@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.controllers.popUps
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.BudgetModel
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
@@ -7,13 +8,12 @@ import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
 import javafx.application.Platform
 import javafx.collections.FXCollections
-import javafx.fxml.FXML
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 
-class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel) : PopUp(userInfo){
+class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseModel: ExpenseModel, observer: Observer) : PopUp(userInfo, observer){
     init {
         stage.title = "Update Expense"
         val label1 = Label("Money:")
@@ -36,22 +36,19 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
 
         val intervalLabel = Label("Interval:")
         val interval = ComboBox<String>()
-
-        // Add items to the ComboBox
         interval.items = FXCollections.observableArrayList("Weekly", "Monthly", "Annually")
-
-
-        // Handle selection change
         interval.setOnAction {
             val selectedOption = interval.value
         }
 
         val endDateLabel = Label("End date:")
         val endDate = DatePicker()
+
         var scene = Scene(layout, 300.0, 200.0)
         val thread = Thread {
             val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
-            val old = dao.get(1)
+            dao.addObserver(observer)
+            val old = dao.get(expenseModel.id)
             if(old?.interval != null) {
                 // Set default selection
                 interval.selectionModel.select(old.interval)
@@ -92,7 +89,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
                 if (userInfo.expenseLimit != 0.0) {
                     val errorAlert = Alert(Alert.AlertType.ERROR)
                     errorAlert.title = "Error"
-                    errorAlert.headerText = "The expense you entered is more than your set limit!"
+                    errorAlert.headerText = "The expense you entered is more than your set limit (${userInfo.expenseLimit})!"
                     errorAlert.showAndWait()
                     return@setOnAction
                 }
@@ -108,6 +105,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
 
             val thread = Thread {
                 val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+                dao.addObserver(observer)
                 dao.update(ExpenseModel(budgetModel.id, textField1.text.toDouble(), textField2.value, textField3.text, interval.value, endDate.value, expenseModel.id))
                 Platform.runLater {
                     val successAlert = Alert(Alert.AlertType.INFORMATION)

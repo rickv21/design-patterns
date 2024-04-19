@@ -1,10 +1,11 @@
 package com.nhlstenden.morithij.budgettracker.controllers
 
 import com.nhlstenden.morithij.budgettracker.SceneManager
-import com.nhlstenden.morithij.budgettracker.models.*
+import com.nhlstenden.morithij.budgettracker.models.BudgetModel
+import com.nhlstenden.morithij.budgettracker.models.ReminderModel
+import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 import com.nhlstenden.morithij.budgettracker.models.dao.DAO
 import com.nhlstenden.morithij.budgettracker.models.dao.DAOFactory
-import com.nhlstenden.morithij.budgettracker.models.dao.BudgetDAO
 import javafx.application.Platform
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
@@ -14,6 +15,7 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.layout.AnchorPane
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.stage.Modality
@@ -24,8 +26,6 @@ import java.time.LocalDate
 
 class OverviewController : Controller(), Observer {
     lateinit var userInfo: UserInfoModel
-
-    private val tagNamesMap = mutableMapOf<Int?, String?>()
 
     @FXML
     private lateinit var overviewBudgetRecords: TableView<BudgetModel>
@@ -41,13 +41,51 @@ class OverviewController : Controller(), Observer {
 
     private lateinit var allRecords : List<BudgetModel>
 
+    @FXML
+    private lateinit var reminderBanner : AnchorPane
+
+    @FXML
+    private lateinit var reminderLabel : Label
+
+    override val title = super.title + " - Overview"
+
     fun initialize() {
-        // setTotalAmount()
-        val moneyRecordDAO = BudgetDAO()
-        val allRecords = moneyRecordDAO.getAll()
-        this.allRecords = allRecords
-        setupTableView(allRecords)
-        setupAddBudgetButtonAction()
+        val thread = Thread {
+            val moneyRecordDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+            val allRecords = moneyRecordDAO.getAll()
+            this.allRecords = allRecords
+
+            val reminderDAO = DAOFactory.getDAO(ReminderModel::class.java) as DAO<ReminderModel>
+            val allReminders = reminderDAO.getAll()
+            val today = LocalDate.now()
+            val reminders = ArrayList<ReminderModel>()
+            for(reminder in allReminders){
+                if(reminder.remindDate.isEqual(today)){
+                    reminders.add(reminder)
+                }
+            }
+                Platform.runLater {
+                    setupTableView(allRecords)
+                    setupAddBudgetButtonAction()
+                    if(reminders.isNotEmpty()) {
+                        reminderBanner.isVisible = true
+                        if (reminders.count() > 1) {
+                            reminderLabel.text = "You have ${reminders.count()} reminders today: "
+                        } else {
+                            reminderLabel.text = "You have a reminder today: "
+                        }
+                        for ((count, reminder) in reminders.withIndex()) {
+                            if (count == 0) {
+                                reminderLabel.text += reminder.description
+                            } else {
+                                reminderLabel.text = reminderLabel.text + ", " + reminder.description
+                            }
+                        }
+                        reminderLabel.text += "."
+                    }
+            }
+        }
+        thread.start()
     }
 
     private fun setupTableView(allRecords: List<BudgetModel>) {
@@ -131,58 +169,12 @@ class OverviewController : Controller(), Observer {
         thread.start()
     }
 
-
-    private fun getTagName(tagId: Int?): String? {
-        // Check if tag name already exists in the map, this to prevent continuous calls because of setCellValueFactory
-        if (tagNamesMap.containsKey(tagId)) {
-            return tagNamesMap[tagId]
-        }
-
-        var tagName: String? = null
-        val dao = DAOFactory.getDAO(TagModel::class.java) as DAO<TagModel>
-        val tag = dao.get(tagId ?: return null)
-        tagName = tag?.tag_name
-
-        // if not exist save
-        tagNamesMap[tagId] = tagName
-
-        return tagName
-    }
-
     override fun update(obj: Any) {
-        if (obj is UserInfoModel) {
-            val thread = Thread {
-                val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-                dao.addObserver(this)
-                dao.update(userInfo)
-                Platform.runLater {
-                    totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
-                }
-            }
-            thread.start()
-        }else if (obj is List<*>) {
+        if (obj is List<*>) {
             val budgetModels = obj.filterIsInstance<BudgetModel>()
             allRecords = budgetModels
             setupTableView(allRecords)
         }
-    }
-
-    private fun setTotalAmount() {
-        val thread = Thread {
-            val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-            val record = dao.get(1)
-            //TODO: handle missing record.
-            if (record != null) {
-                userInfo = record
-                onTotalInitialized()
-            }
-        }
-        thread.start()
-    }
-
-    private fun onTotalInitialized() {
-        userInfo.addObserver(this)
-        totalMoneyLabel.text = "Total Budget: ${formatMoney(userInfo.totalMoney)}"
     }
 
     private fun formatMoney(value: Double): String {
@@ -197,18 +189,10 @@ class OverviewController : Controller(), Observer {
         }
     }
 
-    fun handleLoadAction(actionEvent: ActionEvent) {
-        val thread = Thread {
-            val daoBudgets = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
-            daoBudgets.addObserver(this)
-            daoBudgets.create(BudgetModel(50.0, 40.0, "test"))
-            val daoExpenses = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
-            daoExpenses.create(ExpenseModel(1, 50.0, LocalDate.now(), "test"))
-        }
-        thread.start()
-    }
-
     fun search(actionEvent: ActionEvent){
+        if(searchTerm.text.isEmpty()){
+            setupTableView(allRecords)
+        }
         val result = mutableListOf<BudgetModel>()
         allRecords.forEach{budget ->
             if(budget.description.contains(searchTerm.text)){
@@ -260,6 +244,7 @@ class OverviewController : Controller(), Observer {
 
                     val thread = Thread {
                         val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                        dao.addObserver(this)
                         val id = dao.create(newBudget)
 
                         Platform.runLater {

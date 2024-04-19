@@ -20,7 +20,7 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class ExpenseController() : Controller() {
+class ExpenseController() : Controller(), Observer{
 
     @FXML
     lateinit var anchorPane : AnchorPane
@@ -37,11 +37,13 @@ class ExpenseController() : Controller() {
     @FXML
     private lateinit var currentBudgetLabel : Label
 
+    override val title = super.title + " - Expenses"
+
     @FXML
-    // This function is called when the FXML file is loaded
     fun initialize() {
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
+            // Hardcoded because multiple users was scratched
             userInfo = dao.get(1) as UserInfoModel
 
             val expenseDAO = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
@@ -49,23 +51,14 @@ class ExpenseController() : Controller() {
 
             val budgetDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
             allBudgets = budgetDAO.getAll()
-
-            val totalBudget = allBudgets.sumOf { it.totalBudget }
-            val currentBudget = allBudgets.sumOf { it.currentBudget }
-            val currency = Currency.getInstance("EUR").symbol //Can just hardcode this since we dropped support for multiple currencies.
+            setCurrentAndTotal(allBudgets)
             Platform.runLater{
-                totalBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(totalBudget)
-                currentBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(currentBudget)
                 startDatePicker.setOnAction {updateChart(expenses)}
                 endDatePicker.setOnAction { updateChart(expenses)}
 
-                // Add data to the chart
+                // Generate data for the chart
                 val series = generatePeriodicSeriesData(expenses)
-
-                // Add the series to the line chart
                 lineChart.data.add(series)
-
-                // Set the labels for the axes
                 lineChart.xAxis.label = "Date"
                 lineChart.yAxis.label = "Amount"
 
@@ -81,14 +74,26 @@ class ExpenseController() : Controller() {
                         return formatter.format(dateTime)
                     }
                 }
-
-                // Hide the legend
                 lineChart.isLegendVisible = false
             }
         }
         thread.start()
     }
 
+    private fun setCurrentAndTotal(budgets: List<BudgetModel>){
+        // Updates the list of all budgets
+        allBudgets = budgets
+        // Calculates the total of all totals and currents of the budgets
+        val totalBudget = allBudgets.sumOf { it.totalBudget }
+        val currentBudget = allBudgets.sumOf { it.currentBudget }
+        val currency = Currency.getInstance("EUR").symbol //Can just hardcode this since we dropped support for multiple currencies.
+        Platform.runLater {
+            totalBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(totalBudget)
+            currentBudgetLabel.text = currency + DecimalFormat("#,##0.00").format(currentBudget)
+        }
+    }
+
+    // Used to update the chart when the date pickers are used to select what period needs to be shown
     private fun updateChart(records: List<ExpenseModel>) {
         try {
             val startDate = startDatePicker.value?.atStartOfDay()
@@ -114,6 +119,9 @@ class ExpenseController() : Controller() {
         val earliestDate = sortedRecords.firstOrNull()?.recordDate?.atStartOfDay()
         val latestDate = sortedRecords.lastOrNull()?.recordDate?.atStartOfDay()
 
+        // Sets the dates to the specified date.
+        // If no dates are specified, the earliest and latest record dates are taken.
+        // If that fails, the current date is taken.
         val actualBeginDate = beginDate ?: earliestDate ?: LocalDateTime.now()
         val actualEndDate = endDate ?: latestDate ?: LocalDateTime.now()
 
@@ -124,14 +132,17 @@ class ExpenseController() : Controller() {
             return XYChart.Series<Number, Number>()
         }
 
+        // Filters the records to only show the ones between the selected dates.
         val filteredRecords =
             sortedRecords.filter { it.recordDate.atStartOfDay() in actualBeginDate..actualEndDate }
+        // Divides the period between the start and end-date in even parts to make up the x-axis values
         val duration = Duration.between(actualBeginDate, actualEndDate)
         val numberOfDivisions = filteredRecords.size
         if(filteredRecords.isEmpty()){
             return XYChart.Series<Number, Number>()
         }
         try {
+            //calculates the total expenses per period. Each period becomes a point in the graph
             val periodDuration = duration.dividedBy(numberOfDivisions.toLong())
             val series = XYChart.Series<Number, Number>()
 
@@ -160,5 +171,29 @@ class ExpenseController() : Controller() {
             e.printStackTrace()
         }
         return XYChart.Series<Number, Number>()
+    }
+
+    override fun update(obj: Any) {
+        // When one of the publishers notifies ExpenseController, the chart is updated.
+        val chartThread = Thread{
+            val dao = DAOFactory.getDAO(ExpenseModel::class.java) as DAO<ExpenseModel>
+            updateChart(dao.getAll())
+        }
+        chartThread.start()
+
+        // When the notice from the publishers consists of a budgetID and a money value, the current budget should be updated
+        if(obj is Pair<*, *>){
+            val pair = obj as Pair<Int, Double>
+            val currentBudgetThread = Thread{
+                val dao = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
+                val oldBudget = dao.get(pair.first)
+                if(oldBudget != null){
+                    dao.update(BudgetModel(oldBudget.totalBudget, (oldBudget.currentBudget + pair.second), oldBudget.description, oldBudget.currency, pair.first))
+                }
+                setCurrentAndTotal(dao.getAll())
+            }
+            currentBudgetThread.start()
+
+        }
     }
 }

@@ -20,11 +20,13 @@ class SettingsController() : Controller() {
     @FXML
     lateinit var saveButton: Button
 
+    override val title = super.title + " - Settings"
+
     @FXML
     fun initialize() {
         val thread = Thread {
             val dao = DAOFactory.getDAO(UserInfoModel::class.java) as DAO<UserInfoModel>
-            userInfo = dao.get(1)!!;
+            userInfo = dao.get(1)!!
             Platform.runLater {
                 expenseLimit.text = userInfo.expenseLimit.toString()
 
