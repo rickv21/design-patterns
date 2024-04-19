@@ -89,7 +89,7 @@ class UpdatePopUp (userInfo: UserInfoModel, budgetModel : BudgetModel, expenseMo
                 if (userInfo.expenseLimit != 0.0) {
                     val errorAlert = Alert(Alert.AlertType.ERROR)
                     errorAlert.title = "Error"
-                    errorAlert.headerText = "The expense you entered is more than your set limit!"
+                    errorAlert.headerText = "The expense you entered is more than your set limit (${userInfo.expenseLimit})!"
                     errorAlert.showAndWait()
                     return@setOnAction
                 }
