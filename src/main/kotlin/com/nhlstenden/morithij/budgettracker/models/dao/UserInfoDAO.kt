@@ -1,12 +1,14 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
+import com.nhlstenden.morithij.budgettracker.controllers.commands.DeleteCommand
 import com.nhlstenden.morithij.budgettracker.models.UserInfoModel
 
 /**
  * A DAO for MoneyRecord objects.
  */
 class UserInfoDAO : DAO<UserInfoModel>() {
+    private val deleteCommand = DeleteCommand("user")
 
     override fun get(id: Int): UserInfoModel? {
         val statement = connection.createStatement()
@@ -32,7 +34,7 @@ class UserInfoDAO : DAO<UserInfoModel>() {
     }
 
     override fun delete(id: Int) {
-        TODO("Not yet implemented")
+        deleteCommand.execute(id, connection)
     }
 
     override fun addObserver(observer: Observer) {

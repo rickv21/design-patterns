@@ -1,6 +1,7 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
 import com.nhlstenden.morithij.budgettracker.controllers.Observer
+import com.nhlstenden.morithij.budgettracker.controllers.commands.DeleteCommand
 import com.nhlstenden.morithij.budgettracker.models.ExpenseModel
 import com.nhlstenden.morithij.budgettracker.models.Observable
 import javafx.application.Platform
@@ -16,6 +17,7 @@ import java.time.ZoneOffset
  */
 class ExpenseDAO : DAO<ExpenseModel>() {
     private var observers = mutableListOf<Observer>()
+    private val deleteCommand = DeleteCommand("expenses")
 
 
     override fun get(id: Int): ExpenseModel? {
@@ -174,11 +176,7 @@ class ExpenseDAO : DAO<ExpenseModel>() {
         if(expense != null){
             money = expense.money
         }
-        val statement = connection.prepareStatement("DELETE FROM expenses WHERE id = ?")
-        statement.setInt(1, id)
-
-        statement.executeUpdate()
-        statement.close()
+        deleteCommand.execute(id, connection)
         Platform.runLater {
             notifyObservers(Pair<Int, Double>(expense!!.budgetID, money!!))
         }
