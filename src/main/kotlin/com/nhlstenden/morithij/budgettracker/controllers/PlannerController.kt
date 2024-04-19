@@ -2,7 +2,6 @@ package com.nhlstenden.morithij.budgettracker.controllers
 
 import com.calendarfx.model.Calendar
 import com.calendarfx.model.CalendarSource
-import com.calendarfx.model.Entry
 import com.calendarfx.view.CalendarView
 import com.nhlstenden.morithij.budgettracker.calendar.CustomEntry
 import com.nhlstenden.morithij.budgettracker.calendar.EntryType
@@ -19,6 +18,7 @@ import javafx.scene.control.MenuItem
 import javafx.scene.layout.AnchorPane
 import javafx.util.Callback
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class PlannerController() : Controller() {
 
@@ -56,10 +56,13 @@ class PlannerController() : Controller() {
                     entry.changeEndDate(it.recordDate)
 
                     if(it.interval != null){
+                        val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+                        val formattedEndDate: String = it.endDate!!.format(formatter)
+
                         when(it.interval){
-                            "Weekly" -> entry.recurrenceRule = "FREQ=WEEKLY"
-                            "Monthly" -> entry.recurrenceRule = "FREQ=MONTHLY"
-                            "Annually" -> entry.recurrenceRule = "FREQ=YEARLY"
+                            "Weekly" -> entry.recurrenceRule = "RRULE:FREQ=WEEKLY;UNTIL=$formattedEndDate";
+                            "Monthly" -> entry.recurrenceRule = "RRULE:FREQ=MONTHLY;UNTIL=$formattedEndDate";
+                            "Annually" -> entry.recurrenceRule = "RRULE:FREQ=YEARLY;UNTIL=$formattedEndDate";
                         }
                     }
                     entry.isFullDay = true

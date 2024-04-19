@@ -1,5 +1,6 @@
 package com.nhlstenden.morithij.budgettracker.models.dao
 
+import com.nhlstenden.morithij.budgettracker.controllers.Observer
 import com.nhlstenden.morithij.budgettracker.models.ReminderModel
 import java.sql.Timestamp
 import java.time.Instant
@@ -85,5 +86,13 @@ class ReminderDAO : DAO<ReminderModel>() {
 
         statement.executeUpdate()
         statement.close()
+    }
+
+    override fun addObserver(observer: Observer) {
+        TODO("Not yet implemented")
+    }
+
+    override fun notifyObservers() {
+        TODO("Not yet implemented")
     }
 }

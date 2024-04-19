@@ -50,9 +50,6 @@ class OverviewController : Controller(), Observer {
     private lateinit var reminderLabel : Label
 
     fun initialize() {
-        // setTotalAmount()
-
-
         val thread = Thread {
             val moneyRecordDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
             val allRecords = moneyRecordDAO.getAll()
@@ -67,27 +64,25 @@ class OverviewController : Controller(), Observer {
                     reminders.add(reminder)
                 }
             }
-            setupTableView(allRecords)
-            setupAddBudgetButtonAction()
-
-            if(reminders.isNotEmpty()){
                 Platform.runLater {
-                    reminderBanner.isVisible = true
-                    if(reminders.count() > 1){
-                        reminderLabel.text = "You have ${reminders.count()} reminders today: "
-                    } else {
-                        reminderLabel.text = "You have a reminder today: "
-                    }
-                    for((count, reminder) in reminders.withIndex()){
-                        if(count == 0){
-                            reminderLabel.text += reminder.description
+                    setupTableView(allRecords)
+                    setupAddBudgetButtonAction()
+                    if(reminders.isNotEmpty()) {
+                        reminderBanner.isVisible = true
+                        if (reminders.count() > 1) {
+                            reminderLabel.text = "You have ${reminders.count()} reminders today: "
                         } else {
-                            reminderLabel.text = reminderLabel.text + ", " + reminder.description
+                            reminderLabel.text = "You have a reminder today: "
                         }
+                        for ((count, reminder) in reminders.withIndex()) {
+                            if (count == 0) {
+                                reminderLabel.text += reminder.description
+                            } else {
+                                reminderLabel.text = reminderLabel.text + ", " + reminder.description
+                            }
+                        }
+                        reminderLabel.text += "."
                     }
-                    reminderLabel.text += "."
-
-                }
             }
         }
         thread.start()
