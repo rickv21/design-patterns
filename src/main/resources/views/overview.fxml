@@ -6,11 +6,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.TextField?>
 <AnchorPane fx:id="pane" maxHeight="0.0" maxWidth="0.0" minHeight="700.0" minWidth="1000.0" prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: E7F2F8;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.nhlstenden.morithij.budgettracker.controllers.OverviewController">
     <children>
         <fx:include prefHeight="700.0" prefWidth="1000.0" source="header.fxml" />
@@ -20,21 +20,21 @@
                 <Font name="System Bold" size="20.0" />
             </font>
         </Label>
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="473.0" layoutX="125.0" layoutY="162.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="786.0" />
-        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="385.0" layoutX="186.0" layoutY="197.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="662.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#74bdcb" height="512.0" layoutX="125.0" layoutY="162.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="786.0" />
+        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="385.0" layoutX="187.0" layoutY="226.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="662.0" />
         <Label fx:id="totalMoneyLabel" layoutX="250.0" layoutY="564.0" style="-fx-padding: 10 0 0 0" />
-        <Button fx:id="addBudgetButton" layoutX="768.0" layoutY="601.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" />
+        <Button fx:id="addBudgetButton" layoutX="768.0" layoutY="626.0" mnemonicParsing="false" style="-fx-background-color: E7F2F8;" text="Add Budget" />
         <!-- Add TextField and Search Button -->
-        <TextField fx:id="searchTerm" layoutX="242.0" layoutY="180.0" promptText="Search" />
-        <Button fx:id="searchButton" layoutX="425.0" layoutY="180.0" mnemonicParsing="false" text="Search" onAction="#search"/>
-        <TableView fx:id="overviewBudgetRecords" layoutX="242.0" layoutY="225.0" prefHeight="327.0" prefWidth="549.0">
+        <TextField fx:id="searchTerm" layoutX="542.0" layoutY="192.0" prefHeight="25.0" prefWidth="242.0" promptText="Search" />
+        <Button fx:id="searchButton" layoutX="797.0" layoutY="192.0" mnemonicParsing="false" onAction="#search" text="Search" />
+        <TableView fx:id="overviewBudgetRecords" layoutX="243.0" layoutY="254.0" prefHeight="327.0" prefWidth="549.0">
             <columns>
                 <TableColumn prefWidth="105.99992370605469" text="Budget" />
                 <TableColumn prefWidth="342.6667785644531" text="Description" />
                 <TableColumn prefWidth="99.99993896484375" text="Action" />
             </columns>
         </TableView>
-        <AnchorPane fx:id="reminderBanner" visible="false" layoutX="0.0" layoutY="670.0">
+        <AnchorPane fx:id="reminderBanner" layoutX="0.0" layoutY="670.0" visible="false">
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00cb5a" height="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
             <Label fx:id="reminderLabel" alignment="CENTER" prefWidth="1000.0">
                 <font>
@@ -44,4 +44,3 @@
         </AnchorPane>
     </children>
 </AnchorPane>
-
