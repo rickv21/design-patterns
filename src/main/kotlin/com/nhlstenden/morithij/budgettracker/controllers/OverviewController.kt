@@ -12,7 +12,10 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.geometry.Pos
 import javafx.scene.control.*
+import javafx.scene.layout.AnchorPane
 import javafx.util.Callback
+import java.time.LocalDate
+import java.util.ArrayList
 
 
 class OverviewController : Controller(), Observer {
@@ -27,15 +30,53 @@ class OverviewController : Controller(), Observer {
     @FXML
     lateinit var totalMoneyLabel: Label
 
+    @FXML
+    private lateinit var reminderBanner : AnchorPane
+
+    @FXML
+    private lateinit var reminderLabel : Label
+
     fun initialize() {
         // setTotalAmount()
         setupTableView()
+
+        val thread = Thread {
+            val reminderDAO = DAOFactory.getDAO(ReminderModel::class.java) as DAO<ReminderModel>
+            val allReminders = reminderDAO.getAll()
+            val today = LocalDate.now()
+            val reminders = ArrayList<ReminderModel>()
+            for(reminder in allReminders){
+                if(reminder.remindDate.isEqual(today)){
+                    reminders.add(reminder)
+                }
+            }
+            if(reminders.isNotEmpty()){
+                Platform.runLater {
+                    reminderBanner.isVisible = true
+                    if(reminders.count() > 1){
+                        reminderLabel.text = "You have ${reminders.count()} reminders today: "
+                    } else {
+                        reminderLabel.text = "You have a reminder today: "
+                    }
+                    for((count, reminder) in reminders.withIndex()){
+                        if(count == 0){
+                            reminderLabel.text += reminder.description
+                        } else {
+                            reminderLabel.text = reminderLabel.text + ", " + reminder.description
+                        }
+                    }
+                    reminderLabel.text += "."
+
+                }
+            }
+        }
+        thread.start()
     }
 
     private fun setupTableView() {
         // get budget money records
         val thread = Thread {
-            val moneyRecordDAO = BudgetDAO()
+            val moneyRecordDAO = DAOFactory.getDAO(BudgetModel::class.java) as DAO<BudgetModel>
             val allRecords = moneyRecordDAO.getAll()
             Platform.runLater {
                 overviewBudgetRecords.items = FXCollections.observableArrayList(allRecords)

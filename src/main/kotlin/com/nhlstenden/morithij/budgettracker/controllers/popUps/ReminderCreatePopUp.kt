@@ -11,11 +11,11 @@ import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
+import java.time.LocalDate
 
 class ReminderCreatePopUp () : PopUp(null) {
 
-
-    fun show() : Entry<String>?{
+    fun show(date: LocalDate? = LocalDate.now()) : Entry<String> {
         stage.title = "Create Reminder"
         val label1 = Label("Description:")
         val textField1 = TextField()
@@ -24,9 +24,9 @@ class ReminderCreatePopUp () : PopUp(null) {
 
         val label2 = Label("Date:")
         val textField2 = DatePicker()
+        textField2.value = date
         layout.add(label2, 0, 1)
         layout.add(textField2, 1, 1)
-
 
         val okButton = Button("Add")
         okButton.setOnAction {

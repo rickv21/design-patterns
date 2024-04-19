@@ -31,5 +31,13 @@
             <TableColumn prefWidth="114.66668701171875" text="Action" />
             </columns>
         </TableView>
+        <AnchorPane fx:id="reminderBanner" visible="false" layoutX="0.0" layoutY="670.0">
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#00cb5a" height="30.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="1000.0" />
+            <Label fx:id="reminderLabel" alignment="CENTER" prefWidth="1000.0">
+                <font>
+                    <Font name="System Bold" size="16.0" />
+                </font>
+            </Label>
+        </AnchorPane>
     </children>
 </AnchorPane>
