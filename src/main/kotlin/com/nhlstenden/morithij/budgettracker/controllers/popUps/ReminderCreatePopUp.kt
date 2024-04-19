@@ -13,7 +13,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import java.time.LocalDate
 
-class ReminderCreatePopUp () : PopUp(null) {
+class ReminderCreatePopUp () : PopUp(null, null) {
 
     fun show(date: LocalDate? = LocalDate.now()) : Entry<String> {
         stage.title = "Create Reminder"

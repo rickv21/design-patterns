@@ -92,7 +92,7 @@ class ReminderDAO : DAO<ReminderModel>() {
         TODO("Not yet implemented")
     }
 
-    override fun notifyObservers() {
+    override fun notifyObservers(obj: Any) {
         TODO("Not yet implemented")
     }
 }

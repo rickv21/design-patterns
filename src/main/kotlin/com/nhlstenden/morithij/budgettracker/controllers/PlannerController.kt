@@ -79,6 +79,9 @@ class PlannerController() : Controller() {
 
                 //Attempt to hide entries that it
                 calendarView.entryDetailsCallback = Callback {
+                    if(it.entry !is CustomEntry){
+                        return@Callback null
+                    }
                     if ((it.entry as CustomEntry).entryType == EntryType.TEMP) {
                         it.entry.isHidden = true
                     }
@@ -100,37 +103,44 @@ class PlannerController() : Controller() {
     private fun setupContextMenus(){
         calendarView.entryContextMenuCallback = Callback { entryObj ->
             val contextMenu = ContextMenu()
-            if ((entryObj.entry as CustomEntry).entryType == EntryType.EXPENSE) {
-                val item = MenuItem("Delete " + (entryObj.entry as CustomEntry).title)
-                item.setOnAction { _ ->
-                    run {
-                        val errorAlert = Alert(Alert.AlertType.ERROR)
-                        errorAlert.title = "Error"
-                        errorAlert.headerText = "You cannot delete expenses from the planning page!"
-                        errorAlert.showAndWait()
-                        return@setOnAction
-                    }
-                }
-                contextMenu.items.add(item)
-                contextMenu
-            } else if ((entryObj.entry as CustomEntry).entryType == EntryType.REMINDER) {
-                val item = MenuItem("Delete " + (entryObj.entry as CustomEntry).title)
-                item.setOnAction { _ ->
-                    run {
-                        val thread = Thread {
-                            val reminderDAO =
-                                DAOFactory.getDAO(ReminderModel::class.java) as DAO<ReminderModel>
-                            reminderDAO.delete((entryObj.entry as CustomEntry).id)
-                            updateReminders()
+            if(entryObj.entry !is CustomEntry){
+                return@Callback null
+            }
+            when ((entryObj.entry as CustomEntry).entryType) {
+                EntryType.EXPENSE -> {
+                    val item = MenuItem("Delete " + (entryObj.entry as CustomEntry).title)
+                    item.setOnAction { _ ->
+                        run {
+                            val errorAlert = Alert(Alert.AlertType.ERROR)
+                            errorAlert.title = "Error"
+                            errorAlert.headerText = "You cannot delete expenses from the planning page!"
+                            errorAlert.showAndWait()
+                            return@setOnAction
                         }
-                        thread.start()
                     }
+                    contextMenu.items.add(item)
+                    contextMenu
                 }
+                EntryType.REMINDER -> {
+                    val item = MenuItem("Delete " + (entryObj.entry as CustomEntry).title)
+                    item.setOnAction { _ ->
+                        run {
+                            val thread = Thread {
+                                val reminderDAO =
+                                    DAOFactory.getDAO(ReminderModel::class.java) as DAO<ReminderModel>
+                                reminderDAO.delete((entryObj.entry as CustomEntry).id)
+                                updateReminders()
+                            }
+                            thread.start()
+                        }
+                    }
 
-                contextMenu.items.add(item)
-                contextMenu
-            } else {
-                null
+                    contextMenu.items.add(item)
+                    contextMenu
+                }
+                else -> {
+                    null
+                }
             }
         }
 
